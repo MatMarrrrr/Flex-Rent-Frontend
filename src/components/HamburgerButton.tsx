@@ -67,5 +67,3 @@ const Line = styled.div<LineProps>`
       transform: translateY(-14px) rotate(-45deg);
   `}
 `;
-
-export default HamburgerButton;

@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import logo from "./../assets/logo.png";
-import dashboardIcon from "./../assets/bell.svg";
-import profileIcon from "./../assets/profile.svg";
-import HamburgerButton from "./HamburgerButton";
+import dashboardIcon from "./../assets/icons/bell.svg";
+import profileIcon from "./../assets/icons/profile.svg";
+import { HamburgerButton } from "./HamburgerButton";
 import { useState } from "react";
+import { Logo } from "./Logo";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -17,7 +17,7 @@ export const Navbar = () => {
   return (
     <>
       <Container>
-        <NavbarLogo src={logo} />
+        <Logo />
         <Links>
           {isLogin ? (
             <>
@@ -73,9 +73,11 @@ const Container = styled.div`
   background: var(--gradient);
 `;
 
-const NavbarLogo = styled.img`
-  width: 120px;
-  height: 72px;
+const NavbarLogo = styled.div`
+  color: #041b2b;
+  font-size: 40px;
+  padding: 10px;
+  font-family: "Exo 2", sans-serif;
 `;
 
 const Links = styled.div`
@@ -108,7 +110,7 @@ const LinkIcon = styled.img`
 const StyledLink = styled(Link)`
   text-decoration: none;
   font-size: 20px;
-  color: var(--light-color);
+  color: var(--light);
   transition: transform 0.3s ease;
 
   &:hover {
@@ -126,7 +128,7 @@ const MobileNavbarContainer = styled.div<{ isOpen: boolean }>`
   right: 0;
   height: 100%;
   width: 250px;
-  background: var(--dark-color);
+  background: var(--dark);
   transform: ${({ isOpen }) => (isOpen ? "translateX(0)" : "translateX(100%)")};
   transition: transform 0.3s ease;
   display: none;
