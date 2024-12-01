@@ -1,15 +1,16 @@
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 export const Logo = () => {
   return (
-    <LogoContainer>
+    <LogoContainer to="/">
       <LogoBackground>Flex Rent</LogoBackground>
       <LogoText>Flex Rent</LogoText>
     </LogoContainer>
   );
 };
 
-const LogoContainer = styled.div`
+const LogoContainer = styled(Link)`
   position: relative;
   display: flex;
   text-align: center;
@@ -18,6 +19,7 @@ const LogoContainer = styled.div`
   height: fit-content;
   min-width: 186px;
   user-select: none;
+  text-decoration: none;
 `;
 
 const LogoBackground = styled.span`
