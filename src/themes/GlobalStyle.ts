@@ -13,6 +13,8 @@ const GlobalStyle = createGlobalStyle`
     --dark-50: ${({ theme }) => theme.colors.dark50};
     --dark-25: ${({ theme }) => theme.colors.dark25};
     --dark-5: ${({ theme }) => theme.colors.dark5};
+    --shadow: ${({ theme }) => theme.colors.shadow};
+    --error: ${({ theme }) => theme.colors.error};
   }
 `;
 

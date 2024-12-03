@@ -71,7 +71,7 @@ const CategoriesContainer = styled.div`
   margin: 0 auto;
 
   @media (max-width: 1300px) {
-    grid-template-columns: repeat(auto-fit, minmax(160px, max-content));
+    grid-template-columns: repeat(auto-fit, minmax(200px, max-content));
     justify-content: center;
   }
 `;

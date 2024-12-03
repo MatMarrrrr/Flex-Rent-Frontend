@@ -14,6 +14,8 @@ declare module "styled-components" {
       dark50: string;
       dark25: string;
       dark5: string;
+      shadow: string;
+      error: string;
     };
   }
 }

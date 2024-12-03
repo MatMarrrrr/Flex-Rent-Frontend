@@ -67,7 +67,7 @@ const Container = styled.div`
   padding: 15px;
   background-color: var(--white);
   border-radius: 50px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow);
   width: 100%;
 
   @media (max-width: 700px) {

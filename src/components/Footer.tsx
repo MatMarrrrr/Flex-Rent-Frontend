@@ -3,6 +3,7 @@ import { Logo } from "./Logo";
 import emailIcon from "./../assets/icons/email.svg";
 import facebookIcon from "./../assets/icons/facebook.svg";
 import linkedinIcon from "./../assets/icons/linkedin.svg";
+import { footerLinksData } from "./../consts/footerLinksData";
 
 export const Footer = () => {
   return (
@@ -22,20 +23,14 @@ export const Footer = () => {
         </Icons>
       </LeftWrapper>
       <RightWrapper>
-        <LinksContainer>
-          <LinksTitle>Mapa strony</LinksTitle>
-          <LinkElement>O nas</LinkElement>
-          <LinkElement>Kontakt</LinkElement>
-          <LinkElement>Regulamin</LinkElement>
-          <LinkElement>Polityka prywatności</LinkElement>
-        </LinksContainer>
-        <LinksContainer>
-          <LinksTitle>Serwis</LinksTitle>
-          <LinkElement>Strona główna</LinkElement>
-          <LinkElement>Wyszukaj</LinkElement>
-          <LinkElement>Zaloguj się</LinkElement>
-          <LinkElement>Zarejestruj się</LinkElement>
-        </LinksContainer>
+        {footerLinksData.map((section, index) => (
+          <LinksContainer key={index}>
+            <LinksTitle>{section.title}</LinksTitle>
+            {section.links.map((link, linkIndex) => (
+              <LinkElement key={linkIndex}>{link}</LinkElement>
+            ))}
+          </LinksContainer>
+        ))}
       </RightWrapper>
     </Container>
   );

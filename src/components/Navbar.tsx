@@ -1,19 +1,24 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import dashboardIcon from "./../assets/icons/bell.svg";
 import profileIcon from "./../assets/icons/profile.svg";
 import { HamburgerButton } from "./HamburgerButton";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Logo } from "./Logo";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
 
   const toggleMobileNavbar = () => {
     setIsOpen((prev) => !prev);
   };
 
-  let isLogin = true;
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location]);
+
+  let isLogin = false;
   return (
     <>
       <Container>
@@ -37,11 +42,11 @@ export const Navbar = () => {
             </>
           )}
         </Links>
-        <HamburgerButton
-          isOpen={isOpen}
-          toggleMobileNavbar={toggleMobileNavbar}
-        />
       </Container>
+      <HamburgerButton
+        isOpen={isOpen}
+        toggleMobileNavbar={toggleMobileNavbar}
+      />
       <MobileNavbarContainer isOpen={isOpen}>
         {isLogin ? (
           <>
@@ -67,17 +72,13 @@ export const Navbar = () => {
 
 const Container = styled.div`
   display: flex;
+  position: relative;
+  top: 0;
   justify-content: space-between;
   align-items: center;
-  padding: 5px 10%;
+  padding: 20px 10%;
   background: var(--gradient);
-`;
-
-const NavbarLogo = styled.div`
-  color: #041b2b;
-  font-size: 40px;
-  padding: 10px;
-  font-family: "Exo 2", sans-serif;
+  z-index: 100;
 `;
 
 const Links = styled.div`
@@ -135,6 +136,7 @@ const MobileNavbarContainer = styled.div<{ isOpen: boolean }>`
   flex-direction: column;
   padding: 80px 40px;
   gap: 20px;
+  z-index: 101;
 
   @media (max-width: 700px) {
     display: flex;

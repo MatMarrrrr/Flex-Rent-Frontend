@@ -31,9 +31,10 @@ const Hamburger = styled.div`
   height: 32px;
   cursor: pointer;
   z-index: 100;
-  position: absolute;
+  position: fixed;
   top: 25px;
   right: 30px;
+  z-index: 102;
 
   @media(max-width: 700px){
     display: flex;

@@ -27,8 +27,8 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
 const CardContainer = styled.button`
   position: relative;
   border: 0;
-  width: 160px;
-  height: 160px;
+  width: 200px;
+  height: 200px;
   cursor: pointer;
   border-radius: 15px;
   overflow: hidden;
