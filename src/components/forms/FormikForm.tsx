@@ -1,0 +1,29 @@
+import { Formik, FormikHelpers } from "formik";
+import { StyledForm } from "../../styledComponents/authComponents";
+import { ReactNode } from "react";
+
+interface FormikFormProps<T> {
+  initialValues: T;
+  validationSchema?: any;
+  onSubmit: (values: T, formikHelpers: FormikHelpers<T>) => void;
+  children: ReactNode;
+}
+
+const FormikForm = <T extends object>({
+  initialValues,
+  validationSchema,
+  onSubmit,
+  children,
+}: FormikFormProps<T>) => {
+  return (
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={onSubmit}
+    >
+      <StyledForm>{children}</StyledForm>
+    </Formik>
+  );
+};
+
+export default FormikForm;

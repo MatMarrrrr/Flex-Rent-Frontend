@@ -1,11 +1,11 @@
+import { footerLinksData } from "./../../consts/footerLinksData";
 import styled from "styled-components";
-import { Logo } from "./Logo";
-import emailIcon from "./../assets/icons/email.svg";
-import facebookIcon from "./../assets/icons/facebook.svg";
-import linkedinIcon from "./../assets/icons/linkedin.svg";
-import { footerLinksData } from "./../consts/footerLinksData";
+import Logo from "./Logo";
+import emailIcon from "./../../assets/icons/email.svg";
+import facebookIcon from "./../../assets/icons/facebook.svg";
+import linkedinIcon from "./../../assets/icons/linkedin.svg";
 
-export const Footer = () => {
+const Footer = () => {
   return (
     <Container>
       <LeftWrapper>
@@ -35,6 +35,8 @@ export const Footer = () => {
     </Container>
   );
 };
+
+export default Footer;
 
 const LeftWrapper = styled.div`
   display: flex;

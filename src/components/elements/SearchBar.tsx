@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import searchIcon from "./../assets/icons/search.svg";
-import categoriesIcon from "./../assets/icons/categories.svg";
-import localizationIcon from "./../assets/icons/localization.svg";
+import searchIcon from "./../../assets/icons/search.svg";
+import categoriesIcon from "./../../assets/icons/categories.svg";
+import localizationIcon from "./../../assets/icons/localization.svg";
 
 interface SearchBarProps {
   defaultQuery?: string;
@@ -11,7 +11,7 @@ interface SearchBarProps {
   onSearch: (query: string, category: string, location: string) => void;
 }
 
-export const SearchBar: React.FC<SearchBarProps> = ({
+const SearchBar: React.FC<SearchBarProps> = ({
   defaultQuery = "",
   defaultCategory = "",
   defaultLocation = "",
@@ -28,7 +28,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   return (
-    <Container>
+    <Container data-aos="fade-up">
       <MainInputContainer>
         <Icon src={searchIcon} />
         <StyledInput
@@ -58,6 +58,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     </Container>
   );
 };
+
+export default SearchBar;
 
 const Container = styled.div`
   display: flex;

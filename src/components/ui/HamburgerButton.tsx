@@ -5,7 +5,12 @@ interface HamburgerButtonProps {
   toggleMobileNavbar: () => void;
 }
 
-export const HamburgerButton = ({
+interface LineProps {
+  isOpen: boolean;
+  position: "top" | "middle" | "bottom";
+}
+
+const HamburgerButton = ({
   isOpen,
   toggleMobileNavbar,
 }: HamburgerButtonProps) => {
@@ -18,10 +23,7 @@ export const HamburgerButton = ({
   );
 };
 
-interface LineProps {
-  isOpen: boolean;
-  position: "top" | "middle" | "bottom";
-}
+export default HamburgerButton;
 
 const Hamburger = styled.div`
   display: none;
@@ -36,7 +38,7 @@ const Hamburger = styled.div`
   right: 30px;
   z-index: 102;
 
-  @media(max-width: 700px){
+  @media (max-width: 700px) {
     display: flex;
   }
 `;

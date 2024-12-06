@@ -1,20 +1,28 @@
-import styled from "styled-components";
-import { SearchBar } from "../components/SearchBar";
-import { CategoryCard } from "../components/CategoryCard";
 import { categories } from "../consts/categories";
+import styled from "styled-components";
+import SearchBar from "../components/elements/SearchBar";
+import CategoryCard from "../components/elements/CategoryCard";
 
 export default function MainPage() {
   const handleSearch = () => {};
-  const handleCategoryClick = (id: number) => {};
+
+  const handleCategoryClick = (id: number) => {
+    console.log(id);
+  };
+
   return (
     <>
       <MainHeaderContainer>
-        <MainHeader>Wypożycz wszystko czego potrzebujesz</MainHeader>
+        <MainHeader data-aos="fade-up">
+          Wypożycz wszystko czego potrzebujesz
+        </MainHeader>
         <SearchBar onSearch={handleSearch} />
       </MainHeaderContainer>
       <CategoryMainContainer>
-        <CagtegoryMainHeader>Główne kategorie</CagtegoryMainHeader>
-        <CategoriesContainer>
+        <CagtegoryMainHeader data-aos="fade-up">
+          Główne kategorie
+        </CagtegoryMainHeader>
+        <CategoriesContainer data-aos="fade-up">
           {categories.map((category) => (
             <CategoryCard
               id={category.id}

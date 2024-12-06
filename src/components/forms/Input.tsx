@@ -1,11 +1,13 @@
 import React from "react";
 import styled from "styled-components";
+import { RequiredStar } from "../../styledComponents/authComponents";
 
 interface InputProps {
   label: string;
   type: string;
   value?: string;
   name?: string;
+  isRequired?: boolean;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   margin?: string;
@@ -16,13 +18,17 @@ const Input: React.FC<InputProps> = ({
   type,
   value,
   name,
+  isRequired = false,
   onBlur,
   onChange,
   margin,
 }) => {
   return (
     <Container margin={margin}>
-      <InputText>{label}</InputText>
+      <InputText>
+        {isRequired && <RequiredStar>* </RequiredStar>}
+        {label}
+      </InputText>
       <StyledInput
         type={type}
         value={value || ""}

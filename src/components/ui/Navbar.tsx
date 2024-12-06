@@ -1,12 +1,12 @@
 import { Link, useLocation } from "react-router-dom";
-import styled from "styled-components";
-import dashboardIcon from "./../assets/icons/bell.svg";
-import profileIcon from "./../assets/icons/profile.svg";
-import { HamburgerButton } from "./HamburgerButton";
 import { useState, useEffect } from "react";
-import { Logo } from "./Logo";
+import styled from "styled-components";
+import dashboardIcon from "./../../assets/icons/bell.svg";
+import profileIcon from "./../../assets/icons/profile.svg";
+import HamburgerButton from "./HamburgerButton";
+import Logo from "./Logo";
 
-export const Navbar = () => {
+const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
@@ -70,9 +70,11 @@ export const Navbar = () => {
   );
 };
 
+export default Navbar;
+
 const Container = styled.div`
   display: flex;
-  position: relative;
+  position: sticky;
   top: 0;
   justify-content: space-between;
   align-items: center;

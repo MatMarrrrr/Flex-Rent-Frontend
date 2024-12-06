@@ -8,7 +8,7 @@ interface CategoryCardProps {
   onClick: (id: number) => void;
 }
 
-export const CategoryCard: React.FC<CategoryCardProps> = ({
+const CategoryCard: React.FC<CategoryCardProps> = ({
   id,
   image,
   category,
@@ -23,6 +23,8 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
     </CardContainer>
   );
 };
+
+export default CategoryCard;
 
 const CardContainer = styled.button`
   position: relative;

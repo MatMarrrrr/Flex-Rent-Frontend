@@ -1,13 +1,15 @@
-import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 
-export const Logo = () => {
+const Logo = () => {
   return (
     <LogoContainer to="/">
       <LogoText>Flex Rent</LogoText>
     </LogoContainer>
   );
 };
+
+export default Logo;
 
 const LogoContainer = styled(Link)`
   position: relative;

@@ -1,6 +1,6 @@
 import React from "react";
-import eye from "./../assets/icons/eye.svg";
-import eyeOff from "./../assets/icons/eye-off.svg";
+import eye from "./../../assets/icons/eye.svg";
+import eyeOff from "./../../assets/icons/eye-off.svg";
 import styled from "styled-components";
 
 interface PasswordToggleButtonProps {
@@ -8,7 +8,7 @@ interface PasswordToggleButtonProps {
   passwordShown: boolean;
 }
 
-export const PasswordToggleButton: React.FC<PasswordToggleButtonProps> = ({
+const PasswordToggleButton: React.FC<PasswordToggleButtonProps> = ({
   onClick,
   passwordShown,
 }) => {
@@ -19,10 +19,12 @@ export const PasswordToggleButton: React.FC<PasswordToggleButtonProps> = ({
   );
 };
 
+export default PasswordToggleButton;
+
 const TogleButton = styled.div`
   position: absolute;
   right: 10px;
-  top: 37%;
+  top: 45%;
   border: none;
   padding: 3px;
   display: flex;
