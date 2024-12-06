@@ -16,6 +16,7 @@ const Navbar = () => {
 
   useEffect(() => {
     setIsOpen(false);
+    window.scrollTo(0, 0);
   }, [location]);
 
   let isLogin = false;
