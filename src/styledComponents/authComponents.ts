@@ -77,3 +77,16 @@ export const ErrorWrapper = styled.div`
 export const RequiredStar = styled.span`
   color: var(--error);
 `;
+
+export const ArrowBack = styled.img`
+  position: absolute;
+  top: 28.5px;
+  left: 30px;
+  height: 50px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
