@@ -3,6 +3,7 @@ import styled from "styled-components";
 import searchIcon from "./../../assets/icons/search.svg";
 import categoriesIcon from "./../../assets/icons/categories.svg";
 import localizationIcon from "./../../assets/icons/localization.svg";
+import CategoryModal from "../ui/CategoryModal";
 
 interface SearchBarProps {
   defaultQuery?: string;
@@ -19,7 +20,13 @@ const SearchBar: React.FC<SearchBarProps> = ({
 }) => {
   const [query, setQuery] = useState<string>(defaultQuery);
   const [category, setCategory] = useState<string>(defaultCategory);
+  const [categoryId, setCategoryId] = useState<number>(0);
   const [location, setLocation] = useState<string>(defaultLocation);
+
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const showModal = () => setModalVisible(true);
+  const hideModal = () => setModalVisible(false);
 
   const handleSearchClick = () => {
     if (onSearch) {
@@ -27,35 +34,52 @@ const SearchBar: React.FC<SearchBarProps> = ({
     }
   };
 
+  const handleCategoryClick = () => {
+    // document.body.style.overflow = "hidden";
+    showModal();
+  };
+
   return (
-    <Container data-aos="fade-up">
-      <MainInputContainer>
-        <Icon src={searchIcon} />
-        <StyledInput
-          placeholder="Czego szukasz?"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
-      </MainInputContainer>
-      <Divider />
-      <CategoryInputContainer>
-        <Icon src={categoriesIcon} />
-        <StyledInput
-          placeholder="Kategoria"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        />
-      </CategoryInputContainer>
-      <LocalizationInputContainer>
-        <Icon src={localizationIcon} />
-        <StyledInput
-          placeholder="Lokalizacja"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-        />
-      </LocalizationInputContainer>
-      <SearchButton onClick={handleSearchClick}>Wyszukaj</SearchButton>
-    </Container>
+    <>
+      <CategoryModal
+        isVisible={isModalVisible}
+        onClose={hideModal}
+        onCategoryClick={(categoryId, category) => {
+          setCategoryId(categoryId);
+          setCategory(category);
+          hideModal();
+        }}
+      />
+      <Container data-aos="fade-up">
+        <MainInputContainer>
+          <Icon src={searchIcon} />
+          <StyledInput
+            placeholder="Czego szukasz?"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </MainInputContainer>
+        <Divider />
+        <CategoryInputContainer onClick={handleCategoryClick}>
+          <Icon src={categoriesIcon} />
+          <StyledInput
+            placeholder="Kategoria"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            readOnly
+          />
+        </CategoryInputContainer>
+        <LocalizationInputContainer>
+          <Icon src={localizationIcon} />
+          <StyledInput
+            placeholder="Lokalizacja"
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+          />
+        </LocalizationInputContainer>
+        <SearchButton onClick={handleSearchClick}>Wyszukaj</SearchButton>
+      </Container>
+    </>
   );
 };
 
@@ -108,6 +132,7 @@ const CategoryInputContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+  cursor: pointer;
 
   @media (max-width: 700px) {
     background-color: var(--white);
@@ -144,6 +169,10 @@ const StyledInput = styled.input`
   color: var(--dark);
   width: 100%;
   outline: none;
+
+  &:read-only {
+    cursor: pointer;
+  }
 
   &::placeholder {
     color: var(--dark-50);

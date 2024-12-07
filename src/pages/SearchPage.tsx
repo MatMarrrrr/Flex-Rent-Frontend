@@ -109,7 +109,15 @@ const ResultsText = styled.p`
 `;
 
 const ResultsContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: 40px;
+  grid-template-columns: repeat(3, 1fr);
+
+  @media (max-width: 1400px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 900px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
 `;

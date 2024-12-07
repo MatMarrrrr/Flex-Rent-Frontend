@@ -41,6 +41,7 @@ const ResultCardContainer = styled.div`
   box-shadow: var(--shadow);
   min-width: 240px;
   display: flex;
+  align-items: center;
   flex-direction: column;
   cursor: pointer;
   transition: transform 0.3s ease;
@@ -64,6 +65,7 @@ const ItemName = styled.p`
   font-weight: 900;
   color: var(--dark);
   margin-bottom: 5px;
+  text-align: center;
 
   @media (max-width: 430px) {
     font-size: 16px;
