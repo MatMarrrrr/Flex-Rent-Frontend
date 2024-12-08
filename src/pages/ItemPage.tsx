@@ -4,7 +4,7 @@ import styled from "styled-components";
 import arrowBack from "../assets/icons/arrow_back.svg";
 import localizationIcon from "../assets/icons/localization.svg";
 import test_item from "../assets//test_item.jpg";
-import CalendarButton from "../components/buttons/CallendarButton";
+import CalendarButton from "../components/buttons/CalendarButton";
 import PrimaryButton from "../components/buttons/PrimaryButton";
 import Loader from "../components/ui/Loader";
 
