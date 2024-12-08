@@ -38,6 +38,10 @@ export default function ItemPage() {
     console.log(`${startDateTimestamp}  ${endDateTimestamp}`);
   };
 
+  const handleRegisterRedirect = () => {
+    navigate("/register");
+  };
+
   useEffect(() => {
     const timeout = setTimeout(() => {
       setIsLoading(false);
@@ -46,6 +50,7 @@ export default function ItemPage() {
     return () => clearTimeout(timeout);
   }, []);
 
+  let isLogin = false;
   return (
     <div>
       {isLoading ? (
@@ -88,19 +93,32 @@ export default function ItemPage() {
                   <ItemDetailText>Lokalizacja</ItemDetailText>
                 </ItemLocalizationContainer>
               </ItemDetailsContainer>
-              <CalendarButton
-                selectedDateRange={selectedDateRange}
-                onSelect={handleSelect}
-              />
-              <PrimaryButton
-                type="button"
-                onClick={handleRentClick}
-                disabled={startDateTimestamp === 0}
-                margin="10px 0px 20px 0px"
-                maxWidth="600px"
-              >
-                Wyślij prośbę o wynajem
-              </PrimaryButton>
+              {isLogin && (
+                <CalendarButton
+                  selectedDateRange={selectedDateRange}
+                  onSelect={handleSelect}
+                />
+              )}
+              {isLogin ? (
+                <PrimaryButton
+                  type="button"
+                  onClick={handleRentClick}
+                  disabled={startDateTimestamp === 0}
+                  margin="10px 0px 20px 0px"
+                  maxWidth="600px"
+                >
+                  Wyślij prośbę o wynajem
+                </PrimaryButton>
+              ) : (
+                <PrimaryButton
+                  type="button"
+                  onClick={handleRegisterRedirect}
+                  margin="20px 0px 20px 0px"
+                  maxWidth="600px"
+                >
+                  Zarejestruj się
+                </PrimaryButton>
+              )}
               <MobileItemDescriptionContainer>
                 <ItemDescriptionTitle>Opis</ItemDescriptionTitle>
                 <ItemDescription>
