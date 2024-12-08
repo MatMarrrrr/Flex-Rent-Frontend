@@ -7,12 +7,26 @@ import CategoryCard from "../components/elements/CategoryCard";
 export default function MainPage() {
   const navigate = useNavigate();
 
-  const handleSearch = () => {
-    navigate("/search");
+  const handleSearch = (
+    query: string,
+    categoryId: number,
+    localization: string
+  ) => {
+    const searchParams = new URLSearchParams();
+
+    if (query) searchParams.set("query", query);
+    if (categoryId) searchParams.set("categoryId", categoryId.toString());
+    if (localization) searchParams.set("localization", localization);
+
+    navigate(`/search?${searchParams.toString()}`);
   };
 
-  const handleCategoryClick = (id: number) => {
-    console.log(id);
+  const handleCategoryClick = (categoryId: number) => {
+    const searchParams = new URLSearchParams();
+
+    if (categoryId) searchParams.set("categoryId", categoryId.toString());
+
+    navigate(`/search?${searchParams.toString()}`);
   };
 
   return (
@@ -21,7 +35,7 @@ export default function MainPage() {
         <MainHeader data-aos="fade-up">
           Wypożycz wszystko czego potrzebujesz
         </MainHeader>
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar onSearch={handleSearch} isFadeIn={true} />
       </MainHeaderContainer>
       <CategoryMainContainer>
         <CagtegoryMainHeader data-aos="fade-up">

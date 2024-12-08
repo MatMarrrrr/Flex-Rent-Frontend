@@ -6,6 +6,7 @@ interface ButtonProps {
   disabled?: boolean;
   type: "button" | "submit" | "reset";
   margin?: string;
+  maxWidth?: string;
   children: React.ReactNode;
 }
 
@@ -14,6 +15,7 @@ const PrimaryButton: React.FC<ButtonProps> = ({
   disabled,
   type,
   margin,
+  maxWidth,
   children,
 }) => {
   return (
@@ -22,6 +24,7 @@ const PrimaryButton: React.FC<ButtonProps> = ({
       onClick={onClick}
       type={type}
       disabled={disabled}
+      maxWidth={maxWidth}
     >
       {children}
     </StyledButton>
@@ -30,7 +33,11 @@ const PrimaryButton: React.FC<ButtonProps> = ({
 
 export default PrimaryButton;
 
-const StyledButton = styled.button<{ disabled?: boolean; margin?: string }>`
+const StyledButton = styled.button<{
+  disabled?: boolean;
+  margin?: string;
+  maxWidth?: string;
+}>`
   border: none;
   border-radius: 50px;
   background-color: var(--primary);
@@ -49,7 +56,11 @@ const StyledButton = styled.button<{ disabled?: boolean; margin?: string }>`
     transform: scale(1.03);
   }
 
-  &:disabled:hover{
+  &:disabled:hover {
     transform: none;
+  }
+
+  @media (max-width: 1230px) {
+    max-width: ${({ maxWidth }) => (maxWidth ? maxWidth : "none")};
   }
 `;

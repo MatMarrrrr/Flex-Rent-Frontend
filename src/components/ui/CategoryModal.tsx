@@ -6,7 +6,7 @@ import xIcon from "../../assets/icons/x.svg";
 interface CategoryModalProps {
   isVisible: boolean;
   onClose: () => void;
-  onCategoryClick: (id: number, name: string) => void;
+  onCategoryClick: (categoryId: number) => void;
 }
 
 interface ModalOverlayProps {
@@ -20,14 +20,13 @@ const CategoryModal: React.FC<CategoryModalProps> = ({
 }) => {
   const [isClosing, setisClosing] = useState<boolean>(false);
 
-  const handleCategoryClick = (id: number, name: string) => {
-    onCategoryClick(id, name);
+  const handleCategoryClick = (categoryId: number) => {
+    onCategoryClick(categoryId);
     handleClose();
   };
 
   const handleClose = () => {
     setisClosing(true);
-    // document.body.style.overflow = "auto";
     setTimeout(() => {
       onClose();
       setisClosing(false);
@@ -45,7 +44,7 @@ const CategoryModal: React.FC<CategoryModalProps> = ({
           {categories.map((category) => (
             <CategoryContainer
               key={category.name}
-              onClick={() => handleCategoryClick(category.id, category.name)}
+              onClick={() => handleCategoryClick(category.id)}
             >
               <CategoryText>{category.name}</CategoryText>
             </CategoryContainer>
@@ -100,6 +99,10 @@ const ModalContent = styled.div`
   flex-direction: column;
   width: 100%;
   max-width: 500px;
+
+  @media (max-width: 700px) {
+    margin: 0 10px;
+  }
 `;
 
 const CloseButton = styled.img`

@@ -1,5 +1,5 @@
-import { useSearchParams } from "react-router-dom";
-import { useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import SearchBar from "../components/elements/SearchBar";
 import ResultCard from "../components/elements/ResultCard";
@@ -7,22 +7,49 @@ import test_item from "../assets/test_item.jpg";
 import Loader from "../components/ui/Loader";
 
 export default function SearchPage() {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [result, setResult] = useState<Array<any>>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const query = searchParams.get("query");
-  const category = searchParams.get("category");
-  const location = searchParams.get("location");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const handleSearch = () => {};
-  const handleItemClick = (id: number) => {
-    console.log(id);
+  const queryParam = searchParams.get("query") ?? "";
+  const categoryIdParam = parseInt(searchParams.get("categoryId") ?? "0", 10);
+  const localizationParam = searchParams.get("localization") ?? "";
+
+  const handleSearch = (
+    query: string,
+    categoryId: number,
+    localization: string
+  ) => {
+    const newSearchParams = new URLSearchParams();
+    if (query) newSearchParams.set("query", query);
+    if (categoryId) newSearchParams.set("categoryId", categoryId.toString());
+    if (localization) newSearchParams.set("localization", localization);
+
+    navigate(`?${newSearchParams.toString()}`);
   };
+
+  const handleItemClick = (id: number) => {
+    navigate(`/item/${id}`);
+  };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <>
       <SearchContainer>
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar
+          initialQuery={queryParam}
+          initialCategoryId={categoryIdParam}
+          initialLocalization={localizationParam}
+          onSearch={handleSearch}
+        />
       </SearchContainer>
       <ResultsMainContainer>
         {isLoading ? (
@@ -36,52 +63,52 @@ export default function SearchPage() {
             </ResultsText>
             <ResultsContainer>
               <ResultCard
-                id={0}
+                id={1}
                 image={test_item}
                 name="Nazwa rzeczy do wypożyczenia"
                 price="100"
                 localization="Warszawa"
-                onClick={handleItemClick}
+                onClick={() => handleItemClick(1)}
               />
               <ResultCard
-                id={0}
+                id={2}
                 image={test_item}
                 name="Nazwa rzeczy do wypożyczenia"
                 price="100"
                 localization="Warszawa"
-                onClick={handleItemClick}
+                onClick={() => handleItemClick(2)}
               />
               <ResultCard
-                id={0}
+                id={3}
                 image={test_item}
                 name="Nazwa rzeczy do wypożyczenia"
                 price="100"
                 localization="Warszawa"
-                onClick={handleItemClick}
+                onClick={() => handleItemClick(3)}
               />
               <ResultCard
-                id={0}
+                id={4}
                 image={test_item}
                 name="Nazwa rzeczy do wypożyczenia"
                 price="100"
                 localization="Warszawa"
-                onClick={handleItemClick}
+                onClick={() => handleItemClick(4)}
               />
               <ResultCard
-                id={0}
+                id={5}
                 image={test_item}
                 name="Nazwa rzeczy do wypożyczenia"
                 price="100"
                 localization="Warszawa"
-                onClick={handleItemClick}
+                onClick={() => handleItemClick(5)}
               />
               <ResultCard
-                id={0}
+                id={6}
                 image={test_item}
                 name="Nazwa rzeczy do wypożyczenia"
                 price="100"
                 localization="Warszawa"
-                onClick={handleItemClick}
+                onClick={() => handleItemClick(6)}
               />
             </ResultsContainer>
           </>

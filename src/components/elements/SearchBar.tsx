@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { categories } from "../../consts/categories";
 import styled from "styled-components";
 import searchIcon from "./../../assets/icons/search.svg";
 import categoriesIcon from "./../../assets/icons/categories.svg";
@@ -6,51 +7,62 @@ import localizationIcon from "./../../assets/icons/localization.svg";
 import CategoryModal from "../ui/CategoryModal";
 
 interface SearchBarProps {
-  defaultQuery?: string;
-  defaultCategory?: string;
-  defaultLocation?: string;
-  onSearch: (query: string, category: string, location: string) => void;
+  initialQuery?: string;
+  initialCategoryId?: number;
+  initialLocalization?: string;
+  isFadeIn?: boolean;
+  onSearch: (query: string, categoryId: number, localization: string) => void;
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({
-  defaultQuery = "",
-  defaultCategory = "",
-  defaultLocation = "",
+  initialQuery = "",
+  initialCategoryId = 0,
+  initialLocalization = "",
+  isFadeIn = false,
   onSearch,
 }) => {
-  const [query, setQuery] = useState<string>(defaultQuery);
-  const [category, setCategory] = useState<string>(defaultCategory);
-  const [categoryId, setCategoryId] = useState<number>(0);
-  const [location, setLocation] = useState<string>(defaultLocation);
+  const [query, setQuery] = useState<string>(initialQuery);
+  const [category, setCategory] = useState<string>("");
+  const [categoryId, setCategoryId] = useState<number>(initialCategoryId);
+  const [localization, setLocalization] = useState<string>(initialLocalization);
 
   const [isModalVisible, setModalVisible] = useState(false);
 
-  const showModal = () => setModalVisible(true);
-  const hideModal = () => setModalVisible(false);
+  const showModal = () => {
+    setModalVisible(true);
+  };
+
+  const hideModal = () => {
+    setModalVisible(false);
+  };
 
   const handleSearchClick = () => {
     if (onSearch) {
-      onSearch(query, category, location);
+      onSearch(query, categoryId, localization);
     }
   };
 
-  const handleCategoryClick = () => {
-    // document.body.style.overflow = "hidden";
-    showModal();
+  const handleModalCategoryClick = (categoryId: number) => {
+    setCategoryId(categoryId);
+    hideModal();
   };
+
+  useEffect(() => {
+    const categoryObj = categories.find(
+      (category) => category.id === categoryId
+    );
+    const categoryName = categoryObj?.name ?? "";
+    setCategory(categoryName);
+  }, [categoryId]);
 
   return (
     <>
       <CategoryModal
         isVisible={isModalVisible}
         onClose={hideModal}
-        onCategoryClick={(categoryId, category) => {
-          setCategoryId(categoryId);
-          setCategory(category);
-          hideModal();
-        }}
+        onCategoryClick={handleModalCategoryClick}
       />
-      <Container data-aos="fade-up">
+      <Container data-aos={isFadeIn ? "fade-up" : undefined}>
         <MainInputContainer>
           <Icon src={searchIcon} />
           <StyledInput
@@ -60,7 +72,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
           />
         </MainInputContainer>
         <Divider />
-        <CategoryInputContainer onClick={handleCategoryClick}>
+        <CategoryInputContainer onClick={showModal}>
           <Icon src={categoriesIcon} />
           <StyledInput
             placeholder="Kategoria"
@@ -73,8 +85,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
           <Icon src={localizationIcon} />
           <StyledInput
             placeholder="Lokalizacja"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
+            value={localization}
+            onChange={(e) => setLocalization(e.target.value)}
           />
         </LocalizationInputContainer>
         <SearchButton onClick={handleSearchClick}>Wyszukaj</SearchButton>
