@@ -13,9 +13,9 @@ export default function DashboardPage() {
       <Content>
         <Routes>
           <Route path="your-listings" element={<YourListings />} />
-          <Route path="messages" element={<Messages />} />
           <Route path="your-rentals" element={<YourRentals />} />
           <Route path="requests" element={<Requests />} />
+          <Route path="messages" element={<Messages />} />
 
           <Route path="*" element={<YourListings />} />
         </Routes>

@@ -8,7 +8,7 @@ import DashboardNavigationList from "../elements/DashboardNavigationList";
 const DashboardNavigation = () => {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const defaultSection = "messages";
+  const defaultSection = "your-listings";
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
