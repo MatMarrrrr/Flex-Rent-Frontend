@@ -6,8 +6,8 @@ interface HamburgerButtonProps {
 }
 
 interface LineProps {
-  isOpen: boolean;
-  position: "top" | "middle" | "bottom";
+  $isOpen: boolean;
+  $position: "top" | "middle" | "bottom";
 }
 
 const HamburgerButton = ({
@@ -16,9 +16,9 @@ const HamburgerButton = ({
 }: HamburgerButtonProps) => {
   return (
     <Hamburger onClick={toggleMobileNavbar}>
-      <Line isOpen={isOpen} position="top" />
-      <Line isOpen={isOpen} position="middle" />
-      <Line isOpen={isOpen} position="bottom" />
+      <Line $isOpen={isOpen} $position="top" />
+      <Line $isOpen={isOpen} $position="middle" />
+      <Line $isOpen={isOpen} $position="bottom" />
     </Hamburger>
   );
 };
@@ -49,23 +49,23 @@ const Line = styled.div<LineProps>`
   background-color: white;
   transition: all 0.3s ease;
 
-  ${({ isOpen, position }) =>
-    position === "top" &&
-    isOpen &&
+  ${({ $isOpen, $position }) =>
+    $position === "top" &&
+    $isOpen &&
     `
       transform: translateY(14px) rotate(45deg);
   `}
 
-  ${({ isOpen, position }) =>
-    position === "middle" &&
-    isOpen &&
+  ${({ $isOpen, $position }) =>
+    $position === "middle" &&
+    $isOpen &&
     `
       opacity: 0;
   `}
 
-  ${({ isOpen, position }) =>
-    position === "bottom" &&
-    isOpen &&
+  ${({ $isOpen, $position }) =>
+    $position === "bottom" &&
+    $isOpen &&
     `
       transform: translateY(-14px) rotate(-45deg);
   `}

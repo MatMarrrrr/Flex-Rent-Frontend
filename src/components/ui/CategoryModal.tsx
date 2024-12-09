@@ -9,10 +9,6 @@ interface CategoryModalProps {
   onCategoryClick: (categoryId: number) => void;
 }
 
-interface ModalOverlayProps {
-  isClosing: boolean;
-}
-
 const CategoryModal: React.FC<CategoryModalProps> = ({
   isVisible,
   onClose,
@@ -36,7 +32,7 @@ const CategoryModal: React.FC<CategoryModalProps> = ({
   if (!isVisible && !isClosing) return null;
 
   return (
-    <ModalOverlay isClosing={isClosing}>
+    <ModalOverlay $isClosing={isClosing}>
       <ModalContent>
         <CloseButton onClick={handleClose} src={xIcon} />
         <ModalTitle>Kategorie</ModalTitle>
@@ -75,7 +71,7 @@ const fadeOut = keyframes`
   }
 `;
 
-const ModalOverlay = styled.div<ModalOverlayProps>`
+const ModalOverlay = styled.div<{ $isClosing: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
@@ -86,7 +82,7 @@ const ModalOverlay = styled.div<ModalOverlayProps>`
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  animation: ${({ isClosing }) => (isClosing ? fadeOut : fadeIn)} 0.3s ease;
+  animation: ${({ $isClosing }) => ($isClosing ? fadeOut : fadeIn)} 0.3s ease;
 `;
 
 const ModalContent = styled.div`

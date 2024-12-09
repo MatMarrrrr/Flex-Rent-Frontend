@@ -18,7 +18,7 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   return (
     <StyledButton
-      margin={margin}
+      $margin={margin}
       onClick={onClick}
       type={type}
       disabled={disabled}
@@ -30,7 +30,7 @@ const Button: React.FC<ButtonProps> = ({
 
 export default Button;
 
-const StyledButton = styled.button<{ disabled?: boolean; margin?: string }>`
+const StyledButton = styled.button<{ disabled?: boolean; $margin?: string }>`
   border: 2px solid var(--dark);
   border-radius: 50px;
   background-color: var(--white);
@@ -38,6 +38,8 @@ const StyledButton = styled.button<{ disabled?: boolean; margin?: string }>`
   width: 100%;
   font-size: 18px;
   font-weight: bold;
+  opacity: ${({ disabled }) => (disabled ? "0.5" : "1")};
+  margin: ${({ $margin }) => $margin || "0"};
   color: var(--dark);
   padding: 16px 0px;
   cursor: pointer;

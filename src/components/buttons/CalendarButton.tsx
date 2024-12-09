@@ -44,7 +44,7 @@ const CalendarButton = ({ selectedDateRange, onSelect }: any) => {
       <StyledButton onClick={toggleDatePicker}>
         <CalendarIcon src={calendarIcon} />
         {buttonText}
-        <ArrowDown src={arrowDownBlack} isOpen={isOpen} />
+        <ArrowDown src={arrowDownBlack} $isOpen={isOpen} />
       </StyledButton>
       {isOpen && (
         <StyledDateRange>
@@ -71,7 +71,7 @@ const CalendarContainer = styled.div`
   }
 `;
 
-const StyledButton = styled.button<{ margin?: string }>`
+const StyledButton = styled.button`
   border: none;
   border-radius: 50px;
   background-color: var(--primary);
@@ -84,7 +84,6 @@ const StyledButton = styled.button<{ margin?: string }>`
   font-weight: bold;
   color: var(--dark);
   padding: 16px 0px;
-  margin: ${({ margin }) => margin || "0"};
   box-shadow: var(--shadow);
   cursor: pointer;
   transition: transform 0.3s ease;
@@ -151,12 +150,12 @@ const StyledDateRange = styled.div`
   }
 `;
 
-const ArrowDown = styled.img<{ isOpen: boolean }>`
+const ArrowDown = styled.img<{ $isOpen: boolean }>`
   height: 25px;
   margin-left: 10px;
   transition: transform 0.3s ease;
 
-  transform: ${({ isOpen }) => (isOpen ? "rotate(180deg)" : "rotate(0deg)")};
+  transform: ${({ $isOpen }) => ($isOpen ? "rotate(180deg)" : "rotate(0deg)")};
 `;
 
 const CalendarIcon = styled.img`

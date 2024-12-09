@@ -1,5 +1,5 @@
 import { Form } from "formik";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import styled from "styled-components";
 
 export const Wrapper = styled.div`

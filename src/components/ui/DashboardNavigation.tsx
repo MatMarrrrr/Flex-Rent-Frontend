@@ -1,7 +1,7 @@
 import arrowDownWhite from "./../../assets/icons/arrowDownWhite.svg";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation } from "react-router";
 import { navigationItems } from "../../consts/dashboardNavigationItems";
 import DashboardNavigationList from "../elements/DashboardNavigationList";
 
@@ -22,7 +22,7 @@ const DashboardNavigation = () => {
     <Container>
       <TitleContainer onClick={toggleMenu}>
         <Title>Dashboard</Title>
-        <ArrowDown src={arrowDownWhite} isOpen={isOpen} />
+        <ArrowDown src={arrowDownWhite} $isOpen={isOpen} />
       </TitleContainer>
       <NavigationContainer>
         <DashboardNavigationList
@@ -30,7 +30,7 @@ const DashboardNavigation = () => {
           defaultSection={defaultSection}
         />
       </NavigationContainer>
-      <MobileNavigationContainer isOpen={isOpen}>
+      <MobileNavigationContainer $isOpen={isOpen}>
         <DashboardNavigationList
           navigationItems={navigationItems}
           defaultSection={defaultSection}
@@ -63,8 +63,8 @@ const TitleContainer = styled.div`
   }
 `;
 
-const ArrowDown = styled.img<{ isOpen: boolean }>`
-  transform: ${({ isOpen }) => (isOpen ? "rotate(180deg)" : "rotate(0deg)")};
+const ArrowDown = styled.img<{ $isOpen: boolean }>`
+  transform: ${({ $isOpen }) => ($isOpen ? "rotate(180deg)" : "rotate(0deg)")};
   transition: transform 0.3s ease;
   display: none;
 
@@ -88,11 +88,11 @@ const NavigationContainer = styled.div`
   }
 `;
 
-const MobileNavigationContainer = styled.div<{ isOpen: boolean }>`
+const MobileNavigationContainer = styled.div<{ $isOpen: boolean }>`
   display: none;
   gap: 20px;
   flex-direction: column;
-  max-height: ${({ isOpen }) => (isOpen ? "168px" : "30px")};
+  max-height: ${({ $isOpen }) => ($isOpen ? "168px" : "30px")};
   transition: max-height 0.3s ease;
   overflow: hidden;
 

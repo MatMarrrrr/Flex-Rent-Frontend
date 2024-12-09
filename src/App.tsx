@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { ThemeProvider } from "styled-components";
 import { lightTheme } from "./themes/themes";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router";
 import GlobalStyle from "./themes/GlobalStyle";
 import AOS from "aos";
 import "aos/dist/aos.css";

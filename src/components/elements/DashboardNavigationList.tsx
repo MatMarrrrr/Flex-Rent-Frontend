@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router";
 import styled from "styled-components";
 
 const DashboardNavigationList = ({
@@ -20,7 +20,7 @@ const DashboardNavigationList = ({
   return navigationItems.map((item) => (
     <NavigationItem
       key={item.path}
-      isActive={checkIsActive(location.pathname, item.path)}
+      $isActive={checkIsActive(location.pathname, item.path)}
       to={`/dashboard/${item.path}`}
     >
       {item.label}
@@ -30,19 +30,19 @@ const DashboardNavigationList = ({
 
 export default DashboardNavigationList;
 
-const NavigationItem = styled(Link)<{ isActive: boolean }>`
+const NavigationItem = styled(Link)<{ $isActive: boolean }>`
   text-decoration: none;
   font-size: 20px;
-  font-weight: ${({ isActive }) => (isActive ? "900" : "0")};
+  font-weight: ${({ $isActive }) => ($isActive ? "900" : "0")};
   color: var(--white);
-  pointer-events: ${({ isActive }) => (isActive ? "none" : "auto")};
-  cursor: ${({ isActive }) => (isActive ? "default" : "pointer")};
+  pointer-events: ${({ $isActive }) => ($isActive ? "none" : "auto")};
+  cursor: ${({ $isActive }) => ($isActive ? "default" : "pointer")};
 
   &:hover {
-    color: ${({ isActive }) => (isActive ? "var(--white)" : "var(--dark)")};
+    color: ${({ $isActive }) => ($isActive ? "var(--white)" : "var(--dark)")};
   }
 
   @media (max-width: 850px) {
-    order: ${({ isActive }) => (isActive ? "0" : "1")};
+    order: ${({ $isActive }) => ($isActive ? "0" : "1")};
   }
 `;

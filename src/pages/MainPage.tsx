@@ -1,5 +1,5 @@
 import { categories } from "../consts/categories";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import styled from "styled-components";
 import SearchBar from "../components/elements/SearchBar";
 import CategoryCard from "../components/elements/CategoryCard";
@@ -44,6 +44,7 @@ export default function MainPage() {
         <CategoriesContainer data-aos="fade-up">
           {categories.map((category) => (
             <CategoryCard
+              key={category.id}
               id={category.id}
               image={category.icon}
               category={category.name}

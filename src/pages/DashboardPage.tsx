@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import DashboardNavigation from "../components/ui/DashboardNavigation";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router";
 import Messages from "../sections/Messages";
 import YourRentals from "../sections/YourRentals";
 import YourListings from "../sections/YourListings";

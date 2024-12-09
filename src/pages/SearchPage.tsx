@@ -1,4 +1,4 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import SearchBar from "../components/elements/SearchBar";

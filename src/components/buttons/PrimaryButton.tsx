@@ -20,11 +20,11 @@ const PrimaryButton: React.FC<ButtonProps> = ({
 }) => {
   return (
     <StyledButton
-      margin={margin}
+      $margin={margin}
       onClick={onClick}
       type={type}
       disabled={disabled}
-      maxWidth={maxWidth}
+      $maxWidth={maxWidth}
     >
       {children}
     </StyledButton>
@@ -35,8 +35,8 @@ export default PrimaryButton;
 
 const StyledButton = styled.button<{
   disabled?: boolean;
-  margin?: string;
-  maxWidth?: string;
+  $margin?: string;
+  $maxWidth?: string;
 }>`
   border: none;
   border-radius: 50px;
@@ -48,7 +48,7 @@ const StyledButton = styled.button<{
   font-weight: bold;
   color: var(--dark);
   padding: 16px 0px;
-  margin: ${({ margin }) => margin || "0"};
+  margin: ${({ $margin }) => $margin || "0"};
   cursor: pointer;
   transition: transform 0.3s ease;
 
@@ -61,6 +61,6 @@ const StyledButton = styled.button<{
   }
 
   @media (max-width: 1230px) {
-    max-width: ${({ maxWidth }) => (maxWidth ? maxWidth : "none")};
+    max-width: ${({ $maxWidth }) => ($maxWidth ? $maxWidth : "none")};
   }
 `;

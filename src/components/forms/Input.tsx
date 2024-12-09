@@ -24,7 +24,7 @@ const Input: React.FC<InputProps> = ({
   margin,
 }) => {
   return (
-    <Container margin={margin}>
+    <Container $margin={margin}>
       <InputText>
         {isRequired && <RequiredStar>* </RequiredStar>}
         {label}
@@ -42,12 +42,12 @@ const Input: React.FC<InputProps> = ({
 
 export default Input;
 
-const Container = styled.div<{ margin?: string }>`
+const Container = styled.div<{ $margin?: string }>`
   display: flex;
   flex-direction: column;
   max-width: 400px;
   width: 100%;
-  margin: ${({ margin }) => margin || "0"};
+  margin: ${({ $margin }) => $margin || "0"};
 `;
 
 const InputText = styled.p`
