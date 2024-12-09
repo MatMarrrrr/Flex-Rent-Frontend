@@ -3,7 +3,6 @@ import { ThemeProvider } from "styled-components";
 import { lightTheme } from "./themes/themes";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import GlobalStyle from "./themes/GlobalStyle";
-import "./App.css";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Navbar from "./components/ui/Navbar";
@@ -14,6 +13,7 @@ import RegisterPage from "./pages/RegisterPage";
 import SearchPage from "./pages/SearchPage";
 import ItemPage from "./pages/ItemPage";
 import NotFoundPage from "./pages/NotFoundPage";
+import DashboardPage from "./pages/DashboardPage";
 
 function App() {
   useEffect(() => {
@@ -34,6 +34,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/item/:id" element={<ItemPage />} />
+          <Route path="/dashboard/*" element={<DashboardPage />} />
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

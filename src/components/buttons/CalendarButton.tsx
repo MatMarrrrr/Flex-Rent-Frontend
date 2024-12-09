@@ -1,7 +1,7 @@
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import arrowDown from "./../../assets/icons/arrow_down.svg";
+import arrowDownBlack from "./../../assets/icons/arrowDownBlack.svg";
 import calendarIcon from "./../../assets/icons/calendar.svg";
 import styled from "styled-components";
 import { useState } from "react";
@@ -44,7 +44,7 @@ const CalendarButton = ({ selectedDateRange, onSelect }: any) => {
       <StyledButton onClick={toggleDatePicker}>
         <CalendarIcon src={calendarIcon} />
         {buttonText}
-        <ArrowDown src={arrowDown} isOpen={isOpen} />
+        <ArrowDown src={arrowDownBlack} isOpen={isOpen} />
       </StyledButton>
       {isOpen && (
         <StyledDateRange>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import arrowBack from "../assets/icons/arrow_back.svg";
+import arrowBack from "../assets/icons/arrowBack.svg";
 import localizationIcon from "../assets/icons/localization.svg";
 import test_item from "../assets//test_item.jpg";
 import CalendarButton from "../components/buttons/CalendarButton";

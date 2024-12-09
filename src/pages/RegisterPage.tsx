@@ -16,7 +16,7 @@ import PrimaryButton from "../components/buttons/PrimaryButton";
 import FormField from "../components/forms/FormField";
 import PasswordField from "../components/forms/PasswordField";
 import FormikForm from "../components/forms/FormikForm";
-import arrowBack from "../assets/icons/arrow_back.svg";
+import arrowBack from "../assets/icons/arrowBack.svg";
 
 export default function RegisterPage() {
   const [step, setStep] = useState<number>(1);

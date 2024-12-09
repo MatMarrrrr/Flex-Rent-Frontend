@@ -63,7 +63,7 @@ const StyledInput = styled.input`
   height: 45px;
   font-size: 18px;
   padding: 0px 10px;
-  width: 100% !important;
+  width: 100%;
 
   &:focus {
     outline: none;
