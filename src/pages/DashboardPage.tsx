@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import DashboardNavigation from "../components/ui/DashboardNavigation";
 import { Route, Routes } from "react-router";
-import Messages from "../sections/Messages";
-import YourRentals from "../sections/YourRentals";
-import YourListings from "../sections/YourListings";
-import Requests from "../sections/Requests";
+import MessagesSection from "../sections/MessagesSection";
+import YourRentalsSection from "../sections/YourRentalsSection";
+import YourListingsSection from "../sections/YourListingsSection";
+import RequestsSection from "../sections/RequestsSection";
 
 export default function DashboardPage() {
   return (
@@ -12,12 +12,12 @@ export default function DashboardPage() {
       <DashboardNavigation />
       <Content>
         <Routes>
-          <Route path="your-listings" element={<YourListings />} />
-          <Route path="your-rentals" element={<YourRentals />} />
-          <Route path="requests" element={<Requests />} />
-          <Route path="messages" element={<Messages />} />
+          <Route path="your-listings" element={<YourListingsSection />} />
+          <Route path="your-rentals" element={<YourRentalsSection />} />
+          <Route path="requests" element={<RequestsSection />} />
+          <Route path="messages" element={<MessagesSection />} />
 
-          <Route path="*" element={<YourListings />} />
+          <Route path="*" element={<YourListingsSection />} />
         </Routes>
       </Content>
     </>

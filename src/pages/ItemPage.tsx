@@ -105,7 +105,9 @@ export default function ItemPage() {
                   onClick={handleRentClick}
                   disabled={startDateTimestamp === 0}
                   margin="10px 0px 20px 0px"
-                  maxWidth="600px"
+                  desktopMaxWidth="400px"
+                  mobileStart={1230}
+                  mobileMaxWidth="600px"
                 >
                   Wyślij prośbę o wynajem
                 </PrimaryButton>
@@ -114,7 +116,9 @@ export default function ItemPage() {
                   type="button"
                   onClick={handleRegisterRedirect}
                   margin="20px 0px 20px 0px"
-                  maxWidth="600px"
+                  desktopMaxWidth="400px"
+                  mobileStart={1230}
+                  mobileMaxWidth="600px"
                 >
                   Zarejestruj się
                 </PrimaryButton>
