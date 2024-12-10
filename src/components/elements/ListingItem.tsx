@@ -69,12 +69,14 @@ const Container = styled.div`
 `;
 
 const Image = styled.img`
-  width: 600px;
+  width: 100%;
+  max-width: 600px;
+  height: auto;
   border-radius: 8px;
 
   @media (max-width: 1320px) {
-    width: 100%;
-    max-width: 700px;
+    max-width: 100%;
+    margin-bottom: 10px;
   }
 `;
 
@@ -85,6 +87,7 @@ const Wrapper = styled.div`
 
   @media (max-width: 1320px) {
     width: 100%;
+    min-width: 100%;
     max-width: 700px;
   }
 `;

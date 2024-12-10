@@ -2,12 +2,37 @@ import styled from "styled-components";
 import PrimaryButton from "../components/buttons/PrimaryButton";
 import ListingItem from "../components/elements/ListingItem";
 import test_item from "../assets/test_item.jpg";
+import Loader from "../components/ui/Loader";
+import { useEffect, useState } from "react";
 
 const YourListings = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   const handleAddClick = () => {};
+
   const handleEditClick = (id: number) => {
     console.log(id);
   };
+
+  const listings = Array.from({ length: 5 }, (_, index) => ({
+    id: index + 1,
+    image: test_item,
+    name: `Nazwa rzeczy do wypożyczenia ${index + 1}`,
+    price: "100",
+    localization: `Lokalizacja ${index + 1}`,
+    rentedPeriods: [
+      { from: "12.12.2024", to: "20.12.2024" },
+      { from: "22.12.2024", to: "28.12.2024" },
+    ],
+  }));
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, []);
 
   return (
     <Container>
@@ -20,54 +45,25 @@ const YourListings = () => {
       >
         Utwórz ogłoszenie
       </PrimaryButton>
-      <ListingItem
-        id={1}
-        image={test_item}
-        name="Nazwa rzeczy do wypożyczenia"
-        price="100"
-        localization="Lokalizacja"
-        rentedPeriods={[
-          { from: "12.12.2024", to: "20.12.2024" },
-          { from: "22.12.2024", to: "28.12.2024" },
-          { from: "12.12.2024", to: "20.12.2024" },
-          { from: "22.12.2024", to: "28.12.2024" },
-        ]}
-        onEditClick={() => {
-          handleEditClick(1);
-        }}
-      />
-      <ListingItem
-        id={2}
-        image={test_item}
-        name="Nazwa rzeczy do wypożyczenia"
-        price="100"
-        localization="Lokalizacja"
-        rentedPeriods={[
-          { from: "12.12.2024", to: "20.12.2024" },
-          { from: "22.12.2024", to: "28.12.2024" },
-          { from: "12.12.2024", to: "20.12.2024" },
-          { from: "22.12.2024", to: "28.12.2024" },
-        ]}
-        onEditClick={() => {
-          handleEditClick(1);
-        }}
-      />
-      <ListingItem
-        id={3}
-        image={test_item}
-        name="Nazwa rzeczy do wypożyczenia"
-        price="100"
-        localization="Lokalizacja"
-        rentedPeriods={[
-          { from: "12.12.2024", to: "20.12.2024" },
-          { from: "22.12.2024", to: "28.12.2024" },
-          { from: "12.12.2024", to: "20.12.2024" },
-          { from: "22.12.2024", to: "28.12.2024" },
-        ]}
-        onEditClick={() => {
-          handleEditClick(1);
-        }}
-      />
+      {isLoading ? (
+        <LoaderContainer>
+          <Loader isCenter={true} />
+          <LoaderText>Loading Listings</LoaderText>
+        </LoaderContainer>
+      ) : (
+        listings.map((listing) => (
+          <ListingItem
+            key={listing.id}
+            id={listing.id}
+            image={listing.image}
+            name={listing.name}
+            price={listing.price}
+            localization={listing.localization}
+            rentedPeriods={listing.rentedPeriods}
+            onEditClick={() => handleEditClick(listing.id)}
+          />
+        ))
+      )}
     </Container>
   );
 };
@@ -84,4 +80,20 @@ const Container = styled.div`
   @media (max-width: 1320px) {
     align-items: center;
   }
+`;
+
+const LoaderContainer = styled.div`
+  padding: 20px 10% 40px 10%;
+  display: flex;
+  gap: 10px;
+  flex-grow: 1;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const LoaderText = styled.p`
+  font-size: 30px;
+  color: var(--dark);
+  font-weight: bold;
 `;
