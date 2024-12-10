@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import localizationIcon from "../../assets/icons/localization.svg";
 import Button from "../buttons/Button";
+import SkeletonLoaderImage from "../ui/SkeletonLoaderImage";
 
 interface ListingItemProps {
   id: number;
@@ -58,7 +59,7 @@ export default ListingItem;
 const Container = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  max-width: 1250px;
+  max-width: 1270px;
   column-gap: 70px;
 
   @media (max-width: 1320px) {
@@ -68,7 +69,7 @@ const Container = styled.div`
   }
 `;
 
-const Image = styled.img`
+const Image = styled(SkeletonLoaderImage)`
   width: 100%;
   max-width: 600px;
   height: auto;

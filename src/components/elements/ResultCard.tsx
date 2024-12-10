@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import localizationIcon from "../../assets/icons/localization.svg";
+import SkeletonLoaderImage from "../ui/SkeletonLoaderImage";
 
 interface ResultCardProps {
   id: number;
@@ -51,7 +52,7 @@ const ResultCardContainer = styled.div`
   }
 `;
 
-const Image = styled.img`
+const Image = styled(SkeletonLoaderImage)`
   max-height: 400px;
   max-width: 400px;
   height: 100%;

@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import SkeletonLoaderImage from "../ui/SkeletonLoaderImage";
 
 interface CategoryCardProps {
   id: number;
@@ -42,10 +43,9 @@ const CardContainer = styled.button`
   }
 `;
 
-const Image = styled.img`
+const Image = styled(SkeletonLoaderImage)`
   width: 100%;
   height: 100%;
-  object-fit: cover;
 `;
 
 const Overlay = styled.div`

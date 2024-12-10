@@ -8,6 +8,7 @@ import CalendarButton from "../components/buttons/CalendarButton";
 import PrimaryButton from "../components/buttons/PrimaryButton";
 import Loader from "../components/ui/Loader";
 import { Range } from "react-date-range";
+import SkeletonLoaderImage from "../components/ui/SkeletonLoaderImage";
 
 export default function ItemPage() {
   const navigate = useNavigate();
@@ -226,7 +227,7 @@ const ItemRightContainer = styled.div`
   flex-direction: column;
 `;
 
-const ItemImage = styled.img`
+const ItemImage = styled(SkeletonLoaderImage)`
   width: 100%;
   max-width: 600px;
   height: auto;
