@@ -1,10 +1,11 @@
 import { Formik, FormikHelpers } from "formik";
 import { StyledForm } from "../../styledComponents/authComponents";
 import { ReactNode } from "react";
+import { Schema } from "yup";
 
 interface FormikFormProps<T> {
   initialValues: T;
-  validationSchema?: any;
+  validationSchema?: Schema<T>;
   onSubmit: (values: T, formikHelpers: FormikHelpers<T>) => void;
   children: ReactNode;
 }
