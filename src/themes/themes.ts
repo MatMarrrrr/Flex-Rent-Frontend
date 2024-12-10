@@ -2,6 +2,7 @@ export const lightTheme = {
   colors: {
     primary: "#51D897",
     secondary: "#1F8DDD",
+    accent: "#1f8ddd",
     light: "#F3F8FC",
     white: "#FFFFFF",
     gradient: "linear-gradient(90deg, #1f8ddd 0%, #51d897 100%)",

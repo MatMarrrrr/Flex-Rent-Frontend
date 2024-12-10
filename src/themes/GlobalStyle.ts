@@ -4,6 +4,7 @@ const GlobalStyle = createGlobalStyle`
   :root {
     --primary: ${({ theme }) => theme.colors.primary};
     --secondary: ${({ theme }) => theme.colors.secondary};
+    --accent: ${({ theme }) => theme.colors.accent};
     --light: ${({ theme }) => theme.colors.light};
     --white: ${({ theme }) => theme.colors.white};
     --dark: ${({ theme }) => theme.colors.dark};
