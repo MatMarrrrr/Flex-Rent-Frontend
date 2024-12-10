@@ -1,10 +1,13 @@
 import { useNavigate, useSearchParams } from "react-router";
 import { useEffect, useState } from "react";
+import { categories } from "../consts/categories";
 import styled from "styled-components";
 import SearchBar from "../components/elements/SearchBar";
 import ResultCard from "../components/elements/ResultCard";
 import test_item from "../assets/test_item.jpg";
 import Loader from "../components/ui/Loader";
+import MotionWrapper from "../components/ui/MotionWrapper";
+import { fromRightVariants } from "../consts/motionVariants";
 
 export default function SearchPage() {
   const navigate = useNavigate();
@@ -15,6 +18,10 @@ export default function SearchPage() {
   const queryParam = searchParams.get("query") ?? "";
   const categoryIdParam = parseInt(searchParams.get("categoryId") ?? "0", 10);
   const localizationParam = searchParams.get("localization") ?? "";
+  const isEmptyParams =
+    queryParam.trim() === "" &&
+    categoryIdParam === 0 &&
+    localizationParam.trim() === "";
 
   const handleSearch = (
     query: string,
@@ -32,6 +39,32 @@ export default function SearchPage() {
   const handleItemClick = (id: number) => {
     navigate(`/item/${id}`);
   };
+
+  const getCategoryName = (categoryId: number) => {
+    const categoryObj = categories.find(
+      (category) => category.id === categoryId
+    );
+    return categoryObj?.name ?? "";
+  };
+
+  const getResultsText = (found: boolean) => {
+    const parts: string[] = [];
+
+    if (queryParam) parts.push(queryParam);
+    if (categoryIdParam) parts.push(getCategoryName(categoryIdParam));
+    if (localizationParam) parts.push(localizationParam);
+
+    const baseText = found ? "Wyniki dla:" : "Brak wyników dla:";
+    return [baseText, ...parts];
+  };
+
+  const tempResults = Array.from({ length: 8 }, (_, index) => ({
+    id: index + 1,
+    image: test_item,
+    name: `Nazwa rzeczy do wypożyczenia ${index + 1}`,
+    price: "100",
+    localization: `Lokalizacja`,
+  }));
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -56,60 +89,33 @@ export default function SearchPage() {
           <Loader size={50} color="var(--dark)" isCenter={true} />
         ) : (
           <>
-            <ResultsText>
-              {result.length > 0
-                ? 'Wyniki dla "Termin wyszukiwania"'
-                : 'Brak wyników dla "Termin wyszukiwania"'}
-            </ResultsText>
+            <ResultsTextContainer>
+              {isEmptyParams ? (
+                <ResultsText>
+                  Brak parametrów wyszukiwania. Wprowadź dane, aby zobaczyć
+                  wyniki.
+                </ResultsText>
+              ) : (
+                getResultsText(result.length > 0).map((line, index) => (
+                  <ResultsText key={index}>{line}</ResultsText>
+                ))
+              )}
+            </ResultsTextContainer>
             <ResultsContainer>
-              <ResultCard
-                id={1}
-                image={test_item}
-                name="Nazwa rzeczy do wypożyczenia"
-                price="100"
-                localization="Warszawa"
-                onClick={() => handleItemClick(1)}
-              />
-              <ResultCard
-                id={2}
-                image={test_item}
-                name="Nazwa rzeczy do wypożyczenia"
-                price="100"
-                localization="Warszawa"
-                onClick={() => handleItemClick(2)}
-              />
-              <ResultCard
-                id={3}
-                image={test_item}
-                name="Nazwa rzeczy do wypożyczenia"
-                price="100"
-                localization="Warszawa"
-                onClick={() => handleItemClick(3)}
-              />
-              <ResultCard
-                id={4}
-                image={test_item}
-                name="Nazwa rzeczy do wypożyczenia"
-                price="100"
-                localization="Warszawa"
-                onClick={() => handleItemClick(4)}
-              />
-              <ResultCard
-                id={5}
-                image={test_item}
-                name="Nazwa rzeczy do wypożyczenia"
-                price="100"
-                localization="Warszawa"
-                onClick={() => handleItemClick(5)}
-              />
-              <ResultCard
-                id={6}
-                image={test_item}
-                name="Nazwa rzeczy do wypożyczenia"
-                price="100"
-                localization="Warszawa"
-                onClick={() => handleItemClick(6)}
-              />
+              <MotionWrapper variants={fromRightVariants}>
+                {tempResults.length > 0 &&
+                  tempResults.map((item) => (
+                    <ResultCard
+                      key={item.id}
+                      id={item.id}
+                      image={item.image}
+                      name={item.name}
+                      price={item.price}
+                      localization={item.localization}
+                      onClick={() => handleItemClick(item.id)}
+                    />
+                  ))}
+              </MotionWrapper>
             </ResultsContainer>
           </>
         )}
@@ -128,11 +134,20 @@ const ResultsMainContainer = styled.div`
   padding: 40px 10%;
 `;
 
+const ResultsTextContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+  }
+`;
+
 const ResultsText = styled.p`
   font-size: 28px;
   font-weight: bold;
   color: var(--dark);
-  margin-bottom: 30px;
 `;
 
 const ResultsContainer = styled.div`

@@ -21,7 +21,7 @@ const SkeletonLoaderImage = ({
         src={src}
         alt={alt}
         onLoad={() => setIsImageLoaded(true)}
-        isVisible={isImageLoaded}
+        $isVisible={isImageLoaded}
         loading="lazy"
       />
     </ImageContainer>
@@ -58,10 +58,10 @@ const Skeleton = styled.div`
   }
 `;
 
-const StyledImage = styled.img<{ isVisible: boolean }>`
+const StyledImage = styled.img<{ $isVisible: boolean }>`
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
+  opacity: ${({ $isVisible }) => ($isVisible ? 1 : 0)};
   transition: opacity 0.5s ease-in-out;
 `;

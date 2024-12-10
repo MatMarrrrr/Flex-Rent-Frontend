@@ -4,6 +4,8 @@ import ListingItem from "../components/elements/ListingItem";
 import test_item from "../assets/test_item.jpg";
 import Loader from "../components/ui/Loader";
 import { useEffect, useState } from "react";
+import MotionWrapper from "../components/ui/MotionWrapper";
+import { fromBottomVariants } from "../consts/motionVariants";
 
 const YourListingsSection = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -19,7 +21,7 @@ const YourListingsSection = () => {
     image: test_item,
     name: `Nazwa rzeczy do wypożyczenia ${index + 1}`,
     price: "100",
-    localization: `Lokalizacja ${index + 1}`,
+    localization: `Lokalizacja`,
     rentedPeriods: [
       { from: "12.12.2024", to: "20.12.2024" },
       { from: "22.12.2024", to: "28.12.2024" },
@@ -51,18 +53,20 @@ const YourListingsSection = () => {
           <LoaderText>Loading Listings</LoaderText>
         </LoaderContainer>
       ) : (
-        listings.map((listing) => (
-          <ListingItem
-            key={listing.id}
-            id={listing.id}
-            image={listing.image}
-            name={listing.name}
-            price={listing.price}
-            localization={listing.localization}
-            rentedPeriods={listing.rentedPeriods}
-            onEditClick={() => handleEditClick(listing.id)}
-          />
-        ))
+        <MotionWrapper variants={fromBottomVariants}>
+          {listings.map((listing) => (
+            <ListingItem
+              key={listing.id}
+              id={listing.id}
+              image={listing.image}
+              name={listing.name}
+              price={listing.price}
+              localization={listing.localization}
+              rentedPeriods={listing.rentedPeriods}
+              onEditClick={() => handleEditClick(listing.id)}
+            />
+          ))}
+        </MotionWrapper>
       )}
     </Container>
   );
