@@ -40,7 +40,7 @@ const YourListingsSection = () => {
     <Container>
       <PrimaryButton
         fontSize="20px"
-        desktopMaxWidth="600px"
+        desktopMaxWidth="570px"
         mobileStart={1320}
         mobileMaxWidth="700px"
         onClick={handleAddClick}
@@ -79,6 +79,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 40px;
+  background-color: var(--light);
   min-height: calc(100vh - 494px);
 
   @media (max-width: 1320px) {

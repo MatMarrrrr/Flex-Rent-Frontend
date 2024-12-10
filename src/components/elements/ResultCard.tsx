@@ -40,6 +40,7 @@ const ResultCardContainer = styled.div`
   padding: 20px;
   border-radius: 6px;
   box-shadow: var(--shadow);
+  border-bottom: 4px solid var(--primary);
   min-width: 240px;
   display: flex;
   align-items: center;

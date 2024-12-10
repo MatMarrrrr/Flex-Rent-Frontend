@@ -41,6 +41,9 @@ const ListingItem: React.FC<ListingItemProps> = ({
           </ItemDetailText>
         ))}
         <Button
+          fontColor="var(--white)"
+          borderColor="transparent"
+          background="var(--gradient)"
           desktopMaxWidth="500px"
           mobileStart={1320}
           mobileMaxWidth="700px"
@@ -48,6 +51,18 @@ const ListingItem: React.FC<ListingItemProps> = ({
           onClick={() => onEditClick(id)}
         >
           Edytuj ogłoszenie
+        </Button>
+        <Button
+          fontColor="var(--white)"
+          borderColor="var(--error)"
+          background="var(--error)"
+          desktopMaxWidth="500px"
+          mobileStart={1320}
+          mobileMaxWidth="700px"
+          margin="20px 0px 0px 0px"
+          onClick={() => onEditClick(id)}
+        >
+          Usuń ogłoszenie
         </Button>
       </Wrapper>
     </Container>
@@ -61,6 +76,10 @@ const Container = styled.div`
   grid-template-columns: repeat(2, 1fr);
   max-width: 1270px;
   column-gap: 70px;
+  background-color: var(--white);
+  padding: 30px;
+  border-radius: 8px;
+  border-bottom: 4px solid var(--primary);
 
   @media (max-width: 1320px) {
     grid-template-columns: repeat(1, 1fr);

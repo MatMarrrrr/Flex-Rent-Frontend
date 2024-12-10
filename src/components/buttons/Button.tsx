@@ -7,6 +7,9 @@ export interface ButtonProps {
   type?: "button" | "submit" | "reset";
   margin?: string;
   fontSize?: string;
+  fontColor?: string;
+  borderColor?: string;
+  background?: string;
   desktopMaxWidth?: string;
   mobileMaxWidth?: string;
   mobileStart?: number;
@@ -19,6 +22,9 @@ const Button: React.FC<ButtonProps> = ({
   type = "button",
   margin,
   fontSize,
+  fontColor,
+  borderColor,
+  background,
   desktopMaxWidth,
   mobileMaxWidth,
   mobileStart,
@@ -28,6 +34,9 @@ const Button: React.FC<ButtonProps> = ({
     <StyledButton
       $margin={margin}
       $fontSize={fontSize}
+      $fontColor={fontColor}
+      $borderColor={borderColor}
+      $background={background}
       onClick={onClick}
       type={type}
       disabled={disabled}
@@ -46,20 +55,23 @@ export const StyledButton = styled.button<{
   disabled?: boolean;
   $margin?: string;
   $fontSize?: string;
+  $fontColor?: string;
+  $borderColor?: string;
+  $background?: string;
   $desktopMaxWidth?: string;
   $mobileMaxWidth?: string;
   $mobileStart?: number;
 }>`
-  border: 2px solid var(--dark);
+  border: 2px solid ${({ $borderColor }) => $borderColor || "var(--dark)"};
   border-radius: 50px;
-  background-color: var(--white);
+  background: ${({ $background }) => $background || "var(--white)"};
   max-width: ${({ $desktopMaxWidth }) => $desktopMaxWidth || "none"};
   width: 100%;
   font-size: ${({ $fontSize }) => $fontSize || "18px"};
   font-weight: bold;
   opacity: ${({ disabled }) => (disabled ? "0.5" : "1")};
   margin: ${({ $margin }) => $margin || "0"};
-  color: var(--dark);
+  color: ${({ $fontColor }) => $fontColor || "var(--dark)"};
   padding: 16px 0px;
   cursor: pointer;
   transition: transform 0.3s ease;
