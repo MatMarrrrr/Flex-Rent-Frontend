@@ -5,7 +5,7 @@ import test_item from "../assets/test_item.jpg";
 import Loader from "../components/ui/Loader";
 import { useEffect, useState } from "react";
 
-const YourListings = () => {
+const YourListingsSection = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const handleAddClick = () => {};
@@ -68,7 +68,7 @@ const YourListings = () => {
   );
 };
 
-export default YourListings;
+export default YourListingsSection;
 
 const Container = styled.div`
   padding: 30px 10% 60px 10%;

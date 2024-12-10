@@ -1,7 +1,7 @@
-const Messages = () => {
+const MessagesSection = () => {
   return (
     <div>Messages</div>
   )
 }
 
-export default Messages;
+export default MessagesSection;

@@ -1,5 +1,5 @@
-const YourRentals = () => {
+const YourRentalsSection = () => {
   return <div>YourRentals</div>;
 };
 
-export default YourRentals;
+export default YourRentalsSection;

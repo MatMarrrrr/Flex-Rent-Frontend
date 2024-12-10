@@ -1,5 +1,5 @@
-const Requests = () => {
+const RequestsSection = () => {
   return <div>Requests</div>;
 };
 
-export default Requests;
+export default RequestsSection;
