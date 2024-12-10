@@ -1,4 +1,4 @@
-import { DateRange } from "react-date-range";
+import { DateRange, Range, RangeKeyDict } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import arrowDownBlack from "./../../assets/icons/arrowDownBlack.svg";
@@ -7,7 +7,15 @@ import styled from "styled-components";
 import { useState } from "react";
 import pl from "date-fns/locale/pl";
 
-const CalendarButton = ({ selectedDateRange, onSelect }: any) => {
+interface CalendarButtonProps {
+  selectedDateRange: Range;
+  onSelect: (range: Range) => void;
+}
+
+const CalendarButton = ({
+  selectedDateRange,
+  onSelect,
+}: CalendarButtonProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [buttonText, setButtonText] = useState<string>("Wybierz okres");
 
@@ -16,6 +24,8 @@ const CalendarButton = ({ selectedDateRange, onSelect }: any) => {
   };
 
   function formatDateForDisplay(date: Date): string {
+    if (!date) return "";
+
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
@@ -23,8 +33,11 @@ const CalendarButton = ({ selectedDateRange, onSelect }: any) => {
     return `${day}.${month}.${year}`;
   }
 
-  function getDateRangeString(selectedRange: any) {
+  function getDateRangeString(selectedRange: Range): string {
     const { startDate, endDate } = selectedRange;
+
+    if (!startDate || !endDate) return "";
+
     const stringStartDate = formatDateForDisplay(startDate);
     const stringEndDate = formatDateForDisplay(endDate);
 
@@ -33,8 +46,8 @@ const CalendarButton = ({ selectedDateRange, onSelect }: any) => {
       : `${stringStartDate} - ${stringEndDate}`;
   }
 
-  const handleSelect = (ranges: any) => {
-    const selectedRange = ranges.selectedRange;
+  const handleSelect = (ranges: RangeKeyDict) => {
+    const selectedRange: Range = ranges.selectedRange;
     setButtonText(getDateRangeString(selectedRange));
     onSelect(selectedRange);
   };

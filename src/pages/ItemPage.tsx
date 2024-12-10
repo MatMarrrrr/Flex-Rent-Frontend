@@ -7,13 +7,14 @@ import test_item from "../assets//test_item.jpg";
 import CalendarButton from "../components/buttons/CalendarButton";
 import PrimaryButton from "../components/buttons/PrimaryButton";
 import Loader from "../components/ui/Loader";
+import { Range } from "react-date-range";
 
 export default function ItemPage() {
   const navigate = useNavigate();
   const { id } = useParams();
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [selectedDateRange, setSelectedDateRange] = useState({
+  const [selectedDateRange, setSelectedDateRange] = useState<Range>({
     startDate: new Date(),
     endDate: new Date(),
     key: "selectedRange",
@@ -26,8 +27,9 @@ export default function ItemPage() {
     navigate(-1);
   };
 
-  const handleSelect = (selectedRange: any) => {
+  const handleSelect = (selectedRange: Range) => {
     const { startDate, endDate } = selectedRange;
+    if (!startDate || !endDate) return "";
 
     setSelectedDateRange(selectedRange);
     setStartDateTimestamp(startDate.getTime());
