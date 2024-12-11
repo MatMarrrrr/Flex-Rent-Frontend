@@ -88,7 +88,7 @@ const StyledButton = styled.button`
   border: none;
   border-radius: 50px;
   background-color: var(--primary);
-  max-width: 400px;
+  max-width: 500px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -121,7 +121,7 @@ const StyledButton = styled.button`
 const StyledDateRange = styled.div`
   .rdrCalendarWrapper {
     width: 100%;
-    max-width: 400px;
+    max-width: 500px;
     border-radius: 8px;
     box-shadow: var(--shadow);
     color: var(--dark);

@@ -72,9 +72,54 @@ export default function ItemPage() {
               <ArrowBack src={arrowBack} />
               <BackText>Powrót</BackText>
             </MobileBackContainer>
-            <ItemLeftContainer>
-              <MobileItemName>Nazwa rzeczy do wypożyczenia</MobileItemName>
-              <ItemImage src={test_item} />
+
+            <ItemContentWrapper>
+              <ItemLeftContainer>
+                <ItemImage src={test_item} />
+              </ItemLeftContainer>
+
+              <ItemRightContainer>
+                <ItemName>Nazwa rzeczy do wypożyczenia</ItemName>
+                <ItemCategory>Kategoria</ItemCategory>
+                <ItemDetailsContainer>
+                  <ItemDetailText>100zł / Dzień</ItemDetailText>
+                  <ItemLocalizationContainer>
+                    <ItemLocalizationIcon src={localizationIcon} />
+                    <ItemDetailText>Lokalizacja</ItemDetailText>
+                  </ItemLocalizationContainer>
+                </ItemDetailsContainer>
+                {isLogin && (
+                  <CalendarButton
+                    selectedDateRange={selectedDateRange}
+                    onSelect={handleSelect}
+                  />
+                )}
+                {isLogin ? (
+                  <PrimaryButton
+                    type="button"
+                    onClick={handleRentClick}
+                    disabled={startDateTimestamp === 0}
+                    margin="10px 0px 20px 0px"
+                    desktopMaxWidth="500px"
+                    mobileStart={1230}
+                    mobileMaxWidth="600px"
+                  >
+                    Wyślij prośbę o wynajem
+                  </PrimaryButton>
+                ) : (
+                  <PrimaryButton
+                    type="button"
+                    onClick={handleRegisterRedirect}
+                    margin="20px 0px 20px 0px"
+                    desktopMaxWidth="500px"
+                    mobileStart={1230}
+                    mobileMaxWidth="600px"
+                  >
+                    Zarejestruj się
+                  </PrimaryButton>
+                )}
+              </ItemRightContainer>
+
               <ItemDescriptionContainer>
                 <ItemDescriptionTitle>Opis</ItemDescriptionTitle>
                 <ItemDescription>
@@ -85,58 +130,7 @@ export default function ItemPage() {
                   at, tempor viverra orci. Vestibulum congue bibendum vulputate.
                 </ItemDescription>
               </ItemDescriptionContainer>
-            </ItemLeftContainer>
-            <ItemRightContainer>
-              <ItemName>Nazwa rzeczy do wypożyczenia</ItemName>
-              <ItemCategory>Kategoria</ItemCategory>
-              <ItemDetailsContainer>
-                <ItemDetailText>100zł / Dzień</ItemDetailText>
-                <ItemLocalizationContainer>
-                  <ItemLocalizationIcon src={localizationIcon} />
-                  <ItemDetailText>Lokalizacja</ItemDetailText>
-                </ItemLocalizationContainer>
-              </ItemDetailsContainer>
-              {isLogin && (
-                <CalendarButton
-                  selectedDateRange={selectedDateRange}
-                  onSelect={handleSelect}
-                />
-              )}
-              {isLogin ? (
-                <PrimaryButton
-                  type="button"
-                  onClick={handleRentClick}
-                  disabled={startDateTimestamp === 0}
-                  margin="10px 0px 20px 0px"
-                  desktopMaxWidth="400px"
-                  mobileStart={1230}
-                  mobileMaxWidth="600px"
-                >
-                  Wyślij prośbę o wynajem
-                </PrimaryButton>
-              ) : (
-                <PrimaryButton
-                  type="button"
-                  onClick={handleRegisterRedirect}
-                  margin="20px 0px 20px 0px"
-                  desktopMaxWidth="400px"
-                  mobileStart={1230}
-                  mobileMaxWidth="600px"
-                >
-                  Zarejestruj się
-                </PrimaryButton>
-              )}
-              <MobileItemDescriptionContainer>
-                <ItemDescriptionTitle>Opis</ItemDescriptionTitle>
-                <ItemDescription>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. In
-                  nec sapien et dui ultricies congue at id leo. Etiam imperdiet,
-                  erat eu dictum pharetra, metus quam luctus metus, nec laoreet
-                  lectus ipsum id orci. Etiam tortor orci, convallis nec orci
-                  at, tempor viverra orci. Vestibulum congue bibendum vulputate.
-                </ItemDescription>
-              </MobileItemDescriptionContainer>
-            </ItemRightContainer>
+            </ItemContentWrapper>
           </ItemContainer>
         </Container>
       )}
@@ -165,17 +159,32 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: var(--light);
   min-height: calc(100vh - 308px);
+
+  @media (max-width: 500px) {
+    padding: 0;
+  }
+`;
+
+const ItemContentWrapper = styled.div`
+  display: contents;
+
+  @media (max-width: 1230px) {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const BackContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 10px;
+  margin: 0px 0px 10px 10px;
+  max-width: 1400px;
+  width: 100%;
   cursor: pointer;
   transition: transform 0.3s ease;
-  align-self: flex-start;
 
   &:hover {
     transform: scale(1.003);
@@ -183,6 +192,10 @@ const BackContainer = styled.div`
 
   @media (max-width: 1230px) {
     display: none;
+  }
+
+  @media (max-width: 500px) {
+    margin-left: 0%;
   }
 `;
 
@@ -208,9 +221,13 @@ const ItemContainer = styled.div`
   display: grid;
   gap: 40px;
   grid-template-columns: repeat(2, 1fr);
+  background-color: var(--white);
+  padding: 30px;
+  max-width: 1400px;
+  border-radius: 8px;
 
   @media (max-width: 1230px) {
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: 1fr;
     gap: 0;
     max-width: 600px;
   }
@@ -219,7 +236,6 @@ const ItemContainer = styled.div`
 const ItemLeftContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: start;
 `;
 
 const ItemRightContainer = styled.div`
@@ -232,7 +248,6 @@ const ItemImage = styled(SkeletonLoaderImage)`
   max-width: 600px;
   height: auto;
   border-radius: 8px;
-  margin-bottom: 40px;
 
   @media (max-width: 1230px) {
     margin-bottom: 10px;
@@ -246,15 +261,7 @@ const ItemName = styled.p`
   margin-bottom: 15px;
 
   @media (max-width: 1230px) {
-    display: none;
-  }
-`;
-
-const MobileItemName = styled(ItemName)`
-  display: none;
-
-  @media (max-width: 1230px) {
-    display: block;
+    font-size: 28px;
   }
 
   @media (max-width: 700px) {
@@ -297,18 +304,6 @@ const ItemLocalizationIcon = styled.img`
 const ItemDescriptionContainer = styled.div`
   display: flex;
   flex-direction: column;
-
-  @media (max-width: 1230px) {
-    display: none;
-  }
-`;
-
-const MobileItemDescriptionContainer = styled(ItemDescriptionContainer)`
-  display: none;
-
-  @media (max-width: 1230px) {
-    display: flex;
-  }
 `;
 
 const ItemDescriptionTitle = styled.p`
