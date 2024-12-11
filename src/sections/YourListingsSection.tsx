@@ -80,7 +80,7 @@ const Container = styled.div`
   flex-direction: column;
   gap: 40px;
   background-color: var(--light);
-  min-height: calc(100vh - 494px);
+  min-height: calc(100vh - 493px);
 
   @media (max-width: 1320px) {
     align-items: center;
