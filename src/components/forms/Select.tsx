@@ -10,7 +10,7 @@ interface Option {
 interface SelectProps {
   label: string;
   options: Option[];
-  defaultValue: string;
+  value: string;
   isRequired?: boolean;
   margin?: string;
   onChange?: (value: string) => void;
@@ -20,28 +20,20 @@ interface SelectProps {
 const Select: React.FC<SelectProps> = ({
   label,
   options,
-  defaultValue,
+  value,
   isRequired = false,
   margin,
   onChange,
   name,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(defaultValue);
   const selectRef = useRef<HTMLSelectElement>(null);
 
-  const handleOptionClick = (value: string, optionValue: string) => {
-    setSelectedValue(value);
+  const selectedOption = options.find((option) => option.value === value);
+
+  const handleSelect = (val: string) => {
     setIsOpen(false);
-
-    if (selectRef.current) {
-      selectRef.current.value = optionValue;
-
-      const event = new Event("change", { bubbles: true });
-      selectRef.current.dispatchEvent(event);
-    }
-
-    onChange && onChange(optionValue);
+    if (onChange) onChange(val);
   };
 
   return (
@@ -52,7 +44,7 @@ const Select: React.FC<SelectProps> = ({
       </LabelText>
       <Dropdown>
         <DropdownHeader onClick={() => setIsOpen(!isOpen)}>
-          {selectedValue}
+          {selectedOption ? selectedOption.label : "Wybierz kategorię"}
           <ArrowIcon src={arrowDownBlack} $isOpen={isOpen} />
         </DropdownHeader>
         {isOpen && (
@@ -60,7 +52,7 @@ const Select: React.FC<SelectProps> = ({
             {options.map((option) => (
               <DropdownItem
                 key={option.value}
-                onClick={() => handleOptionClick(option.label, option.value)}
+                onClick={() => handleSelect(option.value)}
               >
                 {option.label}
               </DropdownItem>
@@ -72,17 +64,9 @@ const Select: React.FC<SelectProps> = ({
           ref={selectRef}
           name={name}
           required={isRequired}
-          value={
-            options.find((opt) => opt.label === selectedValue)?.value || ""
-          }
+          value={value}
           onChange={(e) => {
-            const selectedOption = options.find(
-              (opt) => opt.value === e.target.value
-            );
-            if (selectedOption) {
-              setSelectedValue(selectedOption.label);
-              onChange && onChange(selectedOption.value);
-            }
+            if (onChange) onChange(e.target.value);
           }}
         >
           {options.map((option) => (
