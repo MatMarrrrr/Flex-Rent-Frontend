@@ -6,7 +6,7 @@ import {
 import Input from "./Input";
 import PasswordToggleButton from "./PasswordToggleButton";
 
-interface PasswordFieldProps {
+interface FormikPasswordFieldProps {
   name: string;
   label: string;
   isRequired?: boolean;
@@ -14,7 +14,7 @@ interface PasswordFieldProps {
   onToggle: () => void;
 }
 
-const PasswordField: React.FC<PasswordFieldProps> = ({
+const FormikPasswordField: React.FC<FormikPasswordFieldProps> = ({
   name,
   label,
   isRequired = false,
@@ -38,4 +38,4 @@ const PasswordField: React.FC<PasswordFieldProps> = ({
   </>
 );
 
-export default PasswordField;
+export default FormikPasswordField;

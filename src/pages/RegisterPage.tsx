@@ -13,8 +13,8 @@ import {
   ArrowBack,
 } from "../styledComponents/authComponents";
 import PrimaryButton from "../components/buttons/PrimaryButton";
-import FormField from "../components/forms/FormField";
-import PasswordField from "../components/forms/PasswordField";
+import FormikInputField from "../components/forms/FormikInputField";
+import FormikPasswordField from "../components/forms/FormikPasswordField";
 import FormikForm from "../components/forms/FormikForm";
 import arrowBack from "../assets/icons/arrowBack.svg";
 
@@ -60,14 +60,14 @@ export default function RegisterPage() {
               validationSchema={loginSchema}
               onSubmit={handleNext}
             >
-              <FormField
+              <FormikInputField
                 name="email"
                 label="E-mail"
                 type="text"
                 isRequired={true}
                 margin="0px 0px 15px 0px"
               />
-              <PasswordField
+              <FormikPasswordField
                 name="password"
                 label="Hasło"
                 isRequired={true}
@@ -92,28 +92,28 @@ export default function RegisterPage() {
               validationSchema={personalDataSchema}
               onSubmit={handleSubmit}
             >
-              <FormField
+              <FormikInputField
                 name="name"
                 label="Imie"
                 type="text"
                 isRequired={true}
                 margin="0px 0px 15px 0px"
               />
-              <FormField
+              <FormikInputField
                 name="surname"
                 label="Nazwisko"
                 type="text"
                 isRequired={true}
                 margin="0px 0px 15px 0px"
               />
-              <FormField
+              <FormikInputField
                 name="city"
                 label="Miasto"
                 type="text"
                 isRequired={true}
                 margin="0px 0px 15px 0px"
               />
-              <FormField
+              <FormikInputField
                 name="province"
                 label="Województwo"
                 type="text"

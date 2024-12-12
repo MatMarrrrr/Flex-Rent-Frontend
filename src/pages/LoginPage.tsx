@@ -7,8 +7,8 @@ import {
   RedirectText,
 } from "../styledComponents/authComponents";
 import PrimaryButton from "../components/buttons/PrimaryButton";
-import FormField from "../components/forms/FormField";
-import PasswordField from "../components/forms/PasswordField";
+import FormikInputField from "../components/forms/FormikInputField";
+import FormikPasswordField from "../components/forms/FormikPasswordField";
 import FormikForm from "../components/forms/FormikForm";
 
 export default function LoginPage() {
@@ -35,14 +35,14 @@ export default function LoginPage() {
           validationSchema={loginSchema}
           onSubmit={handleSubmit}
         >
-          <FormField
+          <FormikInputField
             name="email"
             label="E-mail"
             type="text"
             isRequired={true}
             margin="0px 0px 15px 0px"
           />
-          <PasswordField
+          <FormikPasswordField
             name="password"
             label="Hasło"
             isRequired={true}
