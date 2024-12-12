@@ -1,8 +1,9 @@
 import { Field, ErrorMessage } from "formik";
 import { ErrorWrapper } from "../../styledComponents/authComponents";
 import Input from "./Input";
+import styled from "styled-components";
 
-interface FormFieldProps {
+interface FormikInputFieldProps {
   name: string;
   label: string;
   type?: string;
@@ -10,14 +11,14 @@ interface FormFieldProps {
   margin?: string;
 }
 
-const FormField: React.FC<FormFieldProps> = ({
+const FormikInputField: React.FC<FormikInputFieldProps> = ({
   name,
   label,
   type = "text",
   isRequired = false,
   margin,
 }) => (
-  <>
+  <FieldWrapper>
     <Field
       name={name}
       as={Input}
@@ -29,7 +30,12 @@ const FormField: React.FC<FormFieldProps> = ({
     <ErrorWrapper>
       <ErrorMessage name={name} />
     </ErrorWrapper>
-  </>
+  </FieldWrapper>
 );
 
-export default FormField;
+const FieldWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+export default FormikInputField;
