@@ -11,6 +11,7 @@ interface SelectProps {
   label: string;
   options: Option[];
   value: string;
+  startValue: string;
   isRequired?: boolean;
   margin?: string;
   onChange?: (value: string) => void;
@@ -21,6 +22,7 @@ const Select: React.FC<SelectProps> = ({
   label,
   options,
   value,
+  startValue,
   isRequired = false,
   margin,
   onChange,
@@ -44,7 +46,7 @@ const Select: React.FC<SelectProps> = ({
       </LabelText>
       <Dropdown>
         <DropdownHeader onClick={() => setIsOpen(!isOpen)}>
-          {selectedOption ? selectedOption.label : "Wybierz kategorię"}
+          {selectedOption ? selectedOption.label : startValue}
           <ArrowIcon src={arrowDownBlack} $isOpen={isOpen} />
         </DropdownHeader>
         {isOpen && (
