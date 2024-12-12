@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 export interface ButtonProps {
-  onClick: () => void;
+  onClick?: () => void;
   disabled?: boolean;
   type?: "button" | "submit" | "reset";
   margin?: string;

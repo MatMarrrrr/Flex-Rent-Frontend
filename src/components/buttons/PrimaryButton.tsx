@@ -9,6 +9,9 @@ const PrimaryButton: React.FC<ButtonProps> = ({
   type = "button",
   margin,
   fontSize,
+  fontColor,
+  borderColor,
+  background,
   desktopMaxWidth,
   mobileMaxWidth,
   mobileStart,
@@ -18,6 +21,9 @@ const PrimaryButton: React.FC<ButtonProps> = ({
     <StyledPrimaryButton
       $margin={margin}
       $fontSize={fontSize}
+      $fontColor={fontColor}
+      $borderColor={borderColor}
+      $background={background}
       onClick={onClick}
       type={type}
       disabled={disabled}
