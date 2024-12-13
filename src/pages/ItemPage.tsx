@@ -201,7 +201,7 @@ const BackContainer = styled.div`
 
 const MobileBackContainer = styled(BackContainer)`
   display: none;
-  margin-bottom: 0;
+  margin: 0 0 10px 0;
 
   @media (max-width: 1230px) {
     display: flex;
@@ -229,6 +229,7 @@ const ItemContainer = styled.div`
   @media (max-width: 1230px) {
     grid-template-columns: 1fr;
     gap: 0;
+    padding-top: 20px;
     max-width: 600px;
   }
 `;
