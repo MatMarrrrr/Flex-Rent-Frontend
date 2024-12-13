@@ -34,7 +34,9 @@ export const UploadImageContainer: React.FC<UploadImageContainerProps> = ({
       {!isImageAdded ? (
         <NoImageContainer>
           <NoImageIcon src={uploadImage} />
-          <NoImageText>Wgraj zdjęcie</NoImageText>
+          <NoImageText>
+            <RequiredStar>*</RequiredStar>Wgraj zdjęcie
+          </NoImageText>
         </NoImageContainer>
       ) : (
         <>
@@ -69,6 +71,11 @@ const Container = styled.label`
 
 const FileInput = styled.input`
   display: none;
+`;
+
+const RequiredStar = styled.span`
+  color: red;
+  margin-right: 5px;
 `;
 
 const NoImageContainer = styled.div`

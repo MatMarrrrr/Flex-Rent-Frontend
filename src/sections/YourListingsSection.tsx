@@ -6,11 +6,15 @@ import Loader from "../components/ui/Loader";
 import { useEffect, useState } from "react";
 import MotionWrapper from "../components/ui/MotionWrapper";
 import { fromBottomVariants } from "../consts/motionVariants";
+import { useNavigate } from "react-router";
 
 const YourListingsSection = () => {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const handleAddClick = () => {};
+  const handleAddClick = () => {
+    navigate("/add-listing");
+  };
 
   const handleEditClick = (id: number) => {
     console.log(id);

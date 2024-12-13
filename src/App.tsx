@@ -14,6 +14,7 @@ import SearchPage from "./pages/SearchPage";
 import ItemPage from "./pages/ItemPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import DashboardPage from "./pages/DashboardPage";
+import AddListingPage from "./pages/AddListingPage";
 
 function App() {
   useEffect(() => {
@@ -35,6 +36,7 @@ function App() {
           <Route path="/search" element={<SearchPage />} />
           <Route path="/item/:id" element={<ItemPage />} />
           <Route path="/dashboard/*" element={<DashboardPage />} />
+          <Route path="/add-listing" element={<AddListingPage />} />
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
