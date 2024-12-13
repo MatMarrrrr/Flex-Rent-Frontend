@@ -96,6 +96,7 @@ const Image = styled(SkeletonLoaderImage)`
 
   @media (max-width: 1320px) {
     max-width: 100%;
+    max-width: 640px;
     margin-bottom: 10px;
   }
 `;
