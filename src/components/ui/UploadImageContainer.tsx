@@ -1,16 +1,20 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
 import styled from "styled-components";
 import uploadImage from "@/assets/icons/uploadImage.svg";
 import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
 
+type ImageType = File | string | null;
+
 interface UploadImageContainerProps {
-  setImageFile: (file: File) => void;
+  setImageFile: (file: ImageType) => void;
+  initialImage?: ImageType;
 }
 
 export const UploadImageContainer: React.FC<UploadImageContainerProps> = ({
   setImageFile,
+  initialImage = null,
 }) => {
-  const [isImageAdded, setIsImageAdded] = useState<boolean>(false);
+  const [isImageAdded, setIsImageAdded] = useState<boolean>(!!initialImage);
   const [previewSrc, setPreviewSrc] = useState<string>("");
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -23,6 +27,17 @@ export const UploadImageContainer: React.FC<UploadImageContainerProps> = ({
       setImageFile(file);
     }
   };
+
+  useEffect(() => {
+    if (initialImage) {
+      setIsImageAdded(true);
+      if (typeof initialImage === "string") {
+        setPreviewSrc(initialImage);
+      } else if (initialImage instanceof File) {
+        setPreviewSrc(URL.createObjectURL(initialImage));
+      }
+    }
+  }, [initialImage]);
 
   return (
     <Container>

@@ -19,7 +19,7 @@ export default function LoginPage() {
   };
 
   const handleSubmit = (values: { email: string; password: string }) => {
-    console.log("Dane formularza:", values);
+    console.log(values);
   };
 
   return (

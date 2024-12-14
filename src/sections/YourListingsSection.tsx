@@ -17,7 +17,7 @@ const YourListingsSection = () => {
   };
 
   const handleEditClick = (id: number) => {
-    console.log(id);
+    navigate(`/edit-listing/${id}`);
   };
 
   const listings = Array.from({ length: 5 }, (_, index) => ({

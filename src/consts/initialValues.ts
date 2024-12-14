@@ -9,3 +9,11 @@ export const personalDataInitialValues = {
   city: "",
   province: "",
 };
+
+export const listingInitialValues = {
+  name: "",
+  category: "",
+  price: null,
+  localization: "",
+  description: "",
+};

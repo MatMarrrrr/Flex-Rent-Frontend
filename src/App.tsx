@@ -15,6 +15,7 @@ import ItemPage from "@/pages/ItemPage";
 import NotFoundPage from "@/pages/NotFoundPage";
 import DashboardPage from "@/pages/DashboardPage";
 import AddListingPage from "@/pages/AddListingPage";
+import EditListingPage from "./pages/EditListingPage";
 
 function App() {
   useEffect(() => {
@@ -37,6 +38,7 @@ function App() {
           <Route path="/item/:id" element={<ItemPage />} />
           <Route path="/dashboard/*" element={<DashboardPage />} />
           <Route path="/add-listing" element={<AddListingPage />} />
+          <Route path="/edit-listing/:id" element={<EditListingPage />} />
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
