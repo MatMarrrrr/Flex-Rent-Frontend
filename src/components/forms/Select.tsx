@@ -29,14 +29,25 @@ const Select: React.FC<SelectProps> = ({
   name,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [filterText, setFilterText] = useState("");
   const selectRef = useRef<HTMLSelectElement>(null);
 
   const selectedOption = options.find((option) => option.value === value);
 
   const handleSelect = (val: string) => {
     setIsOpen(false);
+    setFilterText("");
     if (onChange) onChange(val);
   };
+
+  const handleSelectClick = () => {
+    setIsOpen(!isOpen);
+    setFilterText("");
+  };
+
+  const filteredOptions = options.filter((option) =>
+    option.label.toLowerCase().includes(filterText.toLowerCase().trim())
+  );
 
   return (
     <Container $margin={margin}>
@@ -45,13 +56,19 @@ const Select: React.FC<SelectProps> = ({
         {label}
       </LabelText>
       <Dropdown>
-        <DropdownHeader onClick={() => setIsOpen(!isOpen)}>
+        <DropdownHeader onClick={handleSelectClick}>
           {selectedOption ? selectedOption.label : startValue}
           <ArrowIcon src={arrowDownBlack} $isOpen={isOpen} />
         </DropdownHeader>
         {isOpen && (
           <DropdownList>
-            {options.map((option) => (
+            <SearchInput
+              type="text"
+              placeholder="Wyszukaj..."
+              value={filterText}
+              onChange={(e) => setFilterText(e.target.value)}
+            />
+            {filteredOptions.map((option) => (
               <DropdownItem
                 key={option.value}
                 onClick={() => handleSelect(option.value)}
@@ -59,6 +76,9 @@ const Select: React.FC<SelectProps> = ({
                 {option.label}
               </DropdownItem>
             ))}
+            {filteredOptions.length === 0 && (
+              <NoOptionsMessage>Nie znaleziono opcji</NoOptionsMessage>
+            )}
           </DropdownList>
         )}
 
@@ -130,8 +150,10 @@ const ArrowIcon = styled.img<{ $isOpen: boolean }>`
 const DropdownList = styled.ul`
   position: absolute;
   width: 100%;
+  max-height: 264px;
+  overflow-y: scroll;
   margin: 0;
-  padding: 0;
+  padding: 10px;
   list-style: none;
   border: 1px solid var(--dark-25);
   border-top: 0;
@@ -164,4 +186,20 @@ const HiddenSelect = styled.select`
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   border: 0;
+`;
+
+const SearchInput = styled.input`
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--dark-25);
+  border-radius: 5px;
+  font-size: 16px;
+`;
+
+const NoOptionsMessage = styled.p`
+  text-align: center;
+  padding: 10px;
+  color: var(--dark-50);
+  font-size: 16px;
 `;

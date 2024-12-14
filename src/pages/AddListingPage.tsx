@@ -10,6 +10,7 @@ interface ListingFormValues {
   name: string;
   category: string;
   price: number | null;
+  currency: string;
   localization: string;
   description: string;
 }

@@ -14,6 +14,7 @@ export const listingInitialValues = {
   name: "",
   category: "",
   price: null,
+  currency: "",
   localization: "",
   description: "",
 };

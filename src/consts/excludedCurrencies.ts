@@ -1,0 +1,17 @@
+export const excludedCurrencies = [
+  "XTS",
+  "XUA",
+  "XXX",
+  "XAG",
+  "XAU",
+  "XBA",
+  "XBB",
+  "XBC",
+  "XBD",
+  "XDR",
+  "XOF",
+  "XPD",
+  "XPF",
+  "XPT",
+  "XSU",
+];

@@ -14,6 +14,7 @@ interface ListingFormValues {
   name: string;
   category: string;
   price: number | null;
+  currency: string;
   localization: string;
   description: string;
 }
@@ -49,6 +50,7 @@ export default function EditListingPage() {
       name: `Nazwa przedmiotu ${id}`,
       category: `1`,
       price: 123,
+      currency: "PLN",
       localization: `Warszawa`,
       description: `Opis przedmiotu ${id}`,
     });

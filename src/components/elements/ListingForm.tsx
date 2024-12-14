@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { categories } from "@/consts/categories";
+import currencyCodes from "currency-codes";
 import arrowBack from "@/assets/icons/arrowBack.svg";
 import { listingSchema } from "@/validations/listingSchema";
 import UploadImageContainer from "@/components/ui/UploadImageContainer";
@@ -9,6 +10,7 @@ import FormikInputField from "@/components/forms/FormikInputField";
 import FormikSelectField from "@/components/forms/FormikSelectField";
 import FormikTextAreaField from "@/components/forms/FormikTextAreaField";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
+import { excludedCurrencies } from "@/consts/excludedCurrencies";
 
 type ImageType = File | null | string;
 
@@ -23,6 +25,7 @@ interface ListingFormProps {
     name: string;
     category: string;
     price: number | null;
+    currency: string;
     localization: string;
     description: string;
   };
@@ -49,7 +52,21 @@ const ListingForm: React.FC<ListingFormProps> = ({
     label: category.name,
   }));
 
-  const handleSubmit = (values: any) => {
+  const currencies = currencyCodes.data
+    .filter((currency) => !excludedCurrencies.includes(currency.code))
+    .map((currency) => ({
+      value: currency.code,
+      label: `${currency.code}`,
+    }));
+
+  const handleSubmit = (values: {
+    name: string;
+    category: string;
+    price: number | null;
+    currency: string;
+    localization: string;
+    description: string;
+  }) => {
     if (imageFile == null) {
       setIsImageError(true);
       return;
@@ -108,6 +125,14 @@ const ListingForm: React.FC<ListingFormProps> = ({
             />
             <PerDayText>za dzień</PerDayText>
           </PriceInputContainer>
+          <FormikSelectField
+            name="currency"
+            label="Waluta"
+            options={currencies}
+            startValue="Wybierz walutę"
+            isRequired={true}
+            margin="0px 0px 25px 0px"
+          />
           <FormikInputField
             name="localization"
             label="Lokalizacja"
