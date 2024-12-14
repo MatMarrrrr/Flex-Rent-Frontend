@@ -20,11 +20,11 @@ const DashboardNavigation = () => {
 
   return (
     <Container>
-      <TitleContainer onClick={toggleMenu}>
+      <TitleContainer onClick={toggleMenu} data-aos="fade-up">
         <Title>Dashboard</Title>
         <ArrowDown src={arrowDownWhite} $isOpen={isOpen} />
       </TitleContainer>
-      <NavigationContainer>
+      <NavigationContainer data-aos="fade-up">
         <DashboardNavigationList
           navigationItems={navigationItems}
           defaultSection={defaultSection}
