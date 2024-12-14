@@ -3,7 +3,7 @@ import {
   ErrorWrapper,
   PasswordInputWrapper,
 } from "@/styledComponents/authComponents";
-import Input from "./Input";
+import Input from "@/components/forms/Input";
 import PasswordToggleButton from "@/components/buttons/PasswordToggleButton";
 
 interface FormikPasswordFieldProps {

@@ -1,6 +1,6 @@
 import React from "react";
-import eye from "./../../assets/icons/eye.svg";
-import eyeOff from "./../../assets/icons/eye_off.svg";
+import eye from "@/assets/icons/eye.svg";
+import eyeOff from "@/assets/icons/eye_off.svg";
 import styled from "styled-components";
 
 interface PasswordToggleButtonProps {

@@ -15,7 +15,7 @@ import ItemPage from "@/pages/ItemPage";
 import NotFoundPage from "@/pages/NotFoundPage";
 import DashboardPage from "@/pages/DashboardPage";
 import AddListingPage from "@/pages/AddListingPage";
-import EditListingPage from "./pages/EditListingPage";
+import EditListingPage from "@/pages/EditListingPage";
 
 function App() {
   useEffect(() => {
