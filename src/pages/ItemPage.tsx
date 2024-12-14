@@ -10,6 +10,7 @@ import Loader from "@/components/ui/Loader";
 import { Range } from "react-date-range";
 import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
 import getSymbolFromCurrency from "currency-symbol-map";
+import ErrorLayout from "@/components/ui/ErrorLayout";
 
 export default function ItemPage() {
   const navigate = useNavigate();
@@ -21,9 +22,9 @@ export default function ItemPage() {
     endDate: new Date(),
     key: "selectedRange",
   });
-
   const [startDateTimestamp, setStartDateTimestamp] = useState<number>(0);
   const [endDateTimestamp, setEndDateTimestamp] = useState<number>(0);
+  const [error, setError] = useState<string>("");
 
   const handleBack = () => {
     navigate(-1);
@@ -38,15 +39,25 @@ export default function ItemPage() {
     setEndDateTimestamp(endDate.getTime());
   };
 
-  const handleRentClick = () => {
-    console.log(`${startDateTimestamp}  ${endDateTimestamp}`);
-  };
-
   const handleRegisterRedirect = () => {
     navigate("/register");
   };
 
+  const handleRentClick = () => {
+    console.log(`${startDateTimestamp}  ${endDateTimestamp}`);
+  };
+
+  const handleEditClick = (id: string) => {
+    navigate(`/edit-listing/${id}`);
+  };
+
   useEffect(() => {
+    if (!id || isNaN(Number(id))) {
+      setError("Nieprawidłowy identyfikator ogłoszenia.");
+      setIsLoading(false);
+      return;
+    }
+
     const timeout = setTimeout(() => {
       setIsLoading(false);
     }, 1000);
@@ -55,6 +66,13 @@ export default function ItemPage() {
   }, []);
 
   let isLogin = true;
+  let isRequestSent = true;
+  let isOwner = true;
+
+  if (error) {
+    return <ErrorLayout message={error} />;
+  }
+
   return (
     <div>
       {isLoading ? (
@@ -91,13 +109,52 @@ export default function ItemPage() {
                     <ItemDetailText>Lokalizacja</ItemDetailText>
                   </ItemLocalizationContainer>
                 </ItemDetailsContainer>
-                {isLogin && (
+                {isLogin && !isOwner && !isRequestSent && (
                   <CalendarButton
                     selectedDateRange={selectedDateRange}
                     onSelect={handleSelect}
                   />
                 )}
-                {isLogin ? (
+                {!isLogin && (
+                  <PrimaryButton
+                    type="button"
+                    onClick={handleRegisterRedirect}
+                    margin="20px 0px 20px 0px"
+                    desktopMaxWidth="500px"
+                    mobileStart={1230}
+                    mobileMaxWidth="600px"
+                  >
+                    Zarejestruj się
+                  </PrimaryButton>
+                )}
+
+                {isLogin && isOwner && id && (
+                  <PrimaryButton
+                    type="button"
+                    onClick={() => handleEditClick(id)}
+                    margin="20px 0px 20px 0px"
+                    desktopMaxWidth="500px"
+                    mobileStart={1230}
+                    mobileMaxWidth="600px"
+                  >
+                    Edytuj
+                  </PrimaryButton>
+                )}
+
+                {isLogin && !isOwner && isRequestSent && (
+                  <PrimaryButton
+                    type="button"
+                    disabled={true}
+                    margin="10px 0px 20px 0px"
+                    desktopMaxWidth="500px"
+                    mobileStart={1230}
+                    mobileMaxWidth="600px"
+                  >
+                    Wysłano prośbę
+                  </PrimaryButton>
+                )}
+
+                {isLogin && !isOwner && !isRequestSent && (
                   <PrimaryButton
                     type="button"
                     onClick={handleRentClick}
@@ -108,17 +165,6 @@ export default function ItemPage() {
                     mobileMaxWidth="600px"
                   >
                     Wyślij prośbę o wynajem
-                  </PrimaryButton>
-                ) : (
-                  <PrimaryButton
-                    type="button"
-                    onClick={handleRegisterRedirect}
-                    margin="20px 0px 20px 0px"
-                    desktopMaxWidth="500px"
-                    mobileStart={1230}
-                    mobileMaxWidth="600px"
-                  >
-                    Zarejestruj się
                   </PrimaryButton>
                 )}
               </ItemRightContainer>

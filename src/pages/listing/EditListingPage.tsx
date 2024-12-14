@@ -39,6 +39,12 @@ export default function EditListingPage() {
   };
 
   useEffect(() => {
+    if (!id || isNaN(Number(id))) {
+      setError("Nieprawidłowy identyfikator ogłoszenia.");
+      setIsLoading(false);
+      return;
+    }
+
     const hasAccess = true;
     if (!hasAccess) {
       setError("Nie masz dostępu do tej strony");
