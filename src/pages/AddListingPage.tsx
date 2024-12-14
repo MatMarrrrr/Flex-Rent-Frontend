@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import UploadImageContainer from "../components/ui/UploadImageContainer";
 import { useEffect, useState } from "react";
-import * as yup from "yup";
 import FormikForm from "../components/forms/FormikForm";
 import arrowBack from "../assets/icons/arrowBack.svg";
 import FormikInputField from "../components/forms/FormikInputField";
@@ -10,6 +9,7 @@ import PrimaryButton from "../components/buttons/PrimaryButton";
 import FormikSelectField from "../components/forms/FormikSelectField";
 import FormikTextAreaField from "../components/forms/FormikTextAreaField";
 import { useNavigate } from "react-router";
+import { listingSchema } from "../validations/listingSchema";
 
 export default function AddListingPage() {
   const navigate = useNavigate();
@@ -50,14 +50,6 @@ export default function AddListingPage() {
   useEffect(() => {
     if (imageFile) setIsImageError(false);
   }, [imageFile]);
-
-  const listingSchema = yup.object().shape({
-    name: yup.string().required("Nazwa przedmiotu jest wymagana"),
-    category: yup.string().required("Kategoria jest wymagana"),
-    price: yup.number().nullable().required("Cena jest wymagana"),
-    localization: yup.string().required("Lokalizacja jest wymagana"),
-    description: yup.string().required("Opis jest wymagany"),
-  });
 
   return (
     <Container>
