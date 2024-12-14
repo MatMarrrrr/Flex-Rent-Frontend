@@ -1,15 +1,15 @@
 import styled from "styled-components";
-import UploadImageContainer from "../components/ui/UploadImageContainer";
+import UploadImageContainer from "@/components/ui/UploadImageContainer";
 import { useEffect, useState } from "react";
-import FormikForm from "../components/forms/FormikForm";
-import arrowBack from "../assets/icons/arrowBack.svg";
-import FormikInputField from "../components/forms/FormikInputField";
-import { categories } from "../consts/categories";
-import PrimaryButton from "../components/buttons/PrimaryButton";
-import FormikSelectField from "../components/forms/FormikSelectField";
-import FormikTextAreaField from "../components/forms/FormikTextAreaField";
+import FormikForm from "@/components/forms/FormikForm";
+import arrowBack from "@/assets/icons/arrowBack.svg";
+import FormikInputField from "@/components/forms/FormikInputField";
+import { categories } from "@/consts/categories";
+import PrimaryButton from "@/components/buttons/PrimaryButton";
+import FormikSelectField from "@/components/forms/FormikSelectField";
+import FormikTextAreaField from "@/components/forms/FormikTextAreaField";
 import { useNavigate } from "react-router";
-import { listingSchema } from "../validations/listingSchema";
+import { listingSchema } from "@/validations/listingSchema";
 
 export default function AddListingPage() {
   const navigate = useNavigate();

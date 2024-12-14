@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import SkeletonLoaderImage from "../ui/SkeletonLoaderImage";
+import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
 
 interface CategoryCardProps {
   id: number;

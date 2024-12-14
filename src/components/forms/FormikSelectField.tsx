@@ -1,7 +1,7 @@
 import React from "react";
 import { useField, ErrorMessage } from "formik";
-import { ErrorWrapper } from "../../styledComponents/authComponents";
-import Select from "./Select";
+import { ErrorWrapper } from "@/styledComponents/authComponents";
+import Select from "@/components/forms/Select";
 
 interface FormikSelectFieldProps {
   name: string;

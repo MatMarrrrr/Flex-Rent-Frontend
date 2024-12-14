@@ -1,9 +1,9 @@
-import { footerLinksData } from "./../../consts/footerLinksData";
+import { footerLinksData } from "@/consts/footerLinksData";
 import styled from "styled-components";
-import Logo from "./Logo";
-import emailIcon from "./../../assets/icons/email.svg";
-import facebookIcon from "./../../assets/icons/facebook.svg";
-import linkedinIcon from "./../../assets/icons/linkedin.svg";
+import Logo from "@/components/ui/Logo";
+import emailIcon from "@/assets/icons/email.svg";
+import facebookIcon from "@/assets/icons/facebook.svg";
+import linkedinIcon from "@/assets/icons/linkedin.svg";
 
 const Footer = () => {
   return (

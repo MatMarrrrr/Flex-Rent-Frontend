@@ -1,5 +1,5 @@
 import { Formik, FormikHelpers } from "formik";
-import { StyledForm } from "../../styledComponents/authComponents";
+import { StyledForm } from "@/styledComponents/authComponents";
 import { ReactNode } from "react";
 import { Schema } from "yup";
 

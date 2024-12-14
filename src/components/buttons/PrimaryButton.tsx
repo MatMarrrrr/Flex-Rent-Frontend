@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { StyledButton } from "./Button";
-import type { ButtonProps } from "./Button";
+import { StyledButton } from "@/components/buttons/Button";
+import type { ButtonProps } from "@/components/buttons/Button";
 
 const PrimaryButton: React.FC<ButtonProps> = ({
   onClick,

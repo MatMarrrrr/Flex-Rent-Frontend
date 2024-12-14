@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import PrimaryButton from "../components/buttons/PrimaryButton";
-import ListingItem from "../components/elements/ListingItem";
-import test_item from "../assets/test_item.jpg";
-import Loader from "../components/ui/Loader";
+import PrimaryButton from "@/components/buttons/PrimaryButton";
+import ListingItem from "@/components/elements/ListingItem";
+import test_item from "@/assets/test_item.jpg";
+import Loader from "@/components/ui/Loader";
 import { useEffect, useState } from "react";
-import MotionWrapper from "../components/ui/MotionWrapper";
-import { fromBottomVariants } from "../consts/motionVariants";
+import MotionWrapper from "@/components/ui/MotionWrapper";
+import { fromBottomVariants } from "@/consts/motionVariants";
 import { useNavigate } from "react-router";
 
 const YourListingsSection = () => {

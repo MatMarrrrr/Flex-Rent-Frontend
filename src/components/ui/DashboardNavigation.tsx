@@ -1,9 +1,9 @@
-import arrowDownWhite from "./../../assets/icons/arrowDownWhite.svg";
+import arrowDownWhite from "@/assets/icons/arrowDownWhite.svg";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
-import { navigationItems } from "../../consts/dashboardNavigationItems";
-import DashboardNavigationList from "../elements/DashboardNavigationList";
+import { navigationItems } from "@/consts/dashboardNavigationItems";
+import DashboardNavigationList from "@/components/elements/DashboardNavigationList";
 
 const DashboardNavigation = () => {
   const location = useLocation();

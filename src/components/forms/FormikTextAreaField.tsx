@@ -1,7 +1,7 @@
 import { Field, ErrorMessage } from "formik";
-import { ErrorWrapper } from "../../styledComponents/authComponents";
+import { ErrorWrapper } from "@/styledComponents/authComponents";
 import styled from "styled-components";
-import TextArea from "./TextArea";
+import TextArea from "@/components/forms/TextArea";
 
 interface FormikTextAreaFieldProps {
   name: string;

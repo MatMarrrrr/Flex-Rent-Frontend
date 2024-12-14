@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { loginSchema } from "../validations/loginSchema";
+import { loginSchema } from "@/validations/loginSchema";
 import {
   Wrapper,
   Container,
   Header,
   RedirectText,
-} from "../styledComponents/authComponents";
-import PrimaryButton from "../components/buttons/PrimaryButton";
-import FormikInputField from "../components/forms/FormikInputField";
-import FormikPasswordField from "../components/forms/FormikPasswordField";
-import FormikForm from "../components/forms/FormikForm";
+} from "@/styledComponents/authComponents";
+import PrimaryButton from "@/components/buttons/PrimaryButton";
+import FormikInputField from "@/components/forms/FormikInputField";
+import FormikPasswordField from "@/components/forms/FormikPasswordField";
+import FormikForm from "@/components/forms/FormikForm";
 
 export default function LoginPage() {
   const [passwordShown, setPasswordShown] = useState<boolean>(false);

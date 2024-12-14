@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
-import { categories } from "../../consts/categories";
-import xIcon from "../../assets/icons/x.svg";
+import { categories } from "@/consts/categories";
+import xIcon from "@/assets/icons/x.svg";
 
 interface CategoryModalProps {
   isVisible: boolean;

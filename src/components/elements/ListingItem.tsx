@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import localizationIcon from "../../assets/icons/localization.svg";
-import Button from "../buttons/Button";
-import SkeletonLoaderImage from "../ui/SkeletonLoaderImage";
+import localizationIcon from "@/assets/icons/localization.svg";
+import Button from "@/components/buttons/Button";
+import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
 
 interface ListingItemProps {
   id: number;

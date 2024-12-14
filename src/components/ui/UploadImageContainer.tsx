@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent } from "react";
 import styled from "styled-components";
-import uploadImage from "../../assets/icons/uploadImage.svg";
-import SkeletonLoaderImage from "./SkeletonLoaderImage";
+import uploadImage from "@/assets/icons/uploadImage.svg";
+import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
 
 interface UploadImageContainerProps {
   setImageFile: (file: File) => void;

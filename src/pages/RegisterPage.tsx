@@ -1,22 +1,22 @@
 import { useState } from "react";
-import { loginSchema } from "../validations/loginSchema";
-import { personalDataSchema } from "../validations/personalDataSchema";
+import { loginSchema } from "@/validations/loginSchema";
+import { personalDataSchema } from "@/validations/personalDataSchema";
 import {
   loginInitialValues,
   personalDataInitialValues,
-} from "../consts/initialValues";
+} from "@/consts/initialValues";
 import {
   Wrapper,
   Container,
   Header,
   RedirectText,
   ArrowBack,
-} from "../styledComponents/authComponents";
-import PrimaryButton from "../components/buttons/PrimaryButton";
-import FormikInputField from "../components/forms/FormikInputField";
-import FormikPasswordField from "../components/forms/FormikPasswordField";
-import FormikForm from "../components/forms/FormikForm";
-import arrowBack from "../assets/icons/arrowBack.svg";
+} from "@/styledComponents/authComponents";
+import PrimaryButton from "@/components/buttons/PrimaryButton";
+import FormikInputField from "@/components/forms/FormikInputField";
+import FormikPasswordField from "@/components/forms/FormikPasswordField";
+import FormikForm from "@/components/forms/FormikForm";
+import arrowBack from "@/assets/icons/arrowBack.svg";
 
 export default function RegisterPage() {
   const [step, setStep] = useState<number>(1);

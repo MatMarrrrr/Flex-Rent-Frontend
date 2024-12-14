@@ -2,9 +2,9 @@ import { Field, ErrorMessage } from "formik";
 import {
   ErrorWrapper,
   PasswordInputWrapper,
-} from "../../styledComponents/authComponents";
+} from "@/styledComponents/authComponents";
 import Input from "./Input";
-import PasswordToggleButton from "./PasswordToggleButton";
+import PasswordToggleButton from "@/components/buttons/PasswordToggleButton";
 
 interface FormikPasswordFieldProps {
   name: string;

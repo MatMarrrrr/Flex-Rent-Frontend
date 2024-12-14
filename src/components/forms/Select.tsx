@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
-import arrowDownBlack from "./../../assets/icons/arrowDownBlack.svg";
+import arrowDownBlack from "@/assets/icons/arrowDownBlack.svg";
 
 interface Option {
   value: string;

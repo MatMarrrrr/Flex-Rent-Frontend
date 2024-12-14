@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import localizationIcon from "../../assets/icons/localization.svg";
-import SkeletonLoaderImage from "../ui/SkeletonLoaderImage";
+import localizationIcon from "@/assets/icons/localization.svg";
+import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
 
 interface ResultCardProps {
   id: number;

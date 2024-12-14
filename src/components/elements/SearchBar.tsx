@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { categories } from "../../consts/categories";
+import { categories } from "@/consts/categories";
 import styled from "styled-components";
-import searchIcon from "./../../assets/icons/search.svg";
-import categoriesIcon from "./../../assets/icons/categories.svg";
-import localizationIcon from "./../../assets/icons/localization.svg";
-import CategoryModal from "../ui/CategoryModal";
+import searchIcon from "@/assets/icons/search.svg";
+import categoriesIcon from "@/assets/icons/categories.svg";
+import localizationIcon from "@/assets/icons/localization.svg";
+import CategoryModal from "@/components/ui/CategoryModal";
 
 interface SearchBarProps {
   initialQuery?: string;

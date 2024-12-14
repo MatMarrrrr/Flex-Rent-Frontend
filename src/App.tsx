@@ -1,20 +1,20 @@
 import { useEffect } from "react";
 import { ThemeProvider } from "styled-components";
-import { lightTheme } from "./themes/themes";
+import { lightTheme } from "@/themes/themes";
 import { BrowserRouter as Router, Routes, Route } from "react-router";
-import GlobalStyle from "./themes/GlobalStyle";
+import GlobalStyle from "@/themes/GlobalStyle";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import Navbar from "./components/ui/Navbar";
-import MainPage from "./pages/MainPage";
-import Footer from "./components/ui/Footer";
-import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
-import SearchPage from "./pages/SearchPage";
-import ItemPage from "./pages/ItemPage";
-import NotFoundPage from "./pages/NotFoundPage";
-import DashboardPage from "./pages/DashboardPage";
-import AddListingPage from "./pages/AddListingPage";
+import Navbar from "@/components/ui/Navbar";
+import MainPage from "@/pages/MainPage";
+import Footer from "@/components/ui/Footer";
+import LoginPage from "@/pages/LoginPage";
+import RegisterPage from "@/pages/RegisterPage";
+import SearchPage from "@/pages/SearchPage";
+import ItemPage from "@/pages/ItemPage";
+import NotFoundPage from "@/pages/NotFoundPage";
+import DashboardPage from "@/pages/DashboardPage";
+import AddListingPage from "@/pages/AddListingPage";
 
 function App() {
   useEffect(() => {

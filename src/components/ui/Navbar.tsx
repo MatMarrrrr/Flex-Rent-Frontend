@@ -1,10 +1,10 @@
 import { Link, useLocation } from "react-router";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import dashboardIcon from "./../../assets/icons/bell.svg";
-import profileIcon from "./../../assets/icons/profile.svg";
-import HamburgerButton from "./HamburgerButton";
-import Logo from "./Logo";
+import dashboardIcon from "@/assets/icons/bell.svg";
+import profileIcon from "@/assets/icons/profile.svg";
+import HamburgerButton from "@/components/ui/HamburgerButton";
+import Logo from "@/components/ui/Logo";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);

@@ -1,6 +1,6 @@
 import { Field, ErrorMessage } from "formik";
-import { ErrorWrapper } from "../../styledComponents/authComponents";
-import Input from "./Input";
+import { ErrorWrapper } from "@/styledComponents/authComponents";
+import Input from "@/components/forms/Input";
 import styled from "styled-components";
 
 interface FormikInputFieldProps {

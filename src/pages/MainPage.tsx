@@ -1,8 +1,8 @@
-import { categories } from "../consts/categories";
+import { categories } from "@/consts/categories";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
-import SearchBar from "../components/elements/SearchBar";
-import CategoryCard from "../components/elements/CategoryCard";
+import SearchBar from "@/components/elements/SearchBar";
+import CategoryCard from "@/components/elements/CategoryCard";
 
 export default function MainPage() {
   const navigate = useNavigate();

@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import styled from "styled-components";
-import arrowBack from "../assets/icons/arrowBack.svg";
-import localizationIcon from "../assets/icons/localization.svg";
-import test_item from "../assets//test_item.jpg";
-import CalendarButton from "../components/buttons/CalendarButton";
-import PrimaryButton from "../components/buttons/PrimaryButton";
-import Loader from "../components/ui/Loader";
+import arrowBack from "@/assets/icons/arrowBack.svg";
+import localizationIcon from "@/assets/icons/localization.svg";
+import test_item from "@/assets/test_item.jpg";
+import CalendarButton from "@/components/buttons/CalendarButton";
+import PrimaryButton from "@/components/buttons/PrimaryButton";
+import Loader from "@/components/ui/Loader";
 import { Range } from "react-date-range";
-import SkeletonLoaderImage from "../components/ui/SkeletonLoaderImage";
+import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
 
 export default function ItemPage() {
   const navigate = useNavigate();

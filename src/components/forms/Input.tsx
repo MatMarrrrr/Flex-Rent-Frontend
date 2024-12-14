@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { RequiredStar } from "../../styledComponents/authComponents";
+import { RequiredStar } from "@/styledComponents/authComponents";
 
 interface InputProps {
   label: string;
