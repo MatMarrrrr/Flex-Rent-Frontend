@@ -9,6 +9,7 @@ import PrimaryButton from "@/components/buttons/PrimaryButton";
 import Loader from "@/components/ui/Loader";
 import { Range } from "react-date-range";
 import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
+import getSymbolFromCurrency from "currency-symbol-map";
 
 export default function ItemPage() {
   const navigate = useNavigate();
@@ -82,7 +83,9 @@ export default function ItemPage() {
                 <ItemName>Nazwa rzeczy do wypożyczenia</ItemName>
                 <ItemCategory>Kategoria</ItemCategory>
                 <ItemDetailsContainer>
-                  <ItemDetailText>100zł / Dzień</ItemDetailText>
+                  <ItemDetailText>
+                    100{getSymbolFromCurrency("PLN")} / Dzień
+                  </ItemDetailText>
                   <ItemLocalizationContainer>
                     <ItemLocalizationIcon src={localizationIcon} />
                     <ItemDetailText>Lokalizacja</ItemDetailText>

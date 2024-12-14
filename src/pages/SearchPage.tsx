@@ -63,6 +63,7 @@ export default function SearchPage() {
     image: test_item,
     name: `Nazwa rzeczy do wypożyczenia ${index + 1}`,
     price: "100",
+    currencyCode: "PLN",
     localization: `Lokalizacja`,
   }));
 
@@ -111,6 +112,7 @@ export default function SearchPage() {
                       image={item.image}
                       name={item.name}
                       price={item.price}
+                      currencyCode={item.currencyCode}
                       localization={item.localization}
                       onClick={() => handleItemClick(item.id)}
                     />

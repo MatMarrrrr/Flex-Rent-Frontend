@@ -1,12 +1,14 @@
 import styled from "styled-components";
 import localizationIcon from "@/assets/icons/localization.svg";
 import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
+import getSymbolFromCurrency from "currency-symbol-map";
 
 interface ResultCardProps {
   id: number;
   image: string;
   name: string;
   price: string;
+  currencyCode: string;
   localization: string;
   onClick: (id: number) => void;
 }
@@ -16,6 +18,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
   image,
   name,
   price,
+  currencyCode,
   localization,
   onClick,
 }) => {
@@ -24,7 +27,10 @@ const ResultCard: React.FC<ResultCardProps> = ({
       <Image src={image} />
       <ItemName>{name}</ItemName>
       <ItemDetailsContainer>
-        <ItemDetailText>{price}zł / Dzień</ItemDetailText>
+        <ItemDetailText>
+          {price}
+          {getSymbolFromCurrency(currencyCode)} / Dzień
+        </ItemDetailText>
         <ItemLocalizationContainer>
           <ItemLocalizationIcon src={localizationIcon} />
           <ItemDetailText>{localization}</ItemDetailText>
