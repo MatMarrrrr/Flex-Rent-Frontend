@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { categories } from "@/consts/categories";
 import styled from "styled-components";
 import SearchBar from "@/components/elements/SearchBar";
-import ResultCard from "@/components/elements/ResultCard";
+import ResultCard from "@/pages/search/components/ResultCard";
 import test_item from "@/assets/test_item.jpg";
 import Loader from "@/components/ui/Loader";
 import MotionWrapper from "@/components/ui/MotionWrapper";

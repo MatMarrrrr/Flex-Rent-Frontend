@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
-import ListingItem from "@/components/elements/ListingItem";
+import ListingItem from "@/sections/yourListings/components/ListingItem";
 import test_item from "@/assets/test_item.jpg";
 import Loader from "@/components/ui/Loader";
 import { useEffect, useState } from "react";

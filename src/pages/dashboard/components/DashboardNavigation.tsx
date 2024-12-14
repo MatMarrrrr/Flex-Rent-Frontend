@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { navigationItems } from "@/consts/dashboardNavigationItems";
-import DashboardNavigationList from "@/components/elements/DashboardNavigationList";
+import DashboardNavigationList from "@/pages/dashboard/components/DashboardNavigationList";
 
 const DashboardNavigation = () => {
   const location = useLocation();

@@ -1,9 +1,9 @@
 import styled from "styled-components";
-import DashboardNavigation from "@/components/ui/DashboardNavigation";
+import DashboardNavigation from "@/pages/dashboard/components/DashboardNavigation";
 import { Route, Routes } from "react-router";
 import MessagesSection from "@/sections/MessagesSection";
 import YourRentalsSection from "@/sections/YourRentalsSection";
-import YourListingsSection from "@/sections/YourListingsSection";
+import YourListingsSection from "@/sections/yourListings/YourListingsSection";
 import RequestsSection from "@/sections/RequestsSection";
 
 export default function DashboardPage() {

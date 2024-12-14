@@ -6,16 +6,16 @@ import GlobalStyle from "@/themes/GlobalStyle";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Navbar from "@/components/ui/Navbar";
-import MainPage from "@/pages/MainPage";
+import MainPage from "@/pages/main/MainPage";
 import Footer from "@/components/ui/Footer";
 import LoginPage from "@/pages/LoginPage";
 import RegisterPage from "@/pages/RegisterPage";
-import SearchPage from "@/pages/SearchPage";
+import SearchPage from "@/pages/search/SearchPage";
 import ItemPage from "@/pages/ItemPage";
 import NotFoundPage from "@/pages/NotFoundPage";
-import DashboardPage from "@/pages/DashboardPage";
-import AddListingPage from "@/pages/AddListingPage";
-import EditListingPage from "@/pages/EditListingPage";
+import DashboardPage from "@/pages/dashboard/DashboardPage";
+import AddListingPage from "@/pages/listing/AddListingPage";
+import EditListingPage from "@/pages/listing/EditListingPage";
 
 function App() {
   useEffect(() => {

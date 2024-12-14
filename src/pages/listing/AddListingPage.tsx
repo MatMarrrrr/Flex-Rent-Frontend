@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import arrowBack from "@/assets/icons/arrowBack.svg";
 import { useNavigate } from "react-router";
-import ListingForm from "@/components/elements/ListingForm";
+import ListingForm from "@/pages/listing/components/ListingForm";
 import { listingInitialValues } from "@/consts/initialValues";
 
 type ImageType = File | null | string;
