@@ -58,16 +58,18 @@ export default function SearchPage() {
     return [baseText, ...parts];
   };
 
-  const tempResults = Array.from({ length: 8 }, (_, index) => ({
-    id: index + 1,
-    image: test_item,
-    name: `Nazwa rzeczy do wypożyczenia ${index + 1}`,
-    price: "100",
-    currencyCode: "PLN",
-    localization: `Lokalizacja`,
-  }));
-
   useEffect(() => {
+    const tempResults = Array.from({ length: 8 }, (_, index) => ({
+      id: index + 1,
+      image: test_item,
+      name: `Nazwa rzeczy do wypożyczenia ${index + 1}`,
+      price: "100",
+      currencyCode: "PLN",
+      localization: `Lokalizacja`,
+    }));
+
+    setResult(tempResults);
+
     const timeout = setTimeout(() => {
       setIsLoading(false);
     }, 1000);
@@ -104,8 +106,8 @@ export default function SearchPage() {
             </ResultsTextContainer>
             <ResultsContainer>
               <MotionWrapper variants={fromRightVariants}>
-                {tempResults.length > 0 &&
-                  tempResults.map((item) => (
+                {result.length > 0 &&
+                  result.map((item) => (
                     <ResultCard
                       key={item.id}
                       id={item.id}
