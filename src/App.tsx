@@ -16,6 +16,7 @@ import NotFoundPage from "@/pages/NotFoundPage";
 import DashboardPage from "@/pages/dashboard/DashboardPage";
 import AddListingPage from "@/pages/listing/AddListingPage";
 import EditListingPage from "@/pages/listing/EditListingPage";
+import ProfilePage from "./pages/profile/ProfilePage";
 
 function App() {
   useEffect(() => {
@@ -39,6 +40,7 @@ function App() {
           <Route path="/dashboard/*" element={<DashboardPage />} />
           <Route path="/add-listing" element={<AddListingPage />} />
           <Route path="/edit-listing/:id" element={<EditListingPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

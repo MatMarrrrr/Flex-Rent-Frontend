@@ -67,6 +67,10 @@ export const StyledButton = styled.button<{
   background: ${({ $background }) => $background || "var(--white)"};
   max-width: ${({ $desktopMaxWidth }) => $desktopMaxWidth || "none"};
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
   font-size: ${({ $fontSize }) => $fontSize || "18px"};
   font-weight: bold;
   opacity: ${({ disabled }) => (disabled ? "0.5" : "1")};

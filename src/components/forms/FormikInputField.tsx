@@ -8,6 +8,7 @@ interface FormikInputFieldProps {
   label: string;
   type?: string;
   isRequired?: boolean;
+  disabled?: boolean;
   margin?: string;
 }
 
@@ -16,6 +17,7 @@ const FormikInputField: React.FC<FormikInputFieldProps> = ({
   label,
   type = "text",
   isRequired = false,
+  disabled = false,
   margin,
 }) => (
   <FieldWrapper>
@@ -25,6 +27,7 @@ const FormikInputField: React.FC<FormikInputFieldProps> = ({
       label={label}
       type={type}
       isRequired={isRequired}
+      disabled={disabled}
       margin={margin}
     />
     <ErrorWrapper>

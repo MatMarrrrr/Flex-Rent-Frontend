@@ -8,6 +8,7 @@ interface InputProps {
   value?: string;
   name?: string;
   isRequired?: boolean;
+  disabled?: boolean;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   margin?: string;
@@ -19,6 +20,7 @@ const Input: React.FC<InputProps> = ({
   value,
   name,
   isRequired = false,
+  disabled = false,
   onBlur,
   onChange,
   margin,
@@ -51,6 +53,7 @@ const Input: React.FC<InputProps> = ({
         onChange={handleInputChange}
         onBlur={onBlur}
         name={name}
+        disabled={disabled}
         step={type === "number" ? "0.01" : undefined}
       />
     </Container>

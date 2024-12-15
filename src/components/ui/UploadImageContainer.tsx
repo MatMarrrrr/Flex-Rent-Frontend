@@ -18,12 +18,15 @@ export const UploadImageContainer: React.FC<UploadImageContainerProps> = ({
   const [previewSrc, setPreviewSrc] = useState<string>("");
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      const file = files[0];
-      const preview = URL.createObjectURL(file);
-      setPreviewSrc(preview);
-      setIsImageAdded(true);
+    const file = e.target.files?.[0] || null;
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setPreviewSrc(reader.result as string);
+        setIsImageAdded(true);
+      };
+
+      reader.readAsDataURL(file);
       setImageFile(file);
     }
   };
