@@ -1,8 +1,11 @@
 import { Link, useLocation } from "react-router";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import dashboardIcon from "@/assets/icons/bell.svg";
-import profileIcon from "@/assets/icons/profile.svg";
+import {
+  Bell as BellIcon,
+  User as UserIcon,
+  LogOut as LogOutIcon,
+} from "lucide-react";
 import HamburgerButton from "@/components/ui/HamburgerButton";
 import Logo from "@/components/ui/Logo";
 import { useUser } from "@/contexts/UserContext";
@@ -11,6 +14,7 @@ const Navbar = () => {
   const { isLogin, setIsLogin } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const isActivePath = (path: string) => location.pathname === path;
 
   const toggleMobileNavbar = () => {
     setIsOpen((prev) => !prev);
@@ -38,18 +42,33 @@ const Navbar = () => {
           {isLogin ? (
             <>
               <LinkWrapper>
-                <LinkIcon src={dashboardIcon} />
-                <StyledLink to="/dashboard">Dashboard</StyledLink>
+                <StyledBellIcon $isActive={isActivePath("/dashboard")} />
+                <StyledLink
+                  $isActive={isActivePath("/dashboard")}
+                  to="/dashboard"
+                >
+                  Dashboard
+                </StyledLink>
               </LinkWrapper>
               <LinkWrapper>
-                <LinkIcon src={profileIcon} />
-                <StyledLink to="/profil">Profil</StyledLink>
+                <StyledUserIcon $isActive={isActivePath("/profile")} />
+                <StyledLink $isActive={isActivePath("/profile")} to="/profile">
+                  Profile
+                </StyledLink>
+              </LinkWrapper>
+              <LinkWrapper>
+                <StyledLogoutIcon />
+                <StyledLink to="/logout">Logout</StyledLink>
               </LinkWrapper>
             </>
           ) : (
             <>
-              <StyledLink to="/login">Zaloguj się</StyledLink>
-              <BoldLink to="/register">Zarejestruj się</BoldLink>
+              <StyledLink $isActive={isActivePath("/login")} to="/login">
+                Zaloguj się
+              </StyledLink>
+              <StyledLink $isActive={isActivePath("/register")} to="/register">
+                Zarejestruj się
+              </StyledLink>
             </>
           )}
         </Links>
@@ -62,18 +81,33 @@ const Navbar = () => {
         {isLogin ? (
           <>
             <LinkWrapper>
-              <LinkIcon src={dashboardIcon} />
-              <StyledLink to="/dashboard">Dashboard</StyledLink>
+              <StyledBellIcon $isActive={isActivePath("/dashboard")} />
+              <StyledLink
+                $isActive={isActivePath("/dashboard")}
+                to="/dashboard"
+              >
+                Dashboard
+              </StyledLink>
             </LinkWrapper>
             <LinkWrapper>
-              <LinkIcon src={profileIcon} />
-              <StyledLink to="/profil">Profil</StyledLink>
+              <StyledUserIcon $isActive={isActivePath("/profile")} />
+              <StyledLink $isActive={isActivePath("/profile")} to="/profile">
+                Profile
+              </StyledLink>
+            </LinkWrapper>
+            <LinkWrapper>
+              <StyledLogoutIcon />
+              <StyledLink to="/logout">Logout</StyledLink>
             </LinkWrapper>
           </>
         ) : (
           <>
-            <BoldLink to="/register">Zarejestruj się</BoldLink>
-            <StyledLink to="/login">Zaloguj się</StyledLink>
+            <StyledLink $isActive={isActivePath("/register")} to="/register">
+              Zarejestruj się
+            </StyledLink>
+            <StyledLink $isActive={isActivePath("/login")} to="/login">
+              Zaloguj się
+            </StyledLink>
           </>
         )}
         {/* Temporary */}
@@ -107,9 +141,9 @@ const Links = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 50px;
+  gap: 30px;
 
-  @media (max-width: 700px) {
+  @media (max-width: 800px) {
     display: none;
   }
 `;
@@ -125,24 +159,36 @@ const LinkWrapper = styled.div`
   }
 `;
 
-const LinkIcon = styled.img`
+const StyledBellIcon = styled(BellIcon)<{ $isActive: boolean }>`
+  color: var(--white);
+  stroke-width: ${({ $isActive }) => ($isActive ? 3 : 1.5)};
   width: 24px;
   height: 24px;
 `;
 
-const StyledLink = styled(Link)`
+const StyledUserIcon = styled(UserIcon)<{ $isActive: boolean }>`
+  color: var(--white);
+  stroke-width: ${({ $isActive }) => ($isActive ? 3 : 1.5)};
+  width: 24px;
+  height: 24px;
+`;
+
+const StyledLogoutIcon = styled(LogOutIcon)`
+  color: var(--white);
+  width: 24px;
+  height: 24px;
+`;
+
+const StyledLink = styled(Link)<{ $isActive?: boolean }>`
   text-decoration: none;
   font-size: 20px;
   color: var(--light);
   transition: transform 0.3s ease;
+  font-weight: ${({ $isActive }) => ($isActive ? "800" : "normal")};
 
   &:hover {
     transform: scale(1.03);
   }
-`;
-
-const BoldLink = styled(StyledLink)`
-  font-weight: 700;
 `;
 
 const MobileNavbarContainer = styled.div<{ $isOpen: boolean }>`
@@ -161,7 +207,7 @@ const MobileNavbarContainer = styled.div<{ $isOpen: boolean }>`
   gap: 20px;
   z-index: 101;
 
-  @media (max-width: 700px) {
+  @media (max-width: 800px) {
     display: flex;
   }
 `;
@@ -173,14 +219,14 @@ const IsLoginCheckboxContainer = styled.div`
   align-items: center;
   gap: 10px;
 
-  @media (max-width: 700px) {
+  @media (max-width: 800px) {
     display: none;
   }
 `;
 
 const MobileIsLoginCheckboxContainer = styled(IsLoginCheckboxContainer)`
   display: none;
-  @media (max-width: 700px) {
+  @media (max-width: 800px) {
     display: flex;
   }
 `;
