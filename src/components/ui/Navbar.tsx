@@ -5,8 +5,10 @@ import dashboardIcon from "@/assets/icons/bell.svg";
 import profileIcon from "@/assets/icons/profile.svg";
 import HamburgerButton from "@/components/ui/HamburgerButton";
 import Logo from "@/components/ui/Logo";
+import { useUser } from "@/contexts/UserContext";
 
 const Navbar = () => {
+  const { isLogin, setIsLogin } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
 
@@ -19,11 +21,19 @@ const Navbar = () => {
     window.scrollTo(0, 0);
   }, [location]);
 
-  let isLogin = true;
   return (
     <>
       <Container>
         <Logo />
+        {/* Temporary */}
+        <IsLoginCheckboxContainer>
+          <IsLoginText>Log:</IsLoginText>
+          <IsLoginCheckbox
+            type="checkbox"
+            checked={isLogin}
+            onChange={(e) => setIsLogin(e.target.checked)}
+          />
+        </IsLoginCheckboxContainer>
         <Links>
           {isLogin ? (
             <>
@@ -66,6 +76,15 @@ const Navbar = () => {
             <StyledLink to="/login">Zaloguj się</StyledLink>
           </>
         )}
+        {/* Temporary */}
+        <MobileIsLoginCheckboxContainer>
+          <IsLoginText>Log:</IsLoginText>
+          <IsLoginCheckbox
+            type="checkbox"
+            checked={isLogin}
+            onChange={(e) => setIsLogin(e.target.checked)}
+          />
+        </MobileIsLoginCheckboxContainer>
       </MobileNavbarContainer>
     </>
   );
@@ -145,4 +164,35 @@ const MobileNavbarContainer = styled.div<{ $isOpen: boolean }>`
   @media (max-width: 700px) {
     display: flex;
   }
+`;
+
+/* Temporary isLogin Checkbox */
+
+const IsLoginCheckboxContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  @media (max-width: 700px) {
+    display: none;
+  }
+`;
+
+const MobileIsLoginCheckboxContainer = styled(IsLoginCheckboxContainer)`
+  display: none;
+  @media (max-width: 700px) {
+    display: flex;
+  }
+`;
+
+const IsLoginCheckbox = styled.input`
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+`;
+
+const IsLoginText = styled.p`
+  font-size: 16px;
+  color: var(--light);
+  margin: 0;
 `;

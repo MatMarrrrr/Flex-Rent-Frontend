@@ -11,8 +11,10 @@ import { Range } from "react-date-range";
 import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
 import getSymbolFromCurrency from "currency-symbol-map";
 import ErrorLayout from "@/components/ui/ErrorLayout";
+import { useUser } from "@/contexts/UserContext";
 
 export default function ItemPage() {
+  const { isLogin } = useUser();
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -65,9 +67,8 @@ export default function ItemPage() {
     return () => clearTimeout(timeout);
   }, []);
 
-  let isLogin = true;
-  let isRequestSent = true;
-  let isOwner = true;
+  let isRequestSent = false;
+  let isOwner = false;
 
   if (error) {
     return <ErrorLayout message={error} />;
