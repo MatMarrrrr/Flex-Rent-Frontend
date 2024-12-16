@@ -161,14 +161,14 @@ const LinkWrapper = styled.div`
 
 const StyledBellIcon = styled(BellIcon)<{ $isActive: boolean }>`
   color: var(--white);
-  stroke-width: ${({ $isActive }) => ($isActive ? 3 : 1.5)};
+  stroke-width: ${({ $isActive }) => ($isActive ? 2.5 : 1.5)};
   width: 24px;
   height: 24px;
 `;
 
 const StyledUserIcon = styled(UserIcon)<{ $isActive: boolean }>`
   color: var(--white);
-  stroke-width: ${({ $isActive }) => ($isActive ? 3 : 1.5)};
+  stroke-width: ${({ $isActive }) => ($isActive ? 2.5 : 1.5)};
   width: 24px;
   height: 24px;
 `;
@@ -184,7 +184,7 @@ const StyledLink = styled(Link)<{ $isActive?: boolean }>`
   font-size: 20px;
   color: var(--light);
   transition: transform 0.3s ease;
-  font-weight: ${({ $isActive }) => ($isActive ? "800" : "normal")};
+  font-weight: ${({ $isActive }) => ($isActive ? "bold" : "normal")};
 
   &:hover {
     transform: scale(1.03);
