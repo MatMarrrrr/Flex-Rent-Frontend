@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { categories } from "@/consts/categories";
 import currencyCodes from "currency-codes";
-import arrowBack from "@/assets/icons/arrowBack.svg";
+import { MoveLeft as ArrowBackIcon } from "lucide-react";
 import { listingSchema } from "@/validations/listingSchema";
 import UploadImageContainer from "@/components/ui/UploadImageContainer";
 import FormikForm from "@/components/forms/FormikForm";
@@ -87,7 +87,7 @@ const ListingForm: React.FC<ListingFormProps> = ({
     <Wrapper>
       <LeftContainer>
         <MobileBackContainer onClick={handleBack}>
-          <ArrowBack src={arrowBack} />
+          <ArrowBack />
           <BackText>Powrót</BackText>
         </MobileBackContainer>
         <Header>{headerText}</Header>
@@ -206,8 +206,10 @@ const LeftContainer = styled.div`
   max-width: 400px;
 `;
 
-const ArrowBack = styled.img`
-  height: 36px;
+const ArrowBack = styled(ArrowBackIcon)`
+  height: 30px;
+  width: 30px;
+  stroke-width: 1.5;
 `;
 
 const BackText = styled.p`

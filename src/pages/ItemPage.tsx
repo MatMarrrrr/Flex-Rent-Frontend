@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import styled from "styled-components";
-import arrowBack from "@/assets/icons/arrowBack.svg";
+import { MoveLeft as ArrowBackIcon } from "lucide-react";
 import localizationIcon from "@/assets/icons/localization.svg";
 import test_item from "@/assets/test_item.jpg";
 import CalendarButton from "@/components/buttons/CalendarButton";
@@ -84,12 +84,12 @@ export default function ItemPage() {
       ) : (
         <Container>
           <BackContainer onClick={handleBack}>
-            <ArrowBack src={arrowBack} />
+            <ArrowBack />
             <BackText>Powrót</BackText>
           </BackContainer>
           <ItemContainer>
             <MobileBackContainer onClick={handleBack}>
-              <ArrowBack src={arrowBack} />
+              <ArrowBack />
               <BackText>Powrót</BackText>
             </MobileBackContainer>
 
@@ -259,8 +259,10 @@ const MobileBackContainer = styled(BackContainer)`
   }
 `;
 
-const ArrowBack = styled.img`
+const ArrowBack = styled(ArrowBackIcon)`
   height: 36px;
+  width: 36px;
+  stroke-width: 1.5;
 `;
 
 const BackText = styled.p`

@@ -18,7 +18,6 @@ import PrimaryButton from "@/components/buttons/PrimaryButton";
 import FormikInputField from "@/components/forms/FormikInputField";
 import FormikPasswordField from "@/components/forms/FormikPasswordField";
 import FormikForm from "@/components/forms/FormikForm";
-import arrowBack from "@/assets/icons/arrowBack.svg";
 
 export default function RegisterPage() {
   const [step, setStep] = useState<number>(1);
@@ -90,7 +89,7 @@ export default function RegisterPage() {
         )}
         {step === 2 && (
           <>
-            <ArrowBack src={arrowBack} onClick={handleBack} />
+            <ArrowBack onClick={handleBack} />
             <Header>Podaj swoje dane</Header>
             <FormikForm
               initialValues={personalDataInitialValues}

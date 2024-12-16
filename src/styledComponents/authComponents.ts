@@ -1,5 +1,6 @@
 import { Form } from "formik";
 import { Link } from "react-router";
+import { MoveLeft as ArrowBackIcon } from "lucide-react";
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
@@ -88,11 +89,13 @@ export const RequiredStar = styled.span`
   color: var(--error);
 `;
 
-export const ArrowBack = styled.img`
+export const ArrowBack = styled(ArrowBackIcon)`
   position: absolute;
-  top: 28.5px;
+  top: 41px;
   left: 30px;
-  height: 50px;
+  height: 30px;
+  width: 30px;
+  stroke-width: 1.5;
   cursor: pointer;
   transition: transform 0.3s ease;
 

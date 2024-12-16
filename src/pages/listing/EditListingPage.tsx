@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import arrowBack from "@/assets/icons/arrowBack.svg";
+import { MoveLeft as ArrowBackIcon } from "lucide-react";
 import { useNavigate, useParams } from "react-router";
 import ListingForm from "@/pages/listing/components/ListingForm";
 import test_item from "@/assets/test_item.jpg";
@@ -85,7 +85,7 @@ export default function EditListingPage() {
       ) : (
         <>
           <BackContainer onClick={handleBack}>
-            <ArrowBack src={arrowBack} />
+            <ArrowBack/>
             <BackText>Powrót</BackText>
           </BackContainer>
           <ListingForm
@@ -158,8 +158,10 @@ const BackContainer = styled.div`
   }
 `;
 
-const ArrowBack = styled.img`
-  height: 36px;
+const ArrowBack = styled(ArrowBackIcon)`
+  height: 30px;
+  width: 30px;
+  stroke-width: 1.5;
 `;
 
 const BackText = styled.p`
