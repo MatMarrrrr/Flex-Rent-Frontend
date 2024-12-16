@@ -78,7 +78,10 @@ export default function EditListingPage() {
   return (
     <Container>
       {isLoading ? (
-        <Loader />
+        <LoaderContainer>
+          <Loader size={45}/>
+          <LoaderText>Wczytywanie szczegółów ogłoszenia</LoaderText>
+        </LoaderContainer>
       ) : (
         <>
           <BackContainer onClick={handleBack}>
@@ -100,6 +103,23 @@ export default function EditListingPage() {
     </Container>
   );
 }
+
+const LoaderContainer = styled.div`
+  padding: 20px 10% 40px 10%;
+  display: flex;
+  gap: 10px;
+  flex-grow: 1;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const LoaderText = styled.p`
+  font-size: 24px;
+  color: var(--dark);
+  font-weight: bold;
+  text-align: center;
+`;
 
 const Container = styled.div`
   padding: 40px 10%;

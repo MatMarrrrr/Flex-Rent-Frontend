@@ -79,7 +79,7 @@ export default function ItemPage() {
       {isLoading ? (
         <LoaderContainer>
           <Loader size={50} color="var(--dark)" />
-          <LoaderText>Loading item</LoaderText>
+          <LoaderText>Wczytywanie ogłoszenia</LoaderText>
         </LoaderContainer>
       ) : (
         <Container>
@@ -202,6 +202,7 @@ const LoaderText = styled.p`
   font-size: 30px;
   color: var(--dark);
   font-weight: bold;
+  text-align: center;
 `;
 
 const Container = styled.div`

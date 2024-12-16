@@ -54,7 +54,7 @@ const YourListingsSection = () => {
       {isLoading ? (
         <LoaderContainer>
           <Loader isCenter={true} />
-          <LoaderText>Loading Listings</LoaderText>
+          <LoaderText>Wczytywanie ogłoszeń</LoaderText>
         </LoaderContainer>
       ) : (
         <MotionWrapper variants={fromBottomVariants}>
@@ -105,4 +105,5 @@ const LoaderText = styled.p`
   font-size: 30px;
   color: var(--dark);
   font-weight: bold;
+  text-align: center;
 `;

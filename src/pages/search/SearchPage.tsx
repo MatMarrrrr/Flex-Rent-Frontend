@@ -89,7 +89,10 @@ export default function SearchPage() {
       </SearchContainer>
       <ResultsMainContainer>
         {isLoading ? (
-          <Loader size={50} color="var(--dark)" isCenter={true} />
+          <LoaderContainer>
+            <Loader size={50} color="var(--dark)" />
+            <LoaderText>Pobieranie wyników</LoaderText>
+          </LoaderContainer>
         ) : (
           <>
             <ResultsTextContainer>
@@ -136,6 +139,23 @@ const SearchContainer = styled.div`
 const ResultsMainContainer = styled.div`
   min-height: calc(100vh - 490px);
   padding: 40px 10%;
+`;
+
+const LoaderContainer = styled.div`
+  display: flex;
+  width: 100%;
+  gap: 10px;
+  min-height: calc(100vh - 570px);
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+`;
+
+const LoaderText = styled.div`
+  font-size: 30px;
+  color: var(--dark);
+  font-weight: bold;
+  text-align: center;
 `;
 
 const ResultsTextContainer = styled.div`
