@@ -63,7 +63,7 @@ export const UploadImageContainer: React.FC<UploadImageContainerProps> = ({
       ) : (
         <>
           <Image src={previewSrc} alt="Podgląd obrazu" />
-          <ChangeImageText>Zmień zdjęcie</ChangeImageText>
+          <ChangeImageText $disabled={disabled}>Zmień zdjęcie</ChangeImageText>
         </>
       )}
     </Container>
@@ -124,11 +124,12 @@ const Image = styled(SkeletonLoaderImage)`
   object-fit: cover;
 `;
 
-const ChangeImageText = styled.p`
+const ChangeImageText = styled.p<{ $disabled: boolean }>`
   background: var(--dark-50);
   color: var(--white);
   position: absolute;
   bottom: 0;
+  visibility: ${({ $disabled }) => ($disabled ? "hidden" : "visible")};
   width: 100%;
   padding: 15px;
   text-align: center;

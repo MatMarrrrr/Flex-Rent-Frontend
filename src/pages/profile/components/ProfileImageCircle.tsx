@@ -98,6 +98,7 @@ const ChangeImageButton = styled.label<{ disabled?: boolean }>`
   cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
   opacity: ${({ disabled }) => (disabled ? 0.5 : 1)};
   position: relative;
+  visibility: ${({ disabled }) => (disabled ? "hidden" : "visible")};
   pointer-events: ${({ disabled }) => (disabled ? "none" : "auto")};
 `;
 

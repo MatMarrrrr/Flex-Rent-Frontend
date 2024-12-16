@@ -92,7 +92,8 @@ export default function ProfilePage() {
             disabled={isSubmitting}
           />
           <PrimaryButton type="submit" disabled={isSubmitting}>
-            Zmień {isSubmitting && <Loader size={18} />}
+            {isSubmitting ? "Zmienianie" : "Zmień"}
+            {isSubmitting && <Loader size={18} />}
           </PrimaryButton>
         </FormikForm>
       </Wrapper>
