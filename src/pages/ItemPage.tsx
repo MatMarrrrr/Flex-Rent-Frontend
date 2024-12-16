@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import styled from "styled-components";
 import { MoveLeft as ArrowBackIcon } from "lucide-react";
-import localizationIcon from "@/assets/icons/localization.svg";
+import { MapPin as MapPinIcon } from "lucide-react";
 import test_item from "@/assets/test_item.jpg";
 import CalendarButton from "@/components/buttons/CalendarButton";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
@@ -106,7 +106,7 @@ export default function ItemPage() {
                     100{getSymbolFromCurrency("PLN")} / Dzień
                   </ItemDetailText>
                   <ItemLocalizationContainer>
-                    <ItemLocalizationIcon src={localizationIcon} />
+                    <ItemLocalizationIcon />
                     <ItemDetailText>Lokalizacja</ItemDetailText>
                   </ItemLocalizationContainer>
                 </ItemDetailsContainer>
@@ -350,9 +350,10 @@ const ItemLocalizationContainer = styled.div`
   gap: 5px;
 `;
 
-const ItemLocalizationIcon = styled.img`
+const ItemLocalizationIcon = styled(MapPinIcon)`
   height: 18px;
   width: 18px;
+  color: var(--dark);
 `;
 
 const ItemDescriptionContainer = styled.div`

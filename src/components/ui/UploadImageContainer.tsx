@@ -1,6 +1,6 @@
 import React, { useState, ChangeEvent, useEffect } from "react";
 import styled from "styled-components";
-import uploadImage from "@/assets/icons/uploadImage.svg";
+import { ImageUp as ImageUpIcon } from "lucide-react";
 import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
 
 type ImageType = File | string | null;
@@ -55,7 +55,7 @@ export const UploadImageContainer: React.FC<UploadImageContainerProps> = ({
       />
       {!isImageAdded ? (
         <NoImageContainer>
-          <NoImageIcon src={uploadImage} />
+          <NoImageIcon />
           <NoImageText>
             <RequiredStar>*</RequiredStar>Wgraj zdjęcie
           </NoImageText>
@@ -111,9 +111,11 @@ const NoImageContainer = styled.div`
   height: 100%;
   aspect-ratio: 4/3;
 `;
-const NoImageIcon = styled.img`
+const NoImageIcon = styled(ImageUpIcon)`
   height: 80px;
   width: 80px;
+  stroke-width: 0.7;
+  color: var(--dark);
 `;
 const NoImageText = styled.p``;
 

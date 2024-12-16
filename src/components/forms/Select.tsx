@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
-import arrowDownBlack from "@/assets/icons/arrowDownBlack.svg";
+import { ChevronDown as ChevronDownIcon } from "lucide-react";
 
 interface Option {
   value: string;
@@ -62,7 +62,7 @@ const Select: React.FC<SelectProps> = ({
       <Dropdown>
         <DropdownHeader onClick={handleSelectClick} $disabled={disabled}>
           {selectedOption ? selectedOption.label : startValue}
-          <ArrowIcon src={arrowDownBlack} $isOpen={isOpen} />
+          <ArrowIcon $isOpen={isOpen} />
         </DropdownHeader>
         {isOpen && (
           <DropdownList>
@@ -144,8 +144,10 @@ const DropdownHeader = styled.div<{ $disabled?: boolean }>`
   justify-content: space-between;
 `;
 
-const ArrowIcon = styled.img<{ $isOpen: boolean }>`
+const ArrowIcon = styled(ChevronDownIcon)<{ $isOpen: boolean }>`
   height: 24px;
+  width: 24px;
+  color: var(--dark);
   background-size: contain;
   background-repeat: no-repeat;
   transition: transform 0.3s ease;

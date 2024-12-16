@@ -1,9 +1,11 @@
 import { footerLinksData } from "@/consts/footerLinksData";
 import styled from "styled-components";
 import Logo from "@/components/ui/Logo";
-import emailIcon from "@/assets/icons/email.svg";
-import facebookIcon from "@/assets/icons/facebook.svg";
-import linkedinIcon from "@/assets/icons/linkedin.svg";
+import { Mail as EmailIcon } from "lucide-react";
+import {
+  FaFacebook as FacebookIcon,
+  FaLinkedin as LinkedInIcon,
+} from "react-icons/fa";
 
 const Footer = () => {
   return (
@@ -12,13 +14,13 @@ const Footer = () => {
         <Logo />
         <Icons>
           <IconContainer>
-            <Icon src={emailIcon} />
+            <Email />
           </IconContainer>
           <IconContainer>
-            <Icon src={facebookIcon} />
+            <Facebook />
           </IconContainer>
           <IconContainer>
-            <Icon src={linkedinIcon} />
+            <LinedIn />
           </IconContainer>
         </Icons>
       </LeftWrapper>
@@ -92,7 +94,7 @@ const IconContainer = styled.div`
   border-radius: 50px;
   border: 2px solid var(--light);
   display: flex;
-  padding: 5px;
+  padding: 7px;
   transition: transform 0.3s ease;
   cursor: pointer;
 
@@ -101,9 +103,22 @@ const IconContainer = styled.div`
   }
 `;
 
-const Icon = styled.img`
-  height: 24px;
-  width: 24px;
+const Email = styled(EmailIcon)`
+  height: 22px;
+  width: 22px;
+  color: var(--light);
+`;
+
+const Facebook = styled(FacebookIcon)`
+  height: 22px;
+  width: 22px;
+  color: var(--light);
+`;
+
+const LinedIn = styled(LinkedInIcon)`
+  height: 22px;
+  width: 22px;
+  color: var(--light);
 `;
 
 const LinksContainer = styled.div`

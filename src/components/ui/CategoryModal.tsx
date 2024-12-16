@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { categories } from "@/consts/categories";
-import xIcon from "@/assets/icons/x.svg";
+import { X as XIcon } from "lucide-react";
 
 interface CategoryModalProps {
   isVisible: boolean;
@@ -34,7 +34,7 @@ const CategoryModal: React.FC<CategoryModalProps> = ({
   return (
     <ModalOverlay $isClosing={isClosing}>
       <ModalContent>
-        <CloseButton onClick={handleClose} src={xIcon} />
+        <CloseButton onClick={handleClose} />
         <ModalTitle>Kategorie</ModalTitle>
         <CategoriesContainer>
           {categories.map((category) => (
@@ -101,8 +101,10 @@ const ModalContent = styled.div`
   }
 `;
 
-const CloseButton = styled.img`
+const CloseButton = styled(XIcon)`
   height: 35px;
+  width: 35px;
+  color: var(--dark);
   position: absolute;
   top: 20px;
   right: 20px;

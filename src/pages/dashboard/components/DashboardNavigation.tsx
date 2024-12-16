@@ -1,4 +1,4 @@
-import arrowDownWhite from "@/assets/icons/arrowDownWhite.svg";
+import { ChevronDown as ChevronDownIcon } from "lucide-react";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
@@ -22,7 +22,7 @@ const DashboardNavigation = () => {
     <Container>
       <TitleContainer onClick={toggleMenu} data-aos="fade-up">
         <Title>Dashboard</Title>
-        <ArrowDown src={arrowDownWhite} $isOpen={isOpen} />
+        <ArrowDown $isOpen={isOpen} />
       </TitleContainer>
       <NavigationContainer data-aos="fade-up">
         <DashboardNavigationList
@@ -63,10 +63,13 @@ const TitleContainer = styled.div`
   }
 `;
 
-const ArrowDown = styled.img<{ $isOpen: boolean }>`
+const ArrowDown = styled(ChevronDownIcon)<{ $isOpen: boolean }>`
   transform: ${({ $isOpen }) => ($isOpen ? "rotate(180deg)" : "rotate(0deg)")};
   transition: transform 0.3s ease;
   display: none;
+  height: 40px;
+  width: 40px;
+  color: var(--white);
 
   @media (max-width: 850px) {
     display: block;

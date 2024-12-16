@@ -1,7 +1,6 @@
 import React from "react";
-import eye from "@/assets/icons/eye.svg";
-import eyeOff from "@/assets/icons/eye_off.svg";
 import styled from "styled-components";
+import { Eye as EyeIcon, EyeOff as EyeOffIcon } from "lucide-react";
 
 interface PasswordToggleButtonProps {
   onClick: () => void;
@@ -14,7 +13,7 @@ const PasswordToggleButton: React.FC<PasswordToggleButtonProps> = ({
 }) => {
   return (
     <TogleButton onClick={onClick}>
-      <Icon src={passwordShown ? eyeOff : eye} />
+      {passwordShown ? <EyeOff /> : <Eye />}
     </TogleButton>
   );
 };
@@ -32,7 +31,12 @@ const TogleButton = styled.div`
   cursor: pointer;
 `;
 
-const Icon = styled.img`
+const Eye = styled(EyeIcon)`
+  height: 25px;
+  width: 25px;
+`;
+
+const EyeOff = styled(EyeOffIcon)`
   height: 25px;
   width: 25px;
 `;

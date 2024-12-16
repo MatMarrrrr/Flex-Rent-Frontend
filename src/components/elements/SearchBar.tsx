@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { categories } from "@/consts/categories";
 import styled from "styled-components";
-import searchIcon from "@/assets/icons/search.svg";
-import categoriesIcon from "@/assets/icons/categories.svg";
-import localizationIcon from "@/assets/icons/localization.svg";
+import {
+  Search as SearchIcon,
+  LayoutGrid as LayoutGridIcon,
+  MapPin as MapPinIcon,
+} from "lucide-react";
 import CategoryModal from "@/components/ui/CategoryModal";
 
 interface SearchBarProps {
@@ -69,7 +71,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
       />
       <Container data-aos={isFadeIn ? "fade-up" : undefined}>
         <MainInputContainer>
-          <Icon src={searchIcon} />
+          <QueryIcon />
           <StyledInput
             placeholder="Czego szukasz?"
             value={query}
@@ -78,7 +80,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         </MainInputContainer>
         <Divider />
         <CategoryInputContainer onClick={showModal}>
-          <Icon src={categoriesIcon} />
+          <CategoryIcon />
           <StyledInput
             placeholder="Kategoria"
             value={category}
@@ -87,7 +89,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
           />
         </CategoryInputContainer>
         <LocalizationInputContainer>
-          <Icon src={localizationIcon} />
+          <LocalizationIcon />
           <StyledInput
             placeholder="Lokalizacja"
             value={localization}
@@ -176,9 +178,22 @@ const LocalizationInputContainer = styled.div`
   }
 `;
 
-const Icon = styled.img`
+const QueryIcon = styled(SearchIcon)`
   height: 20px;
   width: 20px;
+  color: var(--dark);
+`;
+
+const CategoryIcon = styled(LayoutGridIcon)`
+  height: 20px;
+  width: 20px;
+  color: var(--dark);
+`;
+
+const LocalizationIcon = styled(MapPinIcon)`
+  height: 20px;
+  width: 20px;
+  color: var(--dark);
 `;
 
 const StyledInput = styled.input`

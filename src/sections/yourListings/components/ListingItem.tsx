@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import localizationIcon from "@/assets/icons/localization.svg";
+import { MapPin as MapPinIcon } from "lucide-react";
 import Button from "@/components/buttons/Button";
 import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
 
@@ -31,7 +31,7 @@ const ListingItem: React.FC<ListingItemProps> = ({
         <ItemDetailsContainer>
           <ItemDetailText>{price}zł / Dzień</ItemDetailText>
           <ItemLocalizationContainer>
-            <ItemLocalizationIcon src={localizationIcon} />
+            <ItemLocalizationIcon />
             <ItemDetailText>{localization}</ItemDetailText>
           </ItemLocalizationContainer>
         </ItemDetailsContainer>
@@ -154,7 +154,7 @@ const ItemLocalizationContainer = styled.div`
   gap: 5px;
 `;
 
-const ItemLocalizationIcon = styled.img`
+const ItemLocalizationIcon = styled(MapPinIcon)`
   height: 18px;
   width: 18px;
 `;

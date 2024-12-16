@@ -1,8 +1,10 @@
 import { DateRange, Range, RangeKeyDict } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import arrowDownBlack from "@/assets/icons/arrowDownBlack.svg";
-import calendarIcon from "@/assets/icons/calendar.svg";
+import {
+  ChevronDown as ChevronDownIcon,
+  CalendarDays as CalendarDaysIcon,
+} from "lucide-react";
 import styled from "styled-components";
 import { useState } from "react";
 import pl from "date-fns/locale/pl";
@@ -55,9 +57,9 @@ const CalendarButton = ({
   return (
     <CalendarContainer>
       <StyledButton onClick={toggleDatePicker}>
-        <CalendarIcon src={calendarIcon} />
+        <CalendarIcon />
         {buttonText}
-        <ArrowDown src={arrowDownBlack} $isOpen={isOpen} />
+        <ArrowDown $isOpen={isOpen} />
       </StyledButton>
       {isOpen && (
         <StyledDateRange>
@@ -163,15 +165,18 @@ const StyledDateRange = styled.div`
   }
 `;
 
-const ArrowDown = styled.img<{ $isOpen: boolean }>`
+const ArrowDown = styled(ChevronDownIcon)<{ $isOpen: boolean }>`
   height: 25px;
+  width: 25px;
+  color: var(--dark);
   margin-left: 10px;
   transition: transform 0.3s ease;
 
   transform: ${({ $isOpen }) => ($isOpen ? "rotate(180deg)" : "rotate(0deg)")};
 `;
 
-const CalendarIcon = styled.img`
+const CalendarIcon = styled(CalendarDaysIcon)`
   height: 18px;
+  width: 18px;
   margin-right: 10px;
 `;
