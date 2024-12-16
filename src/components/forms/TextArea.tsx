@@ -10,6 +10,7 @@ interface TextAreaProps {
   onBlur?: (e: React.FocusEvent<HTMLTextAreaElement>) => void;
   onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   margin?: string;
+  disabled?: boolean;
 }
 
 const TextArea: React.FC<TextAreaProps> = ({
@@ -20,6 +21,7 @@ const TextArea: React.FC<TextAreaProps> = ({
   onBlur,
   onChange,
   margin,
+  disabled = false,
 }) => {
   return (
     <Container $margin={margin}>
@@ -32,6 +34,7 @@ const TextArea: React.FC<TextAreaProps> = ({
         onChange={onChange}
         onBlur={onBlur}
         name={name}
+        disabled={disabled}
       />
     </Container>
   );

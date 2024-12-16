@@ -9,6 +9,7 @@ interface FormikSelectFieldProps {
   isRequired?: boolean;
   margin?: string;
   startValue: string;
+  disabled?: boolean;
   options: { value: string; label: string }[];
 }
 
@@ -19,6 +20,7 @@ const FormikSelectField: React.FC<FormikSelectFieldProps> = ({
   margin,
   startValue,
   options,
+  disabled = false,
 }) => {
   const [field, , helpers] = useField(name);
   const { value } = field;
@@ -33,6 +35,7 @@ const FormikSelectField: React.FC<FormikSelectFieldProps> = ({
         margin={margin}
         name={name}
         startValue={startValue}
+        disabled={disabled}
         value={value}
         onChange={(val) => setValue(val)}
       />

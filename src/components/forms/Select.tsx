@@ -16,6 +16,7 @@ interface SelectProps {
   margin?: string;
   onChange?: (value: string) => void;
   name?: string;
+  disabled?: boolean;
 }
 
 const Select: React.FC<SelectProps> = ({
@@ -27,6 +28,7 @@ const Select: React.FC<SelectProps> = ({
   margin,
   onChange,
   name,
+  disabled = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [filterText, setFilterText] = useState("");
@@ -41,8 +43,10 @@ const Select: React.FC<SelectProps> = ({
   };
 
   const handleSelectClick = () => {
-    setIsOpen(!isOpen);
-    setFilterText("");
+    if (!disabled) {
+      setIsOpen(!isOpen);
+      setFilterText("");
+    }
   };
 
   const filteredOptions = options.filter((option) =>
@@ -56,7 +60,7 @@ const Select: React.FC<SelectProps> = ({
         {label}
       </LabelText>
       <Dropdown>
-        <DropdownHeader onClick={handleSelectClick}>
+        <DropdownHeader onClick={handleSelectClick} $disabled={disabled}>
           {selectedOption ? selectedOption.label : startValue}
           <ArrowIcon src={arrowDownBlack} $isOpen={isOpen} />
         </DropdownHeader>
@@ -125,14 +129,15 @@ const Dropdown = styled.div`
   width: 100%;
 `;
 
-const DropdownHeader = styled.div`
+const DropdownHeader = styled.div<{ $disabled?: boolean }>`
   border: 1px solid var(--dark-25);
   border-radius: 5px;
   height: 45px;
   font-size: 18px;
   padding: 0 10px;
-  background: #fff;
-  cursor: pointer;
+  background: ${({ $disabled }) =>
+    $disabled ? "var(--dark-2)" : "var(--white)"};
+  cursor: ${({ $disabled }) => ($disabled ? "default" : "pointer")};
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -158,7 +163,7 @@ const DropdownList = styled.ul`
   border: 1px solid var(--dark-25);
   border-top: 0;
   border-radius: 5px;
-  background: #fff;
+  background: var(--white);
   z-index: 10;
 `;
 
@@ -178,14 +183,7 @@ const RequiredStar = styled.span`
 `;
 
 const HiddenSelect = styled.select`
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  border: 0;
+  display: none;
 `;
 
 const SearchInput = styled.input`

@@ -8,16 +8,19 @@ type ImageType = File | string | null;
 interface UploadImageContainerProps {
   setImageFile: (file: ImageType) => void;
   initialImage?: ImageType;
+  disabled?: boolean;
 }
 
 export const UploadImageContainer: React.FC<UploadImageContainerProps> = ({
   setImageFile,
   initialImage = null,
+  disabled = false,
 }) => {
   const [isImageAdded, setIsImageAdded] = useState<boolean>(!!initialImage);
   const [previewSrc, setPreviewSrc] = useState<string>("");
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (disabled) return;
     const file = e.target.files?.[0] || null;
     if (file) {
       const reader = new FileReader();
@@ -43,11 +46,12 @@ export const UploadImageContainer: React.FC<UploadImageContainerProps> = ({
   }, [initialImage]);
 
   return (
-    <Container>
+    <Container disabled={disabled}>
       <FileInput
         type="file"
         accept="image/jpeg,image/png"
         onChange={handleFileChange}
+        disabled={disabled}
       />
       {!isImageAdded ? (
         <NoImageContainer>
@@ -68,7 +72,7 @@ export const UploadImageContainer: React.FC<UploadImageContainerProps> = ({
 
 export default UploadImageContainer;
 
-const Container = styled.label`
+const Container = styled.label<{ disabled?: boolean }>`
   height: 300px;
   width: 400px;
   border-radius: 8px;
@@ -77,7 +81,8 @@ const Container = styled.label`
   justify-content: center;
   align-items: center;
   position: relative;
-  cursor: pointer;
+  pointer-events: ${({ disabled }) => (disabled ? "none" : "auto")};
+  cursor: ${({ disabled }) => (disabled ? "default" : "pointer")};
 
   @media (max-width: 1100px) {
     width: 100%;

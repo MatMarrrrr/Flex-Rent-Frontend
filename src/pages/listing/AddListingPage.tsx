@@ -3,6 +3,7 @@ import arrowBack from "@/assets/icons/arrowBack.svg";
 import { useNavigate } from "react-router";
 import ListingForm from "@/pages/listing/components/ListingForm";
 import { listingInitialValues } from "@/consts/initialValues";
+import { useState } from "react";
 
 type ImageType = File | null | string;
 
@@ -17,12 +18,14 @@ interface ListingFormValues {
 
 export default function AddListingPage() {
   const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const handleBack = () => {
     navigate(-1);
   };
 
   const handleSubmit = (values: ListingFormValues, imageFile: ImageType) => {
+    setIsSubmitting(true);
     const finalValues = { ...values, image: imageFile };
     console.log(finalValues);
   };
@@ -40,6 +43,7 @@ export default function AddListingPage() {
         initialImage={null}
         onSubmit={handleSubmit}
         handleBack={handleBack}
+        isSubmitting={isSubmitting}
       />
     </Container>
   );

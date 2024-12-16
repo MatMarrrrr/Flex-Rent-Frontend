@@ -8,6 +8,7 @@ interface FormikTextAreaFieldProps {
   label: string;
   type?: string;
   isRequired?: boolean;
+  disabled?: boolean;
   margin?: string;
 }
 
@@ -16,6 +17,7 @@ const FormikTextAreaField: React.FC<FormikTextAreaFieldProps> = ({
   label,
   type = "text",
   isRequired = false,
+  disabled = false,
   margin,
 }) => (
   <FieldWrapper>
@@ -26,6 +28,7 @@ const FormikTextAreaField: React.FC<FormikTextAreaFieldProps> = ({
       type={type}
       isRequired={isRequired}
       margin={margin}
+      disabled={disabled}
     />
     <ErrorWrapper>
       <ErrorMessage name={name} />
