@@ -59,6 +59,7 @@ export default function SearchPage() {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     const tempResults = Array.from({ length: 8 }, (_, index) => ({
       id: index + 1,
       image: test_item,
@@ -75,7 +76,7 @@ export default function SearchPage() {
     }, 1000);
 
     return () => clearTimeout(timeout);
-  }, []);
+  }, [queryParam, categoryIdParam, localizationParam]);
 
   return (
     <>
