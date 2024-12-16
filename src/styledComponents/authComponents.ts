@@ -43,21 +43,31 @@ export const StyledForm = styled(Form)`
   max-width: 400px;
 `;
 
-export const RedirectText = styled(Link)`
+export const RedirectContainer = styled.div`
+  max-width: 400px;
+  width: 100%;
+  display: flex;
+  justify-content: start;
+  gap: 5px;
+`;
+
+export const RedirectLink = styled(Link)`
   color: var(--blue);
   font-size: 16px;
   text-decoration: none;
-  text-align: left;
-  max-width: 400px;
-  width: 100%;
   transition: transform 0.3s ease;
-  font-size: 16px;
   font-weight: bold;
   color: var(--dark);
 
   &:hover {
     text-decoration: underline;
   }
+`;
+
+export const RedirectText = styled.p`
+  color: var(--blue);
+  font-size: 16px;
+  font-weight: bold;
 `;
 
 export const PasswordInputWrapper = styled.div`

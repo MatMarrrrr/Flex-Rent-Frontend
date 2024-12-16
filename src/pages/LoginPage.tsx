@@ -5,6 +5,8 @@ import {
   Container,
   Header,
   RedirectText,
+  RedirectContainer,
+  RedirectLink,
 } from "@/styledComponents/authComponents";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 import FormikInputField from "@/components/forms/FormikInputField";
@@ -49,10 +51,10 @@ export default function LoginPage() {
             passwordShown={passwordShown}
             onToggle={handlePasswordVisibilityChange}
           />
-
-          <RedirectText to="/register">
-            Nie masz konta? Zarejestruj się
-          </RedirectText>
+          <RedirectContainer>
+            <RedirectText>Nie masz konta?</RedirectText>
+            <RedirectLink to="/register">Zarejestruj się</RedirectLink>
+          </RedirectContainer>
 
           <PrimaryButton type="submit" margin="15px 0px 0px 0px">
             Zaloguj się
