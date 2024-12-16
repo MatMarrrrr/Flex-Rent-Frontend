@@ -12,6 +12,7 @@ declare module "styled-components" {
       gradient50: string;
       maskGradient: string;
       dark: string;
+      dark80: string;
       dark50: string;
       dark25: string;
       dark5: string;

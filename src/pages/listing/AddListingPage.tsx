@@ -40,6 +40,7 @@ export default function AddListingPage() {
         initialValues={listingInitialValues}
         headerText="Utwórz ogłoszenie"
         submitText="Opublikuj ogłoszenie"
+        submittingText="Publikowanie"
         initialImage={null}
         onSubmit={handleSubmit}
         handleBack={handleBack}

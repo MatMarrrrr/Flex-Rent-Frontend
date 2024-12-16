@@ -11,6 +11,7 @@ export const lightTheme = {
     maskGradient:
       "linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0) 100%)",
     dark: "#041B2B",
+    dark80: "rgba(4, 27, 43, 0.8)",
     dark50: "rgba(4, 27, 43, 0.5)",
     dark25: "rgba(4, 27, 43, 0.25)",
     dark5: "rgba(4, 27, 43, 0.05)",

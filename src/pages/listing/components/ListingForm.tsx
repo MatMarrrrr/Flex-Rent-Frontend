@@ -32,6 +32,7 @@ interface ListingFormProps {
   };
   headerText: string;
   submitText: string;
+  submittingText: string;
   initialImage: ImageType;
   isSubmitting: boolean;
   onSubmit: (values: any, imageFile: ImageType) => void;
@@ -42,6 +43,7 @@ const ListingForm: React.FC<ListingFormProps> = ({
   initialValues,
   headerText,
   submitText,
+  submittingText,
   initialImage,
   isSubmitting = false,
   onSubmit,
@@ -164,7 +166,8 @@ const ListingForm: React.FC<ListingFormProps> = ({
             fontColor="var(--white)"
             disabled={isSubmitting}
           >
-            {submitText} {isSubmitting && <Loader size={18} />}
+            {isSubmitting ? submittingText : submitText}
+            {isSubmitting && <Loader size={20} color="var(--white)" />}
           </PrimaryButton>
         </FormikForm>
       </RightContainer>

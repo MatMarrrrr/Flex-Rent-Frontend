@@ -28,12 +28,14 @@ export default function EditListingPage() {
     useState<ListingFormValues>(listingInitialValues);
   const [listingImage, setListingImage] = useState<ImageType>(null);
   const [error, setError] = useState<string>("");
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const handleBack = () => {
     navigate(-1);
   };
 
   const handleSubmit = (values: ListingFormValues, imageFile: ImageType) => {
+    setIsSubmitting(true);
     const finalValues = { ...values, image: imageFile };
     console.log(finalValues);
   };
@@ -87,9 +89,11 @@ export default function EditListingPage() {
             initialValues={listingData}
             headerText="Edytuj ogłoszenie"
             submitText="Zapisz"
+            submittingText="Zapisywanie"
             initialImage={listingImage}
             onSubmit={handleSubmit}
             handleBack={handleBack}
+            isSubmitting={isSubmitting}
           />
         </>
       )}

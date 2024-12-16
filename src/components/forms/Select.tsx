@@ -137,6 +137,7 @@ const DropdownHeader = styled.div<{ $disabled?: boolean }>`
   padding: 0 10px;
   background: ${({ $disabled }) =>
     $disabled ? "var(--dark-2)" : "var(--white)"};
+  color: ${({ $disabled }) => ($disabled ? "var(--dark-80)" : "var(--dark)")};
   cursor: ${({ $disabled }) => ($disabled ? "default" : "pointer")};
   display: flex;
   align-items: center;

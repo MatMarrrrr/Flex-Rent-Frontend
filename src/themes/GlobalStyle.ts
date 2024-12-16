@@ -11,6 +11,7 @@ const GlobalStyle = createGlobalStyle`
     --gradient: ${({ theme }) => theme.colors.gradient};
     --gradient-50: ${({ theme }) => theme.colors.gradient50};
     --mask-gradient: ${({ theme }) => theme.colors.maskGradient};
+    --dark-80: ${({ theme }) => theme.colors.dark80};
     --dark-50: ${({ theme }) => theme.colors.dark50};
     --dark-25: ${({ theme }) => theme.colors.dark25};
     --dark-5: ${({ theme }) => theme.colors.dark5};
