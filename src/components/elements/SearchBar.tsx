@@ -25,7 +25,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const [category, setCategory] = useState<string>("");
   const [categoryId, setCategoryId] = useState<number>(initialCategoryId);
   const [localization, setLocalization] = useState<string>(initialLocalization);
-
+  const [isSearchDisabled, setSearchDisabled] = useState<boolean>(true);
   const [isModalVisible, setModalVisible] = useState(false);
 
   const showModal = () => {
@@ -54,6 +54,11 @@ const SearchBar: React.FC<SearchBarProps> = ({
     const categoryName = categoryObj?.name ?? "";
     setCategory(categoryName);
   }, [categoryId]);
+
+  useEffect(() => {
+    const isDisabled = !query && categoryId === 0 && !localization;
+    setSearchDisabled(isDisabled);
+  }, [query, categoryId, localization]);
 
   return (
     <>
@@ -89,7 +94,9 @@ const SearchBar: React.FC<SearchBarProps> = ({
             onChange={(e) => setLocalization(e.target.value)}
           />
         </LocalizationInputContainer>
-        <SearchButton onClick={handleSearchClick}>Wyszukaj</SearchButton>
+        <SearchButton onClick={handleSearchClick} disabled={isSearchDisabled}>
+          Wyszukaj
+        </SearchButton>
       </Container>
     </>
   );
@@ -206,6 +213,14 @@ const SearchButton = styled.button`
 
   &:hover {
     transform: scale(1.03);
+  }
+
+  &:disabled {
+    &:hover {
+      transform: none;
+    }
+    cursor: default;
+    background-color: var(--dark-80);
   }
 
   @media (max-width: 700px) {
