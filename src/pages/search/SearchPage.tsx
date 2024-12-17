@@ -64,7 +64,7 @@ export default function SearchPage() {
       id: index + 1,
       image: test_item,
       name: `Nazwa rzeczy do wypożyczenia ${index + 1}`,
-      price: "100",
+      price: 100,
       currencyCode: "PLN",
       localization: `Lokalizacja`,
     }));

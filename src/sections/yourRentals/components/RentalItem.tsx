@@ -1,47 +1,61 @@
 import styled from "styled-components";
-import { MapPin as MapPinIcon } from "lucide-react";
 import Button from "@/components/buttons/Button";
 import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
+import { calculateDaysDifference } from "@/components/buttons/CalendarButton";
+import getSymbolFromCurrency from "currency-symbol-map";
 
-interface ListingItemProps {
+interface RentalItemProps {
   id: number;
   image: string;
   name: string;
   category: string;
   price: number;
+  currency: string;
   localization: string;
-  rentedPeriods: { from: string; to: string }[];
-  onEditClick: (id: number) => void;
+  rentedPeriod: { from: string; to: string };
+  onSendMessageClick: (id: number) => void;
 }
 
-const ListingItem: React.FC<ListingItemProps> = ({
+const RentalItem: React.FC<RentalItemProps> = ({
   id,
   image,
   name,
-  category,
   price,
+  currency,
   localization,
-  rentedPeriods,
-  onEditClick,
+  rentedPeriod,
+  onSendMessageClick,
 }) => {
+  const calculateCost = (rentedPeriod: { from: string; to: string }) => {
+    const daysPeriod = calculateDaysDifference(
+      rentedPeriod.from,
+      rentedPeriod.to
+    );
+    return daysPeriod * price;
+  };
+
   return (
     <Container>
       <Image src={image} />
       <Wrapper>
         <Name>{name}</Name>
-        <Category>{category}</Category>
-        <ItemDetailsContainer>
-          <ItemDetailText>{price}zł / Dzień</ItemDetailText>
-          <ItemLocalizationContainer>
-            <ItemLocalizationIcon />
-            <ItemDetailText>{localization}</ItemDetailText>
-          </ItemLocalizationContainer>
-        </ItemDetailsContainer>
-        {rentedPeriods.map((period, index) => (
-          <ItemDetailText key={index}>
-            Wypożyczone: {period.from} - {period.to}
+        <Category>Kategoria</Category>
+        <ItemDetailContainer>
+          <ItemDetailTextBold>Lokalizacja: </ItemDetailTextBold>
+          <ItemDetailText>{localization}</ItemDetailText>
+        </ItemDetailContainer>
+        <ItemDetailContainer>
+          <ItemDetailTextBold>Okres: </ItemDetailTextBold>
+          <ItemDetailText>{`${rentedPeriod.from} - ${rentedPeriod.to}`}</ItemDetailText>
+        </ItemDetailContainer>
+        <ItemDetailContainer>
+          <ItemDetailTextBold>Koszt: </ItemDetailTextBold>
+          <ItemDetailText>
+            {calculateCost(rentedPeriod)}
+            {getSymbolFromCurrency(currency)}
           </ItemDetailText>
-        ))}
+        </ItemDetailContainer>
+        <ItemDetailContainer></ItemDetailContainer>
         <Button
           fontColor="var(--white)"
           borderColor="transparent"
@@ -50,28 +64,16 @@ const ListingItem: React.FC<ListingItemProps> = ({
           mobileStart={1320}
           mobileMaxWidth="700px"
           margin="20px 0px 0px 0px"
-          onClick={() => onEditClick(id)}
+          onClick={() => onSendMessageClick(id)}
         >
-          Edytuj ogłoszenie
-        </Button>
-        <Button
-          fontColor="var(--white)"
-          borderColor="var(--error)"
-          background="var(--error)"
-          desktopMaxWidth="500px"
-          mobileStart={1320}
-          mobileMaxWidth="700px"
-          margin="20px 0px 0px 0px"
-          onClick={() => onEditClick(id)}
-        >
-          Usuń ogłoszenie
+          Wyślij wiadomość
         </Button>
       </Wrapper>
     </Container>
   );
 };
 
-export default ListingItem;
+export default RentalItem;
 
 const Container = styled.div`
   display: grid;
@@ -131,17 +133,6 @@ const Category = styled.p`
   margin-bottom: 10px;
 `;
 
-const ItemDetailsContainer = styled.div`
-  display: flex;
-  gap: 15px;
-  margin-bottom: 10px;
-
-  @media (max-width: 430px) {
-    flex-direction: column;
-    gap: 5px;
-  }
-`;
-
 const ItemDetailText = styled.p`
   font-size: 16px;
   color: var(--dark);
@@ -151,12 +142,12 @@ const ItemDetailText = styled.p`
   }
 `;
 
-const ItemLocalizationContainer = styled.div`
-  display: flex;
-  gap: 5px;
+const ItemDetailTextBold = styled(ItemDetailText)`
+  font-weight: bold;
 `;
 
-const ItemLocalizationIcon = styled(MapPinIcon)`
-  height: 18px;
-  width: 18px;
+const ItemDetailContainer = styled.div`
+  display: flex;
+  gap: 5px;
+  margin-bottom: 5px;
 `;

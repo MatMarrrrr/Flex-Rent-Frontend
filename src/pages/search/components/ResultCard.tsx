@@ -7,7 +7,7 @@ interface ResultCardProps {
   id: number;
   image: string;
   name: string;
-  price: string;
+  price: number;
   currencyCode: string;
   localization: string;
   onClick: (id: number) => void;

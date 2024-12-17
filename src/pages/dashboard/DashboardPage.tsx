@@ -2,7 +2,7 @@ import styled from "styled-components";
 import DashboardNavigation from "@/pages/dashboard/components/DashboardNavigation";
 import { Route, Routes } from "react-router";
 import MessagesSection from "@/sections/messages/MessagesSection";
-import YourRentalsSection from "@/sections/YourRentalsSection";
+import YourRentalsSection from "@/sections/yourRentals/YourRentalsSection";
 import YourListingsSection from "@/sections/yourListings/YourListingsSection";
 import RequestsSection from "@/sections/RequestsSection";
 

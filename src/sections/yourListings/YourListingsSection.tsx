@@ -25,7 +25,7 @@ const YourListingsSection = () => {
     image: test_item,
     name: `Nazwa rzeczy do wypożyczenia ${index + 1}`,
     category: "Kategoria",
-    price: "100",
+    price: 100,
     localization: `Lokalizacja`,
     rentedPeriods: [
       { from: "12.12.2024", to: "20.12.2024" },
