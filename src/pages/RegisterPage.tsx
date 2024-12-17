@@ -74,6 +74,7 @@ export default function RegisterPage() {
                 isRequired={true}
                 passwordShown={passwordShown}
                 onToggle={handlePasswordVisibilityChange}
+                margin="0px 0px 15px 0px"
               />
 
               <RedirectContainer>

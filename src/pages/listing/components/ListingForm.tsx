@@ -162,8 +162,6 @@ const ListingForm: React.FC<ListingFormProps> = ({
           <PrimaryButton
             type="submit"
             margin="15px 0px 0px 0px"
-            background="var(--gradient)"
-            fontColor="var(--white)"
             disabled={isSubmitting}
           >
             {isSubmitting ? submittingText : submitText}

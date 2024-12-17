@@ -71,9 +71,10 @@ export const RedirectText = styled.p`
   font-weight: bold;
 `;
 
-export const PasswordInputWrapper = styled.div`
+export const PasswordInputWrapper = styled.div<{ $margin?: string }>`
   width: 100%;
   display: flex;
+  margin: ${({ $margin }) => $margin || "0"};
   justify-content: center;
   position: relative;
 `;

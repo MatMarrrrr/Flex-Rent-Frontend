@@ -20,6 +20,10 @@ const YourListingsSection = () => {
     navigate(`/edit-listing/${id}`);
   };
 
+  const handleDeleteClick = (id: number) => {
+    console.log(`Deleting ${id}`);
+  };
+
   const listings = Array.from({ length: 5 }, (_, index) => ({
     id: index + 1,
     image: test_item,
@@ -70,6 +74,7 @@ const YourListingsSection = () => {
               localization={listing.localization}
               rentedPeriods={listing.rentedPeriods}
               onEditClick={() => handleEditClick(listing.id)}
+              onDeleteClick={() => handleDeleteClick(listing.id)}
             />
           ))}
         </MotionWrapper>

@@ -1,5 +1,9 @@
 import styled from "styled-components";
-import { MapPin as MapPinIcon } from "lucide-react";
+import {
+  MapPin as MapPinIcon,
+  Pencil as PencilIcon,
+  X as XIcon,
+} from "lucide-react";
 import Button from "@/components/buttons/Button";
 import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
 
@@ -12,6 +16,7 @@ interface ListingItemProps {
   localization: string;
   rentedPeriods: { from: string; to: string }[];
   onEditClick: (id: number) => void;
+  onDeleteClick: (id: number) => void;
 }
 
 const ListingItem: React.FC<ListingItemProps> = ({
@@ -23,6 +28,7 @@ const ListingItem: React.FC<ListingItemProps> = ({
   localization,
   rentedPeriods,
   onEditClick,
+  onDeleteClick,
 }) => {
   return (
     <Container>
@@ -43,28 +49,23 @@ const ListingItem: React.FC<ListingItemProps> = ({
           </ItemDetailText>
         ))}
         <Button
-          fontColor="var(--white)"
-          borderColor="transparent"
-          background="var(--gradient)"
           desktopMaxWidth="500px"
           mobileStart={1320}
           mobileMaxWidth="700px"
           margin="20px 0px 0px 0px"
           onClick={() => onEditClick(id)}
         >
+          <ItemEditIcon />
           Edytuj ogłoszenie
         </Button>
         <Button
-          fontColor="var(--white)"
-          borderColor="var(--error)"
-          background="var(--error)"
           desktopMaxWidth="500px"
           mobileStart={1320}
           mobileMaxWidth="700px"
           margin="20px 0px 0px 0px"
-          onClick={() => onEditClick(id)}
+          onClick={() => onDeleteClick(id)}
         >
-          Usuń ogłoszenie
+          <ItemDeleteIcon /> Usuń ogłoszenie
         </Button>
       </Wrapper>
     </Container>
@@ -159,4 +160,14 @@ const ItemLocalizationContainer = styled.div`
 const ItemLocalizationIcon = styled(MapPinIcon)`
   height: 18px;
   width: 18px;
+`;
+
+const ItemEditIcon = styled(PencilIcon)`
+  height: 18px;
+  width: 18px;
+`;
+
+const ItemDeleteIcon = styled(XIcon)`
+  height: 22px;
+  width: 22px;
 `;
