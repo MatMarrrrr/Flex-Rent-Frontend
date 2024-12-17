@@ -15,6 +15,7 @@ declare module "styled-components" {
       dark80: string;
       dark50: string;
       dark25: string;
+      dark10: string;
       dark5: string;
       dark2: string;
       shadow: string;

@@ -159,7 +159,7 @@ const DropdownList = styled.ul`
   position: absolute;
   width: 100%;
   max-height: 264px;
-  overflow-y: scroll;
+  overflow-y: auto;
   margin: 0;
   padding: 10px;
   list-style: none;

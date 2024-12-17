@@ -14,6 +14,7 @@ export const lightTheme = {
     dark80: "rgba(4, 27, 43, 0.8)",
     dark50: "rgba(4, 27, 43, 0.5)",
     dark25: "rgba(4, 27, 43, 0.25)",
+    dark10: "rgba(4, 27, 43, 0.10)",
     dark5: "rgba(4, 27, 43, 0.05)",
     dark2: "rgba(4, 27, 43, 0.02)",
     shadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",

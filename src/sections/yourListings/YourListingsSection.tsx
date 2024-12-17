@@ -5,7 +5,7 @@ import test_item from "@/assets/test_item.jpg";
 import Loader from "@/components/ui/Loader";
 import { useEffect, useState } from "react";
 import MotionWrapper from "@/components/ui/MotionWrapper";
-import { fromBottomVariants } from "@/consts/motionVariants";
+import { fromBottomVariants03 } from "@/consts/motionVariants";
 import { useNavigate } from "react-router";
 
 const YourListingsSection = () => {
@@ -57,7 +57,7 @@ const YourListingsSection = () => {
           <LoaderText>Wczytywanie ogłoszeń</LoaderText>
         </LoaderContainer>
       ) : (
-        <MotionWrapper variants={fromBottomVariants}>
+        <MotionWrapper variants={fromBottomVariants03}>
           {listings.map((listing) => (
             <ListingItem
               key={listing.id}
