@@ -24,6 +24,7 @@ const YourListingsSection = () => {
     id: index + 1,
     image: test_item,
     name: `Nazwa rzeczy do wypożyczenia ${index + 1}`,
+    category: "Kategoria",
     price: "100",
     localization: `Lokalizacja`,
     rentedPeriods: [
@@ -64,6 +65,7 @@ const YourListingsSection = () => {
               id={listing.id}
               image={listing.image}
               name={listing.name}
+              category={listing.category}
               price={listing.price}
               localization={listing.localization}
               rentedPeriods={listing.rentedPeriods}

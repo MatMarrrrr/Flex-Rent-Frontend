@@ -7,6 +7,7 @@ interface ListingItemProps {
   id: number;
   image: string;
   name: string;
+  category: string;
   price: string;
   localization: string;
   rentedPeriods: { from: string; to: string }[];
@@ -17,6 +18,7 @@ const ListingItem: React.FC<ListingItemProps> = ({
   id,
   image,
   name,
+  category,
   price,
   localization,
   rentedPeriods,
@@ -27,7 +29,7 @@ const ListingItem: React.FC<ListingItemProps> = ({
       <Image src={image} />
       <Wrapper>
         <Name>{name}</Name>
-        <Category>Kategoria</Category>
+        <Category>{category}</Category>
         <ItemDetailsContainer>
           <ItemDetailText>{price}zł / Dzień</ItemDetailText>
           <ItemLocalizationContainer>
