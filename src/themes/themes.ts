@@ -17,7 +17,7 @@ export const lightTheme = {
     dark10: "rgba(4, 27, 43, 0.10)",
     dark5: "rgba(4, 27, 43, 0.05)",
     dark2: "rgba(4, 27, 43, 0.02)",
-    shadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+    shadow: "0 10px 20px rgba(4, 27, 43, 0.1);",
     error: "#ee5454",
   },
 };

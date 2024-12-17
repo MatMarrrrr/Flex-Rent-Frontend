@@ -122,6 +122,7 @@ const Wrapper = styled.div`
   background-color: var(--white);
   padding: 50px 100px;
   align-items: center;
+  box-shadow: var(--shadow);
 
   @media (max-width: 650px) {
     min-width: 100%;
