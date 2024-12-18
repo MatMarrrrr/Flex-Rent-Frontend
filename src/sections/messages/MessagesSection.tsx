@@ -63,6 +63,8 @@ const MessagesSection = () => {
     }, 1000);
   };
 
+  const activeChatId = 2;
+
   useEffect(() => {
     const chatsData: ChatData[] = [
       {
@@ -81,9 +83,18 @@ const MessagesSection = () => {
       },
     ];
 
-    chatsData[0].status = "active";
+    const updatedChats = chatsData.map((chat, index) => {
+      if (activeChatId) {
+        return chat.id === activeChatId
+          ? { ...chat, status: "active" as ChatStatus }
+          : { ...chat, status: chat.status as ChatStatus };
+      }
+      return index === 0
+        ? { ...chat, status: "active" as ChatStatus }
+        : { ...chat, status: chat.status as ChatStatus };
+    });
 
-    setChats(chatsData);
+    setChats(updatedChats);
 
     const timeout = setTimeout(() => {
       setIsLoading(false);

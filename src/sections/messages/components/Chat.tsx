@@ -67,7 +67,7 @@ const ChatProfileText = styled.div`
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background-color: var(--accent);
+  background-color: var(--primary);
   display: flex;
   justify-content: center;
   align-items: center;

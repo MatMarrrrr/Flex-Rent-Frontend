@@ -69,7 +69,7 @@ const Container = styled.div`
 const ImageCircle = styled.div`
   height: 128px;
   width: 128px;
-  background-color: var(--accent);
+  background-color: var(--primary);
   border-radius: 50%;
   display: flex;
   justify-content: center;
