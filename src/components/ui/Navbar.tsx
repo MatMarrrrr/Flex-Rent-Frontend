@@ -153,9 +153,21 @@ const LinkWrapper = styled.div`
   gap: 10px;
   transition: transform 0.3s ease;
   cursor: pointer;
+  position: relative;
 
-  &:hover {
-    transform: scale(1.03);
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--white);
+    transition: width 0.3s ease;
+  }
+
+  &:hover::after {
+    width: 100%;
   }
 `;
 
@@ -185,9 +197,21 @@ const StyledLink = styled(Link)<{ $isActive?: boolean }>`
   color: var(--light);
   transition: transform 0.3s ease;
   font-weight: ${({ $isActive }) => ($isActive ? "bold" : "normal")};
+  position: relative;
 
-  &:hover {
-    transform: scale(1.03);
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--white);
+    transition: width 0.3s ease;
+  }
+
+  &:hover::after {
+    width: 100%;
   }
 `;
 

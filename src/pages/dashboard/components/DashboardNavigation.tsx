@@ -4,11 +4,14 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { navigationItems } from "@/consts/dashboardNavigationItems";
 import DashboardNavigationList from "@/pages/dashboard/components/DashboardNavigationList";
+import { DashboardRequestsNavigation } from "./DashboardRequestsNavigation";
 
 const DashboardNavigation = () => {
   const location = useLocation();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const defaultSection = "your-listings";
+
+  const isRequestsSection = location.pathname.includes("requests");
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -30,12 +33,15 @@ const DashboardNavigation = () => {
           defaultSection={defaultSection}
         />
       </NavigationContainer>
+
       <MobileNavigationContainer $isOpen={isOpen}>
         <DashboardNavigationList
           navigationItems={navigationItems}
           defaultSection={defaultSection}
         />
       </MobileNavigationContainer>
+
+      {isRequestsSection && <DashboardRequestsNavigation />}
     </Container>
   );
 };

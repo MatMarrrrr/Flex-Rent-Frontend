@@ -4,7 +4,7 @@ import { Route, Routes } from "react-router";
 import MessagesSection from "@/sections/messages/MessagesSection";
 import YourRentalsSection from "@/sections/yourRentals/YourRentalsSection";
 import YourListingsSection from "@/sections/yourListings/YourListingsSection";
-import RequestsSection from "@/sections/RequestsSection";
+import RequestsSection from "@/sections/requests/RequestsSection";
 
 export default function DashboardPage() {
   return (
@@ -14,7 +14,7 @@ export default function DashboardPage() {
         <Routes>
           <Route path="your-listings" element={<YourListingsSection />} />
           <Route path="your-rentals" element={<YourRentalsSection />} />
-          <Route path="requests" element={<RequestsSection />} />
+          <Route path="requests/*" element={<RequestsSection />} />
           <Route path="messages" element={<MessagesSection />} />
 
           <Route path="*" element={<YourListingsSection />} />

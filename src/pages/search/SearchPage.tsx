@@ -7,7 +7,7 @@ import ResultCard from "@/pages/search/components/ResultCard";
 import test_item from "@/assets/test_item.jpg";
 import Loader from "@/components/ui/Loader";
 import MotionWrapper from "@/components/ui/MotionWrapper";
-import { fromRightVariants } from "@/consts/motionVariants";
+import { fromRightVariants01 } from "@/consts/motionVariants";
 
 export default function SearchPage() {
   const navigate = useNavigate();
@@ -109,7 +109,7 @@ export default function SearchPage() {
               )}
             </ResultsTextContainer>
             <ResultsContainer>
-              <MotionWrapper variants={fromRightVariants}>
+              <MotionWrapper variants={fromRightVariants01}>
                 {result.length > 0 &&
                   result.map((item) => (
                     <ResultCard

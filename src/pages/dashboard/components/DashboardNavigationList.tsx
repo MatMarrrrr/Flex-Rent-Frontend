@@ -38,8 +38,21 @@ const NavigationItem = styled(Link)<{ $isActive: boolean }>`
   pointer-events: ${({ $isActive }) => ($isActive ? "none" : "auto")};
   cursor: ${({ $isActive }) => ($isActive ? "default" : "pointer")};
 
-  &:hover {
-    color: ${({ $isActive }) => ($isActive ? "var(--white)" : "var(--dark)")};
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--white);
+    transition: width 0.3s ease;
+  }
+
+  &:hover::after {
+    width: 100%;
   }
 
   @media (max-width: 850px) {
