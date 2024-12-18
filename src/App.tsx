@@ -16,8 +16,8 @@ import NotFoundPage from "@/pages/NotFoundPage";
 import DashboardPage from "@/pages/dashboard/DashboardPage";
 import AddListingPage from "@/pages/listing/AddListingPage";
 import EditListingPage from "@/pages/listing/EditListingPage";
-import ProfilePage from "./pages/profile/ProfilePage";
-import LogoutPage from "./pages/LogoutPage";
+import ProfilePage from "@/pages/profile/ProfilePage";
+import LogoutPage from "@/pages/LogoutPage";
 
 function App() {
   useEffect(() => {

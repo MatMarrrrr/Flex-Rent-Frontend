@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import test_item from "@/assets/test_item.jpg";
 import styled from "styled-components";
 import { fromBottomVariants03 } from "@/consts/motionVariants";
-import RentalItem from "./components/rentalItem";
+import RentalItem from "@/sections/yourRentals/components/RentalItem";
 
 const YourRentalsSection = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);

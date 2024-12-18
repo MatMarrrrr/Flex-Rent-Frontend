@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 import { navigationItems } from "@/consts/dashboardNavigationItems";
 import DashboardNavigationList from "@/pages/dashboard/components/DashboardNavigationList";
-import { DashboardRequestsNavigation } from "./DashboardRequestsNavigation";
+import { DashboardRequestsNavigation } from "@/pages/dashboard/components/DashboardRequestsNavigation";
 
 const DashboardNavigation = () => {
   const location = useLocation();

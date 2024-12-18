@@ -3,7 +3,7 @@ import FormikForm from "@/components/forms/FormikForm";
 import FormikInputField from "@/components/forms/FormikInputField";
 import { profileDataSchema } from "@/validations/profileSchema";
 import styled from "styled-components";
-import ProfileImageCircle from "./components/ProfileImageCircle";
+import ProfileImageCircle from "@/pages/profile/components/ProfileImageCircle";
 import { useState } from "react";
 import Loader from "@/components/ui/Loader";
 
