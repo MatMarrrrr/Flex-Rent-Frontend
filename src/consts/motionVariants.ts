@@ -21,3 +21,4 @@ const createFromRightVariants = (delayFactor: number): Variants => ({
 export const fromBottomVariants03 = createFromBottomVariants(0.3);
 export const fromBottomVariants01 = createFromBottomVariants(0.1);
 export const fromRightVariants01 = createFromRightVariants(0.1);
+export const fromRightVariants0 = createFromRightVariants(0);

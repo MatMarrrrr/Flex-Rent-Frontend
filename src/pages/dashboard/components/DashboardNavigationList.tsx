@@ -33,6 +33,7 @@ export default DashboardNavigationList;
 const NavigationItem = styled(Link)<{ $isActive: boolean }>`
   text-decoration: none;
   font-size: 20px;
+  width: fit-content;
   font-weight: ${({ $isActive }) => ($isActive ? "900" : "0")};
   color: var(--white);
   pointer-events: ${({ $isActive }) => ($isActive ? "none" : "auto")};
@@ -48,11 +49,10 @@ const NavigationItem = styled(Link)<{ $isActive: boolean }>`
     width: 0;
     height: 2px;
     background-color: var(--white);
-    transition: width 0.3s ease;
   }
 
   &:hover::after {
-    width: 100%;
+    width: ${({ $isActive }) => ($isActive ? "0" : "100%")};
   }
 
   @media (max-width: 850px) {

@@ -23,11 +23,11 @@ const DashboardNavigation = () => {
 
   return (
     <Container>
-      <TitleContainer onClick={toggleMenu} data-aos="fade-up">
+      <TitleContainer onClick={toggleMenu}>
         <Title>Dashboard</Title>
         <ArrowDown $isOpen={isOpen} />
       </TitleContainer>
-      <NavigationContainer data-aos="fade-up">
+      <NavigationContainer>
         <DashboardNavigationList
           navigationItems={navigationItems}
           defaultSection={defaultSection}
@@ -40,7 +40,6 @@ const DashboardNavigation = () => {
           defaultSection={defaultSection}
         />
       </MobileNavigationContainer>
-
       {isRequestsSection && <DashboardRequestsNavigation />}
     </Container>
   );
@@ -53,13 +52,13 @@ const Container = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 15px;
   background: var(--gradient);
 `;
 
 const TitleContainer = styled.div`
   display: flex;
   gap: 10px;
+  margin-bottom: 15px;
   cursor: pointer;
   pointer-events: none;
   user-select: none;
@@ -101,10 +100,11 @@ const MobileNavigationContainer = styled.div<{ $isOpen: boolean }>`
   display: none;
   gap: 20px;
   flex-direction: column;
-  max-height: ${({ $isOpen }) => ($isOpen ? "168px" : "30px")};
+  height: 100%;
+  max-height: ${({ $isOpen }) => ($isOpen ? "171px" : "30px")};
   transition: max-height 0.3s ease;
   overflow: hidden;
-
+  padding-bottom: ${({ $isOpen }) => ($isOpen ? "10px" : "0")};
   @media (max-width: 850px) {
     display: flex;
   }

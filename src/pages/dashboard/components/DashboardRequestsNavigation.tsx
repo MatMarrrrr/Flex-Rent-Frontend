@@ -1,5 +1,3 @@
-import MotionWrapper from "@/components/ui/MotionWrapper";
-import { fromRightVariants01 } from "@/consts/motionVariants";
 import { Link } from "react-router";
 import styled from "styled-components";
 
@@ -17,34 +15,27 @@ export const DashboardRequestsNavigation = () => {
   };
 
   return (
-    <MotionWrapper variants={fromRightVariants01}>
-      <RequestsNavigationContainer>
-        <RequestsNavigationLink
-          $isActive={checkIsRequestsSectionActive(
-            location.pathname,
-            "incoming"
-          )}
-          to="/dashboard/requests/incoming"
-        >
-          Przychodzące
-        </RequestsNavigationLink>
-        <RequestsNavigationLink
-          $isActive={checkIsRequestsSectionActive(
-            location.pathname,
-            "outgoing"
-          )}
-          to="/dashboard/requests/outgoing"
-        >
-          Wychodzące
-        </RequestsNavigationLink>
-      </RequestsNavigationContainer>
-    </MotionWrapper>
+    <RequestsNavigationContainer>
+      <RequestsNavigationLink
+        $isActive={checkIsRequestsSectionActive(location.pathname, "incoming")}
+        to="/dashboard/requests/incoming"
+      >
+        Przychodzące
+      </RequestsNavigationLink>
+      <RequestsNavigationLink
+        $isActive={checkIsRequestsSectionActive(location.pathname, "outgoing")}
+        to="/dashboard/requests/outgoing"
+      >
+        Wychodzące
+      </RequestsNavigationLink>
+    </RequestsNavigationContainer>
   );
 };
 
 const RequestsNavigationContainer = styled.div`
   display: flex;
   gap: 10px;
+  margin-top: 10px;
 `;
 
 const RequestsNavigationLink = styled(Link)<{ $isActive: boolean }>`
@@ -64,10 +55,9 @@ const RequestsNavigationLink = styled(Link)<{ $isActive: boolean }>`
     width: 0;
     height: 2px;
     background-color: var(--white);
-    transition: width 0.3s ease;
   }
 
   &:hover::after {
-    width: 100%;
+    width: ${({ $isActive }) => ($isActive ? "0" : "100%")};
   }
 `;

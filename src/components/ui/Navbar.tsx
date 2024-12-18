@@ -163,7 +163,6 @@ const LinkWrapper = styled.div`
     width: 0;
     height: 2px;
     background-color: var(--white);
-    transition: width 0.3s ease;
   }
 
   &:hover::after {
@@ -207,7 +206,6 @@ const StyledLink = styled(Link)<{ $isActive?: boolean }>`
     width: 0;
     height: 2px;
     background-color: var(--white);
-    transition: width 0.3s ease;
   }
 
   &:hover::after {
