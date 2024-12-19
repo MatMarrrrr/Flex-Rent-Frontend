@@ -73,15 +73,7 @@ export default function OutgoingRequestsSection() {
           {outgoingRequests.map((request) => (
             <OutgoingRequest
               key={request.id}
-              id={request.id}
-              image={request.image}
-              name={request.name}
-              category={request.category}
-              price={request.price}
-              currency={request.currency}
-              localization={request.localization}
-              rentedPeriod={request.rentedPeriod}
-              status={request.status}
+              request={request}
               onCancelClick={() => handleCancelClick(request.id)}
               onSendMessageClick={() => handleSendMessageClick(request.id)}
             />

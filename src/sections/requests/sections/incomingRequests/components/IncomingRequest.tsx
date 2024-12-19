@@ -8,6 +8,12 @@ import { Check as CheckIcon, X as XIcon } from "lucide-react";
 type RequestStatus = "accepted" | "declined" | "waiting" | "canceled";
 
 interface IncomingRequestProps {
+  request: Request;
+  onAcceptClick: (id: number) => void;
+  onDeclineClick: (id: number) => void;
+}
+
+interface Request {
   id: number;
   image: string;
   name: string;
@@ -17,23 +23,17 @@ interface IncomingRequestProps {
   localization: string;
   rentedPeriod: { from: string; to: string };
   status: RequestStatus;
-  onAcceptClick: (id: number) => void;
-  onDeclineClick: (id: number) => void;
 }
 
 const IncomingRequest: React.FC<IncomingRequestProps> = ({
-  id,
-  image,
-  name,
-  price,
-  currency,
-  localization,
-  rentedPeriod,
-  status,
+  request,
   onAcceptClick,
   onDeclineClick,
 }) => {
-  const calculateCost = (rentedPeriod: { from: string; to: string }) => {
+  const calculateCost = (
+    rentedPeriod: { from: string; to: string },
+    price: number
+  ) => {
     const daysPeriod = calculateDaysDifference(
       rentedPeriod.from,
       rentedPeriod.to
@@ -43,49 +43,49 @@ const IncomingRequest: React.FC<IncomingRequestProps> = ({
 
   return (
     <Container>
-      <Image src={image} />
+      <Image src={request.image} />
       <Wrapper>
-        <Name>{name}</Name>
-        <Category>Kategoria</Category>
+        <Name>{request.name}</Name>
+        <Category>{request.category}</Category>
         <ItemDetailContainer>
           <ItemDetailTextBold>Lokalizacja: </ItemDetailTextBold>
-          <ItemDetailText>{localization}</ItemDetailText>
+          <ItemDetailText>{request.localization}</ItemDetailText>
         </ItemDetailContainer>
         <ItemDetailContainer>
           <ItemDetailTextBold>Okres: </ItemDetailTextBold>
-          <ItemDetailText>{`${rentedPeriod.from} - ${rentedPeriod.to}`}</ItemDetailText>
+          <ItemDetailText>{`${request.rentedPeriod.from} - ${request.rentedPeriod.to}`}</ItemDetailText>
         </ItemDetailContainer>
         <ItemDetailContainer>
           <ItemDetailTextBold>Koszt: </ItemDetailTextBold>
           <ItemDetailText>
-            {calculateCost(rentedPeriod)}
-            {getSymbolFromCurrency(currency)}
+            {calculateCost(request.rentedPeriod, request.price)}
+            {getSymbolFromCurrency(request.currency)}
           </ItemDetailText>
         </ItemDetailContainer>
-        {status !== "declined" && (
+        {request.status !== "declined" && (
           <Button
             desktopMaxWidth="500px"
             mobileStart={1320}
             mobileMaxWidth="700px"
             margin="20px 0px 0px 0px"
-            disabled={status === "accepted"}
-            onClick={() => onAcceptClick(id)}
+            disabled={request.status === "accepted"}
+            onClick={() => onAcceptClick(request.id)}
           >
             <CheckIcon />
-            {status === "accepted" ? "Zaakceptowano" : "Zaakceptuj"}
+            {request.status === "accepted" ? "Zaakceptowano" : "Zaakceptuj"}
           </Button>
         )}
-        {status !== "accepted" && (
+        {request.status !== "accepted" && (
           <Button
             desktopMaxWidth="500px"
             mobileStart={1320}
             mobileMaxWidth="700px"
             margin="20px 0px 0px 0px"
-            disabled={status === "declined"}
-            onClick={() => onDeclineClick(id)}
+            disabled={request.status === "declined"}
+            onClick={() => onDeclineClick(request.id)}
           >
             <XIcon />
-            {status === "declined" ? "Odrzucono" : "Odrzuć"}
+            {request.status === "declined" ? "Odrzucono" : "Odrzuć"}
           </Button>
         )}
       </Wrapper>

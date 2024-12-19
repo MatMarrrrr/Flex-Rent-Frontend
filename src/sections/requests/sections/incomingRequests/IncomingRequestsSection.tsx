@@ -73,15 +73,7 @@ export default function IncomingRequestsSection() {
           {incomingRequests.map((request) => (
             <IncomingRequest
               key={request.id}
-              id={request.id}
-              image={request.image}
-              name={request.name}
-              category={request.category}
-              price={request.price}
-              currency={request.currency}
-              localization={request.localization}
-              rentedPeriod={request.rentedPeriod}
-              status={request.status}
+              request={request}
               onAcceptClick={() => handleAcceptClick(request.id)}
               onDeclineClick={() => handleDeclineClick(request.id)}
             />
