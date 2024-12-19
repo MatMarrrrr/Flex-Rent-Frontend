@@ -41,7 +41,7 @@ const ChatContainer = styled.div<{ $status: ChatStatus }>`
   align-items: center;
   border-radius: 8px;
   background-color: ${({ $status }) =>
-    $status == "active" ? "var(--accent)" : "var(--light)"};
+    $status === "active" ? "var(--accent)" : "var(--light)"};
   padding: 5px 10px;
   min-width: 400px;
   width: 100%;
@@ -79,8 +79,8 @@ const ChatUserName = styled.p<{ $status: ChatStatus }>`
   font-size: 18px;
   margin-left: 10px;
   color: ${({ $status }) =>
-    $status == "active" ? "var(--white)" : "var(--dark)"};
-  font-weight: ${({ $status }) => ($status == "unread" ? "bold" : "normal")};
+    $status === "active" ? "var(--white)" : "var(--dark)"};
+  font-weight: ${({ $status }) => ($status === "unread" ? "bold" : "normal")};
 `;
 
 const ChatGreenDot = styled(DotIcon)<{ $status: ChatStatus }>`
@@ -89,6 +89,6 @@ const ChatGreenDot = styled(DotIcon)<{ $status: ChatStatus }>`
   border-radius: 50%;
   height: 12px;
   width: 12px;
-  display: ${({ $status }) => ($status == "unread" ? "block" : "none")};
+  display: ${({ $status }) => ($status === "unread" ? "block" : "none")};
   color: var(--primary);
 `;

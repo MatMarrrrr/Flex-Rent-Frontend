@@ -23,7 +23,7 @@ export const ChatWindow = forwardRef<HTMLDivElement, ChatWindowProps>(
     };
 
     const sendMessage = () => {
-      if (message.trim() == "") return;
+      if (message.trim() === "") return;
       console.log(message);
       setMessage("");
     };

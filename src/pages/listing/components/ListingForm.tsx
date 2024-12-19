@@ -72,7 +72,7 @@ const ListingForm: React.FC<ListingFormProps> = ({
     localization: string;
     description: string;
   }) => {
-    if (imageFile == null) {
+    if (imageFile === null) {
       setIsImageError(true);
       return;
     }

@@ -31,7 +31,7 @@ const OutgoingRequestButtons: React.FC<OutgoingRequestButtonsProps> = ({
       </Button>
     )}
 
-    {requestStatus == "waiting" && (
+    {requestStatus === "waiting" && (
       <RequestStatusText>
         <CheckIcon />
         Prośba wysłana
