@@ -7,8 +7,7 @@ import { listingInitialValues } from "@/consts/initialValues";
 import { useEffect, useState } from "react";
 import Loader from "@/components/ui/Loader";
 import ErrorLayout from "@/components/ui/ErrorLayout";
-
-type ImageType = File | null | string;
+import { ImageType } from "@/types/types";
 
 interface ListingFormValues {
   name: string;

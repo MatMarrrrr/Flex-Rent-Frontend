@@ -1,8 +1,7 @@
 import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
 import styled from "styled-components";
 import { Dot as DotIcon } from "lucide-react";
-
-type ChatStatus = "active" | "unread" | "read";
+import { ChatStatus } from "@/types/types";
 
 interface ChatProps {
   id: number;

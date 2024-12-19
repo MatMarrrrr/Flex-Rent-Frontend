@@ -1,11 +1,11 @@
 import { useState } from "react";
 import styled from "styled-components";
 
-type SkeletonLoaderImageProps = {
+interface SkeletonLoaderImageProps {
   src: string;
   alt?: string;
   className?: string;
-};
+}
 
 const SkeletonLoaderImage = ({
   src,

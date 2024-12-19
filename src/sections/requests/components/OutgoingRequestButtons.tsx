@@ -1,4 +1,5 @@
 import Button from "@/components/buttons/Button";
+import { RequestStatus } from "@/types/types";
 import { X as XIcon, Check as CheckIcon, Send as SendIcon } from "lucide-react";
 import styled from "styled-components";
 
@@ -7,8 +8,6 @@ interface OutgoingRequestButtonsProps {
   onCancelClick: () => void;
   onSendMessageClick: () => void;
 }
-
-type RequestStatus = "accepted" | "declined" | "waiting" | "canceled";
 
 const OutgoingRequestButtons: React.FC<OutgoingRequestButtonsProps> = ({
   requestStatus,

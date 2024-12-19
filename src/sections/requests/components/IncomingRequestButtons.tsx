@@ -1,4 +1,5 @@
 import Button from "@/components/buttons/Button";
+import { RequestStatus } from "@/types/types";
 import { Check as CheckIcon, X as XIcon } from "lucide-react";
 
 interface IncomingRequestButtonsProps {
@@ -6,8 +7,6 @@ interface IncomingRequestButtonsProps {
   onAcceptClick: () => void;
   onDeclineClick: () => void;
 }
-
-type RequestStatus = "accepted" | "declined" | "waiting" | "canceled";
 
 const IncomingRequestButtons: React.FC<IncomingRequestButtonsProps> = ({
   requestStatus,

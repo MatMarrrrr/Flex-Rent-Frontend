@@ -2,8 +2,7 @@ import React, { useState, ChangeEvent, useEffect } from "react";
 import styled from "styled-components";
 import { ImageUp as ImageUpIcon } from "lucide-react";
 import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
-
-type ImageType = File | string | null;
+import { ImageType } from "@/types/types";
 
 interface UploadImageContainerProps {
   setImageFile: (file: ImageType) => void;

@@ -4,8 +4,7 @@ import ListingForm from "@/pages/listing/components/ListingForm";
 import { listingInitialValues } from "@/consts/initialValues";
 import { useState } from "react";
 import { MoveLeft as ArrowBackIcon } from "lucide-react";
-
-type ImageType = File | null | string;
+import { ImageType } from "@/types/types";
 
 interface ListingFormValues {
   name: string;

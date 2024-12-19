@@ -6,8 +6,7 @@ import Loader from "@/components/ui/Loader";
 import MotionWrapper from "@/components/ui/MotionWrapper";
 import { fromBottomVariants01 } from "@/consts/motionVariants";
 import test_image from "@/assets/test_item.jpg";
-
-type ChatStatus = "active" | "unread" | "read";
+import { ChatStatus } from "@/types/types";
 
 interface ChatData {
   id: number;

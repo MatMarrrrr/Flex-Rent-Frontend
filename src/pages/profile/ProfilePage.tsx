@@ -6,8 +6,7 @@ import styled from "styled-components";
 import ProfileImageCircle from "@/pages/profile/components/ProfileImageCircle";
 import { useState } from "react";
 import Loader from "@/components/ui/Loader";
-
-type ImageType = File | string | null;
+import { ImageType } from "@/types/types";
 
 interface ProfileData {
   email: string;

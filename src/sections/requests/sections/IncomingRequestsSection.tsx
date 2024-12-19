@@ -6,20 +6,8 @@ import MotionWrapper from "@/components/ui/MotionWrapper";
 import { fromBottomVariants03 } from "@/consts/motionVariants";
 import RequestCard from "@/sections/requests/components/RequestCard";
 import IncomingRequestButtons from "@/sections/requests/components/IncomingRequestButtons";
-
-type RequestStatus = "accepted" | "declined" | "waiting" | "canceled";
-
-interface Request {
-  id: number;
-  image: string;
-  name: string;
-  category: string;
-  price: number;
-  currency: string;
-  localization: string;
-  rentedPeriod: { from: string; to: string };
-  status: RequestStatus;
-}
+import { RequestStatus } from "@/types/types";
+import { Request } from "@/types/interfaces";
 
 export default function IncomingRequestsSection() {
   const [isLoading, setIsLoading] = useState<boolean>(true);

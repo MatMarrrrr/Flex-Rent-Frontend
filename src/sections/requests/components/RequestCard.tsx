@@ -2,21 +2,11 @@ import styled from "styled-components";
 import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
 import { calculateDaysDifference } from "@/components/buttons/CalendarButton";
 import getSymbolFromCurrency from "currency-symbol-map";
+import { Request } from "@/types/interfaces";
 
 interface RequestCardProps {
   request: Request;
   children: React.ReactNode;
-}
-
-interface Request {
-  id: number;
-  image: string;
-  name: string;
-  category: string;
-  price: number;
-  currency: string;
-  localization: string;
-  rentedPeriod: { from: string; to: string };
 }
 
 const RequestCard: React.FC<RequestCardProps> = ({ request, children }) => {

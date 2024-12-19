@@ -12,8 +12,7 @@ import FormikTextAreaField from "@/components/forms/FormikTextAreaField";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 import { excludedCurrencies } from "@/consts/excludedCurrencies";
 import Loader from "@/components/ui/Loader";
-
-type ImageType = File | null | string;
+import { ImageType } from "@/types/types";
 
 interface Category {
   id: number;
