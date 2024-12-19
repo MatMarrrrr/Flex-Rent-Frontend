@@ -5,26 +5,33 @@ import test_item from "@/assets/test_item.jpg";
 import styled from "styled-components";
 import { fromBottomVariants03 } from "@/consts/motionVariants";
 import RentalItem from "@/sections/yourRentals/components/RentalItem";
+import { Period, Rental } from "@/types/interfaces";
 
 const YourRentalsSection = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [yourRentals, setYourRentals] = useState<Rental[]>([]);
 
   const handleSendMessageClick = (id: number) => {
     console.log("Message" + id);
   };
 
-  const rentals = Array.from({ length: 5 }, (_, index) => ({
-    id: index + 1,
-    image: test_item,
-    name: `Nazwa rzeczy do wypożyczenia ${index + 1}`,
-    category: "Kategoria",
-    price: 100,
-    currency: "PLN",
-    localization: `Warszawa`,
-    rentedPeriod: { from: "22.12.2024", to: "28.12.2024" },
-  }));
-
   useEffect(() => {
+    const rentals = Array.from({ length: 5 }, (_, index) => ({
+      id: index + 1,
+      image: test_item,
+      name: `Nazwa rzeczy do wypożyczenia ${index + 1}`,
+      category: "Kategoria",
+      price: 100,
+      currency: "PLN",
+      localization: `Warszawa`,
+      rentedPeriod: {
+        startDate: "22.12.2024",
+        endDate: "28.12.2024",
+      } as Period,
+    }));
+
+    setYourRentals(rentals);
+
     const timeout = setTimeout(() => {
       setIsLoading(false);
     }, 1000);
@@ -41,17 +48,10 @@ const YourRentalsSection = () => {
         </LoaderContainer>
       ) : (
         <MotionWrapper variants={fromBottomVariants03}>
-          {rentals.map((rental) => (
+          {yourRentals.map((rental) => (
             <RentalItem
               key={rental.id}
-              id={rental.id}
-              image={rental.image}
-              name={rental.name}
-              category={rental.category}
-              price={rental.price}
-              currency={rental.currency}
-              localization={rental.localization}
-              rentedPeriod={rental.rentedPeriod}
+              rental={rental}
               onSendMessageClick={() => handleSendMessageClick(rental.id)}
             />
           ))}

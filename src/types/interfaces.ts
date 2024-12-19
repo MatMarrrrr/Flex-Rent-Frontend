@@ -17,14 +17,25 @@ export interface Request {
   status: RequestStatus;
 }
 
-  export interface Listing {
-    id: number;
-    image: string;
-    name: string;
-    category: string;
-    price: number;
-    currency: string;
-    localization: string;
-    rentedPeriods: Period[];
-    status: ListingStatus;
-  }
+export interface Listing {
+  id: number;
+  image: string;
+  name: string;
+  category: string;
+  price: number;
+  currency: string;
+  localization: string;
+  rentedPeriods: Period[];
+  status: ListingStatus;
+}
+
+export interface Rental {
+  id: number;
+  image: string;
+  name: string;
+  category: string;
+  price: number;
+  currency: string;
+  localization: string;
+  rentedPeriod: Period;
+}

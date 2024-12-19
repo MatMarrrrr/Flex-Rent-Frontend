@@ -3,56 +3,44 @@ import Button from "@/components/buttons/Button";
 import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
 import getSymbolFromCurrency from "currency-symbol-map";
 import { calculateDaysDifference } from "@/utils/dataHelpers";
+import { Period, Rental } from "@/types/interfaces";
 
 interface RentalItemProps {
-  id: number;
-  image: string;
-  name: string;
-  category: string;
-  price: number;
-  currency: string;
-  localization: string;
-  rentedPeriod: { from: string; to: string };
+  rental: Rental;
   onSendMessageClick: (id: number) => void;
 }
 
 const RentalItem: React.FC<RentalItemProps> = ({
-  id,
-  image,
-  name,
-  price,
-  currency,
-  localization,
-  rentedPeriod,
+  rental,
   onSendMessageClick,
 }) => {
-  const calculateCost = (rentedPeriod: { from: string; to: string }) => {
+  const calculateCost = (rentedPeriod: Period) => {
     const daysPeriod = calculateDaysDifference(
-      rentedPeriod.from,
-      rentedPeriod.to
+      rentedPeriod.startDate,
+      rentedPeriod.endDate
     );
-    return daysPeriod * price;
+    return daysPeriod * rental.price;
   };
 
   return (
     <Container>
-      <Image src={image} />
+      <Image src={rental.image} />
       <Wrapper>
-        <Name>{name}</Name>
+        <Name>{rental.name}</Name>
         <Category>Kategoria</Category>
         <ItemDetailContainer>
           <ItemDetailTextBold>Lokalizacja: </ItemDetailTextBold>
-          <ItemDetailText>{localization}</ItemDetailText>
+          <ItemDetailText>{rental.localization}</ItemDetailText>
         </ItemDetailContainer>
         <ItemDetailContainer>
           <ItemDetailTextBold>Okres: </ItemDetailTextBold>
-          <ItemDetailText>{`${rentedPeriod.from} - ${rentedPeriod.to}`}</ItemDetailText>
+          <ItemDetailText>{`${rental.rentedPeriod.startDate} - ${rental.rentedPeriod.endDate}`}</ItemDetailText>
         </ItemDetailContainer>
         <ItemDetailContainer>
           <ItemDetailTextBold>Koszt: </ItemDetailTextBold>
           <ItemDetailText>
-            {calculateCost(rentedPeriod)}
-            {getSymbolFromCurrency(currency)}
+            {calculateCost(rental.rentedPeriod)}
+            {getSymbolFromCurrency(rental.currency)}
           </ItemDetailText>
         </ItemDetailContainer>
         <Button
@@ -63,7 +51,7 @@ const RentalItem: React.FC<RentalItemProps> = ({
           mobileStart={1320}
           mobileMaxWidth="700px"
           margin="20px 0px 0px 0px"
-          onClick={() => onSendMessageClick(id)}
+          onClick={() => onSendMessageClick(rental.id)}
         >
           Wyślij wiadomość
         </Button>
