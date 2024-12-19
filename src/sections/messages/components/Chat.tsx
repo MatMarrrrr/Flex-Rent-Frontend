@@ -11,13 +11,13 @@ interface ChatProps {
   onClick: () => void;
 }
 
-export const Chat = ({
+export const Chat: React.FC<ChatProps> = ({
   id,
   status,
   name,
   profilePicture,
   onClick,
-}: ChatProps) => {
+}) => {
   const getProfileText = (fullName: string): string => {
     const words = fullName.trim().split(" ");
     const initials = words.map((word) => word[0].toUpperCase()).join("");
@@ -27,7 +27,9 @@ export const Chat = ({
 
   return (
     <ChatContainer key={id} $status={status} onClick={onClick}>
-      {!profilePicture && <ChatProfileText>{getProfileText(name)}</ChatProfileText>}
+      {!profilePicture && (
+        <ChatProfileText>{getProfileText(name)}</ChatProfileText>
+      )}
       {profilePicture && <ChatProfileImage src={profilePicture} />}
       <ChatUserName $status={status}>{name}</ChatUserName>
       <ChatGreenDot $status={status} />

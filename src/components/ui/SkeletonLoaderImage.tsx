@@ -7,11 +7,11 @@ interface SkeletonLoaderImageProps {
   className?: string;
 }
 
-const SkeletonLoaderImage = ({
+const SkeletonLoaderImage: React.FC<SkeletonLoaderImageProps> = ({
   src,
   alt,
   className,
-}: SkeletonLoaderImageProps) => {
+}) => {
   const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   return (

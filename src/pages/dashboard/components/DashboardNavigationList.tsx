@@ -1,12 +1,14 @@
 import { Link, useLocation } from "react-router";
 import styled from "styled-components";
 
-const DashboardNavigationList = ({
-  navigationItems,
-  defaultSection,
-}: {
+interface DashboardNavigationListProps {
   navigationItems: { path: string; label: string }[];
   defaultSection: string;
+}
+
+const DashboardNavigationList: React.FC<DashboardNavigationListProps> = ({
+  navigationItems,
+  defaultSection,
 }) => {
   const location = useLocation();
 

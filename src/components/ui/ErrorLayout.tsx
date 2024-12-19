@@ -6,7 +6,7 @@ interface ErrorLayoutProps {
   message: string;
 }
 
-const ErrorLayout = ({ code, message }: ErrorLayoutProps) => {
+const ErrorLayout: React.FC<ErrorLayoutProps> = ({ code, message }) => {
   return (
     <Wrapper>
       <Container data-aos="fade-up">

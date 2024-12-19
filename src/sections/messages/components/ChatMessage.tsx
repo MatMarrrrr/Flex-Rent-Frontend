@@ -6,7 +6,7 @@ interface ChatMessageProps {
   isSender: boolean;
 }
 
-export const ChatMessage = ({ isSender }: ChatMessageProps) => {
+export const ChatMessage: React.FC<ChatMessageProps> = ({ isSender }) => {
   return (
     <MessageContainer $isSender={isSender}>
       {!isSender && <SenderImage src={test_image} />}

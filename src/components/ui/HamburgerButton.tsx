@@ -10,10 +10,10 @@ interface LineProps {
   $position: "top" | "middle" | "bottom";
 }
 
-const HamburgerButton = ({
+const HamburgerButton: React.FC<HamburgerButtonProps> = ({
   isOpen,
   toggleMobileNavbar,
-}: HamburgerButtonProps) => {
+}) => {
   return (
     <Hamburger onClick={toggleMobileNavbar}>
       <Line $isOpen={isOpen} $position="top" />

@@ -43,10 +43,10 @@ export const calculateDaysDifference = (
   return daysDifference + 1;
 };
 
-const CalendarButton = ({
+const CalendarButton: React.FC<CalendarButtonProps> = ({
   selectedDateRange,
   onSelect,
-}: CalendarButtonProps) => {
+}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [buttonText, setButtonText] = useState<string>("Wybierz okres");
 
