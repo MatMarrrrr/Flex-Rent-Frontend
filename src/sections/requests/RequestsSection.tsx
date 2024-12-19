@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router";
 import styled from "styled-components";
-import IncomingRequestsSection from "@/sections/requests/sections/IncomingRequestsSection";
-import OutgoingRequestsSection from "@/sections/requests/sections/OutgoingRequestsSection";
+import IncomingRequestsSection from "@/sections/requests/sections/incomingRequests/IncomingRequestsSection";
+import OutgoingRequestsSection from "@/sections/requests/sections/outgoingRequests/OutgoingRequestsSection";
 
 const RequestsSection = () => {
   return (

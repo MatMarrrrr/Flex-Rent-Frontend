@@ -3,8 +3,11 @@ import Button from "@/components/buttons/Button";
 import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
 import { calculateDaysDifference } from "@/components/buttons/CalendarButton";
 import getSymbolFromCurrency from "currency-symbol-map";
+import { Check as CheckIcon, X as XIcon } from "lucide-react";
 
-interface RentalItemProps {
+type RequestStatus = "accepted" | "declined" | "waiting" | "canceled";
+
+interface IncomingRequestProps {
   id: number;
   image: string;
   name: string;
@@ -13,10 +16,12 @@ interface RentalItemProps {
   currency: string;
   localization: string;
   rentedPeriod: { from: string; to: string };
-  onSendMessageClick: (id: number) => void;
+  status: RequestStatus;
+  onAcceptClick: (id: number) => void;
+  onDeclineClick: (id: number) => void;
 }
 
-const RentalItem: React.FC<RentalItemProps> = ({
+const IncomingRequest: React.FC<IncomingRequestProps> = ({
   id,
   image,
   name,
@@ -24,7 +29,9 @@ const RentalItem: React.FC<RentalItemProps> = ({
   currency,
   localization,
   rentedPeriod,
-  onSendMessageClick,
+  status,
+  onAcceptClick,
+  onDeclineClick,
 }) => {
   const calculateCost = (rentedPeriod: { from: string; to: string }) => {
     const daysPeriod = calculateDaysDifference(
@@ -55,24 +62,38 @@ const RentalItem: React.FC<RentalItemProps> = ({
             {getSymbolFromCurrency(currency)}
           </ItemDetailText>
         </ItemDetailContainer>
-        <Button
-          fontColor="var(--white)"
-          borderColor="transparent"
-          background="var(--gradient)"
-          desktopMaxWidth="500px"
-          mobileStart={1320}
-          mobileMaxWidth="700px"
-          margin="20px 0px 0px 0px"
-          onClick={() => onSendMessageClick(id)}
-        >
-          Wyślij wiadomość
-        </Button>
+        {status !== "declined" && (
+          <Button
+            desktopMaxWidth="500px"
+            mobileStart={1320}
+            mobileMaxWidth="700px"
+            margin="20px 0px 0px 0px"
+            disabled={status === "accepted"}
+            onClick={() => onAcceptClick(id)}
+          >
+            <CheckIcon />
+            {status === "accepted" ? "Zaakceptowano" : "Zaakceptuj"}
+          </Button>
+        )}
+        {status !== "accepted" && (
+          <Button
+            desktopMaxWidth="500px"
+            mobileStart={1320}
+            mobileMaxWidth="700px"
+            margin="20px 0px 0px 0px"
+            disabled={status === "declined"}
+            onClick={() => onDeclineClick(id)}
+          >
+            <XIcon />
+            {status === "declined" ? "Odrzucono" : "Odrzuć"}
+          </Button>
+        )}
       </Wrapper>
     </Container>
   );
 };
 
-export default RentalItem;
+export default IncomingRequest;
 
 const Container = styled.div`
   display: grid;
