@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import test_item from "@/assets/test_item.jpg";
-import OutgoingRequest from "@/sections/requests/sections/outgoingRequests/components/OutgoingRequest";
 import Loader from "@/components/ui/Loader";
 import { useEffect, useState } from "react";
 import MotionWrapper from "@/components/ui/MotionWrapper";
 import { fromBottomVariants03 } from "@/consts/motionVariants";
+import RequestCard from "@/sections/requests/components/RequestCard";
+import OutgoingRequestButtons from "@/sections/requests/components/OutgoingRequestButtons";
 
 type RequestStatus = "accepted" | "declined" | "waiting" | "canceled";
 
@@ -71,12 +72,13 @@ export default function OutgoingRequestsSection() {
       ) : (
         <MotionWrapper variants={fromBottomVariants03}>
           {outgoingRequests.map((request) => (
-            <OutgoingRequest
-              key={request.id}
-              request={request}
-              onCancelClick={() => handleCancelClick(request.id)}
-              onSendMessageClick={() => handleSendMessageClick(request.id)}
-            />
+            <RequestCard request={request}>
+              <OutgoingRequestButtons
+                requestStatus={request.status}
+                onCancelClick={() => handleCancelClick(request.id)}
+                onSendMessageClick={() => handleSendMessageClick(request.id)}
+              />
+            </RequestCard>
           ))}
         </MotionWrapper>
       )}

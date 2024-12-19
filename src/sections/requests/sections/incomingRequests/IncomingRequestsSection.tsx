@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import test_item from "@/assets/test_item.jpg";
-import IncomingRequest from "@/sections/requests/sections/incomingRequests/components/IncomingRequest";
 import Loader from "@/components/ui/Loader";
 import { useEffect, useState } from "react";
 import MotionWrapper from "@/components/ui/MotionWrapper";
 import { fromBottomVariants03 } from "@/consts/motionVariants";
+import RequestCard from "@/sections/requests/components/RequestCard";
+import IncomingRequestButtons from "@/sections/requests/components/IncomingRequestButtons";
 
 type RequestStatus = "accepted" | "declined" | "waiting" | "canceled";
 
@@ -71,12 +72,13 @@ export default function IncomingRequestsSection() {
       ) : (
         <MotionWrapper variants={fromBottomVariants03}>
           {incomingRequests.map((request) => (
-            <IncomingRequest
-              key={request.id}
-              request={request}
-              onAcceptClick={() => handleAcceptClick(request.id)}
-              onDeclineClick={() => handleDeclineClick(request.id)}
-            />
+            <RequestCard request={request}>
+              <IncomingRequestButtons
+                requestStatus={request.status}
+                onAcceptClick={() => handleAcceptClick(request.id)}
+                onDeclineClick={() => handleDeclineClick(request.id)}
+              />
+            </RequestCard>
           ))}
         </MotionWrapper>
       )}

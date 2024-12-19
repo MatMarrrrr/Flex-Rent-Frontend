@@ -1,16 +1,11 @@
 import styled from "styled-components";
-import Button from "@/components/buttons/Button";
 import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
 import { calculateDaysDifference } from "@/components/buttons/CalendarButton";
 import getSymbolFromCurrency from "currency-symbol-map";
-import { Check as CheckIcon, X as XIcon } from "lucide-react";
 
-type RequestStatus = "accepted" | "declined" | "waiting" | "canceled";
-
-interface IncomingRequestProps {
+interface RequestCardProps {
   request: Request;
-  onAcceptClick: (id: number) => void;
-  onDeclineClick: (id: number) => void;
+  children: React.ReactNode;
 }
 
 interface Request {
@@ -22,14 +17,9 @@ interface Request {
   currency: string;
   localization: string;
   rentedPeriod: { from: string; to: string };
-  status: RequestStatus;
 }
 
-const IncomingRequest: React.FC<IncomingRequestProps> = ({
-  request,
-  onAcceptClick,
-  onDeclineClick,
-}) => {
+const RequestCard: React.FC<RequestCardProps> = ({ request, children }) => {
   const calculateCost = (
     rentedPeriod: { from: string; to: string },
     price: number
@@ -62,38 +52,13 @@ const IncomingRequest: React.FC<IncomingRequestProps> = ({
             {getSymbolFromCurrency(request.currency)}
           </ItemDetailText>
         </ItemDetailContainer>
-        {request.status !== "declined" && (
-          <Button
-            desktopMaxWidth="500px"
-            mobileStart={1320}
-            mobileMaxWidth="700px"
-            margin="20px 0px 0px 0px"
-            disabled={request.status === "accepted"}
-            onClick={() => onAcceptClick(request.id)}
-          >
-            <CheckIcon />
-            {request.status === "accepted" ? "Zaakceptowano" : "Zaakceptuj"}
-          </Button>
-        )}
-        {request.status !== "accepted" && (
-          <Button
-            desktopMaxWidth="500px"
-            mobileStart={1320}
-            mobileMaxWidth="700px"
-            margin="20px 0px 0px 0px"
-            disabled={request.status === "declined"}
-            onClick={() => onDeclineClick(request.id)}
-          >
-            <XIcon />
-            {request.status === "declined" ? "Odrzucono" : "Odrzuć"}
-          </Button>
-        )}
+        {children}
       </Wrapper>
     </Container>
   );
 };
 
-export default IncomingRequest;
+export default RequestCard;
 
 const Container = styled.div`
   display: grid;
