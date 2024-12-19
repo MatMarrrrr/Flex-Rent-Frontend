@@ -78,7 +78,7 @@ export default function EditListingPage() {
     <Container>
       {isLoading ? (
         <LoaderContainer>
-          <Loader size={45}/>
+          <Loader />
           <LoaderText>Wczytywanie szczegółów ogłoszenia</LoaderText>
         </LoaderContainer>
       ) : (

@@ -90,6 +90,7 @@ const LoaderContainer = styled.div`
 
 const LoaderText = styled.p`
   font-size: 20px;
+  color: var(--dark);
   font-weight: bold;
   text-align: center;
 `;

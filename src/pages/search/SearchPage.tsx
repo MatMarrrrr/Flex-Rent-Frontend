@@ -91,7 +91,7 @@ export default function SearchPage() {
       <ResultsMainContainer>
         {isLoading ? (
           <LoaderContainer>
-            <Loader size={50} color="var(--dark)" />
+            <Loader />
             <LoaderText>Pobieranie wyników</LoaderText>
           </LoaderContainer>
         ) : (
@@ -153,7 +153,7 @@ const LoaderContainer = styled.div`
 `;
 
 const LoaderText = styled.div`
-  font-size: 30px;
+  font-size: 24px;
   color: var(--dark);
   font-weight: bold;
   text-align: center;
