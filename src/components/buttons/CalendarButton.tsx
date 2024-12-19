@@ -28,6 +28,12 @@ export const dateToTimestamp = (dateString: string): number => {
   return date.getTime();
 };
 
+export const convertToMidnightTimestamp = (timestamp: number): number => {
+  const date = new Date(timestamp);
+  date.setHours(0, 0, 0, 0);
+  return date.getTime();
+};
+
 export const calculateDaysDifference = (
   startDateString: string,
   endDateString: string

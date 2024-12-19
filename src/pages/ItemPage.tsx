@@ -4,7 +4,9 @@ import styled from "styled-components";
 import { MoveLeft as ArrowBackIcon } from "lucide-react";
 import { MapPin as MapPinIcon } from "lucide-react";
 import test_item from "@/assets/test_item.jpg";
-import CalendarButton from "@/components/buttons/CalendarButton";
+import CalendarButton, {
+  convertToMidnightTimestamp,
+} from "@/components/buttons/CalendarButton";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 import Loader from "@/components/ui/Loader";
 import { Range } from "react-date-range";
@@ -27,6 +29,12 @@ export default function ItemPage() {
   const [startDateTimestamp, setStartDateTimestamp] = useState<number>(0);
   const [endDateTimestamp, setEndDateTimestamp] = useState<number>(0);
   const [error, setError] = useState<string>("");
+  const [isPeriodError, setIsPeriodError] = useState<boolean>(false);
+
+  let reservedPeriods = [
+    { startDate: "2024-12-01", endDate: "2024-12-05" },
+    { startDate: "2024-12-10", endDate: "2024-12-15" },
+  ];
 
   const handleBack = () => {
     navigate(-1);
@@ -34,11 +42,11 @@ export default function ItemPage() {
 
   const handleSelect = (selectedRange: Range) => {
     const { startDate, endDate } = selectedRange;
-    if (!startDate || !endDate) return "";
+    if (!startDate || !endDate) return;
 
     setSelectedDateRange(selectedRange);
-    setStartDateTimestamp(startDate.getTime());
-    setEndDateTimestamp(endDate.getTime());
+    setStartDateTimestamp(convertToMidnightTimestamp(startDate.getTime()));
+    setEndDateTimestamp(convertToMidnightTimestamp(endDate.getTime()));
   };
 
   const handleRegisterRedirect = () => {
@@ -52,6 +60,41 @@ export default function ItemPage() {
   const handleEditClick = (id: string) => {
     navigate(`/edit-listing/${id}`);
   };
+
+  const isOverlapping = (
+    reservedPeriods: { startDate: string; endDate: string }[]
+  ): boolean => {
+    if (startDateTimestamp === 0 || endDateTimestamp === 0) return false;
+
+    return reservedPeriods.some((reservedPeriod) => {
+      const reservedStartTimestamp = convertToMidnightTimestamp(
+        new Date(reservedPeriod.startDate).getTime()
+      );
+      const reservedEndTimestamp = convertToMidnightTimestamp(
+        new Date(reservedPeriod.endDate).getTime()
+      );
+
+      return (
+        (startDateTimestamp >= reservedStartTimestamp &&
+          startDateTimestamp <= reservedEndTimestamp) ||
+        (endDateTimestamp >= reservedStartTimestamp &&
+          endDateTimestamp <= reservedEndTimestamp) ||
+        (startDateTimestamp <= reservedStartTimestamp &&
+          endDateTimestamp >= reservedEndTimestamp)
+      );
+    });
+  };
+
+  useEffect(() => {
+    if (!selectedDateRange.startDate || !selectedDateRange.endDate) {
+      setIsPeriodError(false);
+      return;
+    }
+
+    const overlapping = isOverlapping(reservedPeriods);
+
+    setIsPeriodError(overlapping);
+  }, [selectedDateRange, reservedPeriods]);
 
   useEffect(() => {
     if (!id || isNaN(Number(id))) {
@@ -110,12 +153,6 @@ export default function ItemPage() {
                     <ItemDetailText>Lokalizacja</ItemDetailText>
                   </ItemLocalizationContainer>
                 </ItemDetailsContainer>
-                {isLogin && !isOwner && !isRequestSent && (
-                  <CalendarButton
-                    selectedDateRange={selectedDateRange}
-                    onSelect={handleSelect}
-                  />
-                )}
                 {!isLogin && (
                   <PrimaryButton
                     type="button"
@@ -156,17 +193,43 @@ export default function ItemPage() {
                 )}
 
                 {isLogin && !isOwner && !isRequestSent && (
-                  <PrimaryButton
-                    type="button"
-                    onClick={handleRentClick}
-                    disabled={startDateTimestamp === 0}
-                    margin="10px 0px 20px 0px"
-                    desktopMaxWidth="500px"
-                    mobileStart={1230}
-                    mobileMaxWidth="600px"
-                  >
-                    Wyślij prośbę o wynajem
-                  </PrimaryButton>
+                  <>
+                    <CalendarButton
+                      selectedDateRange={selectedDateRange}
+                      onSelect={handleSelect}
+                    />
+                    <PrimaryButton
+                      type="button"
+                      onClick={handleRentClick}
+                      disabled={startDateTimestamp === 0 || isPeriodError}
+                      margin="10px 0px 10px 0px"
+                      desktopMaxWidth="500px"
+                      mobileStart={1230}
+                      mobileMaxWidth="600px"
+                    >
+                      Wyślij prośbę o wynajem
+                    </PrimaryButton>
+                    {isPeriodError && (
+                      <PeriodErrorText>
+                        Wybrany okres nachodzi na zarezerwowane terminy.
+                      </PeriodErrorText>
+                    )}
+                  </>
+                )}
+                {isLogin && reservedPeriods.length > 0 && (
+                  <ReservedPeriodsContainer>
+                    <ReservedPeriodsTitle>
+                      Zarezerwowane okresy
+                    </ReservedPeriodsTitle>
+
+                    <ReservedPeriodsList>
+                      {reservedPeriods.map((period, index) => (
+                        <ReservedPeriod key={index}>
+                          {period.startDate} - {period.endDate}
+                        </ReservedPeriod>
+                      ))}
+                    </ReservedPeriodsList>
+                  </ReservedPeriodsContainer>
                 )}
               </ItemRightContainer>
 
@@ -371,4 +434,40 @@ const ItemDescriptionTitle = styled.p`
 const ItemDescription = styled.p`
   font-size: 16px;
   color: var(--dark);
+`;
+
+const ReservedPeriodsContainer = styled.div`
+  margin-top: 20px;
+  background-color: var(--light-gray);
+  border-radius: 8px;
+`;
+
+const ReservedPeriodsTitle = styled.h3`
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--dark);
+  margin-bottom: 10px;
+`;
+
+const ReservedPeriodsList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+`;
+
+const ReservedPeriod = styled.li`
+  font-size: 16px;
+  color: var(--dark);
+  margin-bottom: 5px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+const PeriodErrorText = styled.p`
+  font-size: 14px;
+  color: red;
+  margin-top: 5px;
+  text-align: left;
 `;
