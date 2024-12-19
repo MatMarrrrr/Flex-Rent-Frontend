@@ -7,37 +7,91 @@ import { useEffect, useState } from "react";
 import MotionWrapper from "@/components/ui/MotionWrapper";
 import { fromBottomVariants03 } from "@/consts/motionVariants";
 import { useNavigate } from "react-router";
+import DeleteListingModal from "@/components/ui/DeleteListingModal";
+import { useToast } from "@/contexts/ToastContext";
+import { Listing, Period } from "@/types/interfaces";
+import { ListingStatus } from "@/types/types";
 
 const YourListingsSection = () => {
   const navigate = useNavigate();
+  const { notify } = useToast();
+
+  const [yourListings, setYourListings] = useState<Listing[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [modalData, setModalData] = useState<{
+    isVisible: boolean;
+    listingId: number | null;
+    listingName: string | null;
+  }>({
+    isVisible: false,
+    listingId: null,
+    listingName: null,
+  });
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
+
+  const showDeleteListingModal = (listingId: number, listingName: string) => {
+    setModalData({
+      isVisible: true,
+      listingId: listingId,
+      listingName: listingName,
+    });
+  };
+
+  const hideDeleteListingModal = () => {
+    setModalData({
+      isVisible: false,
+      listingId: null,
+      listingName: null,
+    });
+  };
 
   const handleAddClick = () => {
     navigate("/add-listing");
   };
 
-  const handleEditClick = (id: number) => {
-    navigate(`/edit-listing/${id}`);
+  const handleEditClick = (listingId: number) => {
+    navigate(`/edit-listing/${listingId}`);
   };
 
-  const handleDeleteClick = (id: number) => {
-    console.log(`Deleting ${id}`);
+  const handleDeleteClick = (listingId: number) => {
+    setIsDeleting(true);
+
+    setTimeout(() => {
+      setIsDeleting(false);
+      hideDeleteListingModal();
+      updateListingsStatus(listingId, "deleted");
+      notify("Ogłoszenie zostało usunięte", "success");
+    }, 2000);
   };
 
-  const listings = Array.from({ length: 5 }, (_, index) => ({
-    id: index + 1,
-    image: test_item,
-    name: `Nazwa rzeczy do wypożyczenia ${index + 1}`,
-    category: "Kategoria",
-    price: 100,
-    localization: `Lokalizacja`,
-    rentedPeriods: [
-      { from: "12.12.2024", to: "20.12.2024" },
-      { from: "22.12.2024", to: "28.12.2024" },
-    ],
-  }));
+  const updateListingsStatus = (
+    listingId: number,
+    newStatus: ListingStatus
+  ) => {
+    setYourListings((prevListings) =>
+      prevListings.map((listing) =>
+        listing.id === listingId ? { ...listing, status: newStatus } : listing
+      )
+    );
+  };
 
   useEffect(() => {
+    const listings = Array.from({ length: 5 }, (_, index) => ({
+      id: index + 1,
+      image: test_item,
+      name: `Nazwa rzeczy do wypożyczenia ${index + 1}`,
+      category: "Kategoria",
+      price: 100,
+      currency: "PLN",
+      localization: `Lokalizacja`,
+      rentedPeriods: [
+        { startDate: "12.12.2024", endDate: "20.12.2024" },
+        { startDate: "22.12.2024", endDate: "28.12.2024" },
+      ] as Period[],
+      status: "active" as ListingStatus,
+    }));
+
+    setYourListings(listings);
     const timeout = setTimeout(() => {
       setIsLoading(false);
     }, 1000);
@@ -46,40 +100,48 @@ const YourListingsSection = () => {
   }, []);
 
   return (
-    <Container>
-      <PrimaryButton
-        fontSize="20px"
-        desktopMaxWidth="570px"
-        mobileStart={1320}
-        mobileMaxWidth="700px"
-        onClick={handleAddClick}
-      >
-        Utwórz ogłoszenie
-      </PrimaryButton>
-      {isLoading ? (
-        <LoaderContainer>
-          <Loader />
-          <LoaderText>Wczytywanie ogłoszeń</LoaderText>
-        </LoaderContainer>
-      ) : (
-        <MotionWrapper variants={fromBottomVariants03}>
-          {listings.map((listing) => (
-            <ListingItem
-              key={listing.id}
-              id={listing.id}
-              image={listing.image}
-              name={listing.name}
-              category={listing.category}
-              price={listing.price}
-              localization={listing.localization}
-              rentedPeriods={listing.rentedPeriods}
-              onEditClick={() => handleEditClick(listing.id)}
-              onDeleteClick={() => handleDeleteClick(listing.id)}
-            />
-          ))}
-        </MotionWrapper>
-      )}
-    </Container>
+    <>
+      <DeleteListingModal
+        isVisible={modalData.isVisible}
+        isDeleting={isDeleting}
+        listingId={modalData.listingId!}
+        listingName={modalData.listingName!}
+        onDeleteClick={() => handleDeleteClick(modalData.listingId!)}
+        onClose={hideDeleteListingModal}
+      />
+      <Container>
+        <PrimaryButton
+          fontSize="20px"
+          desktopMaxWidth="570px"
+          mobileStart={1320}
+          mobileMaxWidth="700px"
+          onClick={handleAddClick}
+        >
+          Utwórz ogłoszenie
+        </PrimaryButton>
+        {isLoading ? (
+          <LoaderContainer>
+            <Loader />
+            <LoaderText>Wczytywanie ogłoszeń</LoaderText>
+          </LoaderContainer>
+        ) : (
+          <MotionWrapper variants={fromBottomVariants03}>
+            {yourListings
+              .filter((listing) => listing.status !== "deleted")
+              .map((listing) => (
+                <ListingItem
+                  key={listing.id}
+                  listing={listing}
+                  onEditClick={() => handleEditClick(listing.id)}
+                  onDeleteClick={() =>
+                    showDeleteListingModal(listing.id, listing.name)
+                  }
+                />
+              ))}
+          </MotionWrapper>
+        )}
+      </Container>
+    </>
   );
 };
 

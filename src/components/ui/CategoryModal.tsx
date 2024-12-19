@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { categories } from "@/consts/categories";
 import { X as XIcon } from "lucide-react";
+import { fadeIn, fadeOut } from "@/styledComponents/keyframes";
 
 interface CategoryModalProps {
   isVisible: boolean;
@@ -52,24 +53,6 @@ const CategoryModal: React.FC<CategoryModalProps> = ({
 };
 
 export default CategoryModal;
-
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-`;
-
-const fadeOut = keyframes`
-  from {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-`;
 
 const ModalOverlay = styled.div<{ $isClosing: boolean }>`
   position: fixed;

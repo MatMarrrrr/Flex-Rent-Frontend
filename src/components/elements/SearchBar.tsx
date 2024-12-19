@@ -28,7 +28,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const [categoryId, setCategoryId] = useState<number>(initialCategoryId);
   const [localization, setLocalization] = useState<string>(initialLocalization);
   const [isSearchDisabled, setSearchDisabled] = useState<boolean>(true);
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [isModalVisible, setModalVisible] = useState<boolean>(false);
 
   const showModal = () => {
     setModalVisible(true);

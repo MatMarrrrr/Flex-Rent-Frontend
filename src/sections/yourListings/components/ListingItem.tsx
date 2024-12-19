@@ -6,46 +6,39 @@ import {
 } from "lucide-react";
 import Button from "@/components/buttons/Button";
 import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
+import getSymbolFromCurrency from "currency-symbol-map";
+import { Listing } from "@/types/interfaces";
 
 interface ListingItemProps {
-  id: number;
-  image: string;
-  name: string;
-  category: string;
-  price: number;
-  localization: string;
-  rentedPeriods: { from: string; to: string }[];
+  listing: Listing;
   onEditClick: (id: number) => void;
   onDeleteClick: (id: number) => void;
 }
 
 const ListingItem: React.FC<ListingItemProps> = ({
-  id,
-  image,
-  name,
-  category,
-  price,
-  localization,
-  rentedPeriods,
+  listing,
   onEditClick,
   onDeleteClick,
 }) => {
   return (
     <Container>
-      <Image src={image} />
+      <Image src={listing.image} />
       <Wrapper>
-        <Name>{name}</Name>
-        <Category>{category}</Category>
+        <Name>{listing.name}</Name>
+        <Category>{listing.category}</Category>
         <ItemDetailsContainer>
-          <ItemDetailText>{price}zł / Dzień</ItemDetailText>
+          <ItemDetailText>
+            {listing.price}
+            {getSymbolFromCurrency(listing.currency)} / Dzień
+          </ItemDetailText>
           <ItemLocalizationContainer>
             <ItemLocalizationIcon />
-            <ItemDetailText>{localization}</ItemDetailText>
+            <ItemDetailText>{listing.localization}</ItemDetailText>
           </ItemLocalizationContainer>
         </ItemDetailsContainer>
-        {rentedPeriods.map((period, index) => (
+        {listing.rentedPeriods.map((period, index) => (
           <ItemDetailText key={index}>
-            Wypożyczone: {period.from} - {period.to}
+            Wypożyczone: {period.startDate} - {period.endDate}
           </ItemDetailText>
         ))}
         <Button
@@ -53,7 +46,7 @@ const ListingItem: React.FC<ListingItemProps> = ({
           mobileStart={1320}
           mobileMaxWidth="700px"
           margin="20px 0px 0px 0px"
-          onClick={() => onEditClick(id)}
+          onClick={() => onEditClick(listing.id)}
         >
           <ItemEditIcon />
           Edytuj ogłoszenie
@@ -63,7 +56,7 @@ const ListingItem: React.FC<ListingItemProps> = ({
           mobileStart={1320}
           mobileMaxWidth="700px"
           margin="20px 0px 0px 0px"
-          onClick={() => onDeleteClick(id)}
+          onClick={() => onDeleteClick(listing.id)}
         >
           <ItemDeleteIcon /> Usuń ogłoszenie
         </Button>

@@ -1,4 +1,4 @@
-import { ReservedPeriod } from "@/types/interfaces";
+import { Period } from "@/types/interfaces";
 import { Range } from "react-date-range";
 
 export const timestampToDate = (timestamp: number): string => {
@@ -22,7 +22,7 @@ export const timestampToDate = (timestamp: number): string => {
   };
   
   export const generateDisabledDates = (
-    reservedPeriods: ReservedPeriod[]
+    reservedPeriods: Period[]
   ): Date[] => {
     const disabledDates: Date[] = [];
   

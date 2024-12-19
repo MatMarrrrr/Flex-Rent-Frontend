@@ -1,6 +1,6 @@
-import { RequestStatus } from "@/types/types";
+import { ListingStatus, RequestStatus } from "@/types/types";
 
-export interface ReservedPeriod {
+export interface Period {
   startDate: string;
   endDate: string;
 }
@@ -16,3 +16,15 @@ export interface Request {
   rentedPeriod: { from: string; to: string };
   status: RequestStatus;
 }
+
+  export interface Listing {
+    id: number;
+    image: string;
+    name: string;
+    category: string;
+    price: number;
+    currency: string;
+    localization: string;
+    rentedPeriods: Period[];
+    status: ListingStatus;
+  }
