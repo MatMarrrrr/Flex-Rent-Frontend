@@ -4,7 +4,7 @@ import FormikInputField from "@/components/forms/FormikInputField";
 import { profileDataSchema } from "@/validations/profileSchema";
 import styled from "styled-components";
 import ProfileImageCircle from "@/pages/profile/components/ProfileImageCircle";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "@/components/ui/Loader";
 import { ImageType } from "@/types/types";
 
@@ -19,6 +19,7 @@ interface ProfileData {
 export default function ProfilePage() {
   const [imageFile, setImageFile] = useState<ImageType>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const profileData = {
     email: "email@email.com",
@@ -34,77 +35,108 @@ export default function ProfilePage() {
     console.log(finalValues);
   };
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, []);
+
   return (
     <Container>
-      <Wrapper>
-        <Header>Twój profil</Header>
-        <ProfileImageCircle
-          profileImage={null}
-          profileText="MM"
-          setImageFile={setImageFile}
-          disabled={isSubmitting}
-        />
-        <FormHeader>Twoje Dane</FormHeader>
-        <FormikForm
-          initialValues={profileData}
-          onSubmit={handleSubmit}
-          validationSchema={profileDataSchema}
-        >
-          <FormikInputField
-            name="email"
-            label="E-mail"
-            type="text"
-            isRequired={true}
-            margin="0px 0px 15px 0px"
+      {isLoading ? (
+        <LoaderContainer>
+          <Loader />
+          <LoaderText>Wczytywanie danych</LoaderText>
+        </LoaderContainer>
+      ) : (
+        <Wrapper data-aos="fade-up">
+          <Header>Twój profil</Header>
+          <ProfileImageCircle
+            profileImage={null}
+            profileText="MM"
+            setImageFile={setImageFile}
             disabled={isSubmitting}
           />
-          <FormikInputField
-            name="name"
-            label="Imie"
-            type="text"
-            isRequired={true}
-            margin="0px 0px 15px 0px"
-            disabled={isSubmitting}
-          />
-          <FormikInputField
-            name="surname"
-            label="Nazwisko"
-            type="text"
-            isRequired={true}
-            margin="0px 0px 15px 0px"
-            disabled={isSubmitting}
-          />
-          <FormikInputField
-            name="city"
-            label="Miasto"
-            type="text"
-            isRequired={true}
-            margin="0px 0px 15px 0px"
-            disabled={isSubmitting}
-          />
-          <FormikInputField
-            name="province"
-            label="Województwo"
-            type="text"
-            isRequired={true}
-            margin="0px 0px 15px 0px"
-            disabled={isSubmitting}
-          />
-          <PrimaryButton type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Zmienianie" : "Zmień"}
-            {isSubmitting && <Loader size={18} />}
-          </PrimaryButton>
-        </FormikForm>
-      </Wrapper>
+          <FormHeader>Twoje Dane</FormHeader>
+          <FormikForm
+            initialValues={profileData}
+            onSubmit={handleSubmit}
+            validationSchema={profileDataSchema}
+          >
+            <FormikInputField
+              name="email"
+              label="E-mail"
+              type="text"
+              isRequired={true}
+              margin="0px 0px 15px 0px"
+              disabled={isSubmitting}
+            />
+            <FormikInputField
+              name="name"
+              label="Imie"
+              type="text"
+              isRequired={true}
+              margin="0px 0px 15px 0px"
+              disabled={isSubmitting}
+            />
+            <FormikInputField
+              name="surname"
+              label="Nazwisko"
+              type="text"
+              isRequired={true}
+              margin="0px 0px 15px 0px"
+              disabled={isSubmitting}
+            />
+            <FormikInputField
+              name="city"
+              label="Miasto"
+              type="text"
+              isRequired={true}
+              margin="0px 0px 15px 0px"
+              disabled={isSubmitting}
+            />
+            <FormikInputField
+              name="province"
+              label="Województwo"
+              type="text"
+              isRequired={true}
+              margin="0px 0px 15px 0px"
+              disabled={isSubmitting}
+            />
+            <PrimaryButton type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Zmienianie" : "Zmień"}
+              {isSubmitting && <Loader size={18} />}
+            </PrimaryButton>
+          </FormikForm>
+        </Wrapper>
+      )}
     </Container>
   );
 }
+
+const LoaderContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+`;
+
+const LoaderText = styled.p`
+  text-align: center;
+  color: var(--dark);
+  font-size: 24px;
+  font-weight: bold;
+`;
 
 const Container = styled.div`
   padding: 40px 10%;
   display: flex;
   gap: 10px;
   justify-content: center;
+  align-items: center;
   background-color: var(--light);
   min-height: calc(100vh - 308px);
 
