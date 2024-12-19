@@ -8,9 +8,11 @@ import {
 import styled from "styled-components";
 import { useState } from "react";
 import pl from "date-fns/locale/pl";
+import { ReservedPeriod } from "@/types/interfaces";
 
 interface CalendarButtonProps {
   selectedDateRange: Range;
+  disabledDates: Date[];
   onSelect: (range: Range) => void;
 }
 
@@ -34,6 +36,28 @@ export const convertToMidnightTimestamp = (timestamp: number): number => {
   return date.getTime();
 };
 
+export const generateDisabledDates = (
+  reservedPeriods: ReservedPeriod[]
+): Date[] => {
+  const disabledDates: Date[] = [];
+
+  reservedPeriods.forEach((period) => {
+    const start = new Date(period.startDate);
+    const end = new Date(period.endDate);
+
+    start.setHours(0, 0, 0, 0);
+    end.setHours(0, 0, 0, 0);
+
+    const currentDate = new Date(start);
+    while (currentDate <= end) {
+      disabledDates.push(new Date(currentDate));
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+  });
+
+  return disabledDates;
+};
+
 export const calculateDaysDifference = (
   startDateString: string,
   endDateString: string
@@ -49,8 +73,32 @@ export const calculateDaysDifference = (
   return daysDifference + 1;
 };
 
+export const formatDateForDisplay = (date: Date): string => {
+  if (!date) return "";
+
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+
+  return `${day}.${month}.${year}`;
+};
+
+export const getDateRangeString = (selectedRange: Range): string => {
+  const { startDate, endDate } = selectedRange;
+
+  if (!startDate || !endDate) return "";
+
+  const stringStartDate = formatDateForDisplay(startDate);
+  const stringEndDate = formatDateForDisplay(endDate);
+
+  return stringStartDate === stringEndDate
+    ? stringStartDate
+    : `${stringStartDate} - ${stringEndDate}`;
+};
+
 const CalendarButton: React.FC<CalendarButtonProps> = ({
   selectedDateRange,
+  disabledDates,
   onSelect,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -58,29 +106,6 @@ const CalendarButton: React.FC<CalendarButtonProps> = ({
 
   const toggleDatePicker = () => {
     setIsOpen((prev) => !prev);
-  };
-
-  const formatDateForDisplay = (date: Date): string => {
-    if (!date) return "";
-
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-
-    return `${day}.${month}.${year}`;
-  };
-
-  const getDateRangeString = (selectedRange: Range): string => {
-    const { startDate, endDate } = selectedRange;
-
-    if (!startDate || !endDate) return "";
-
-    const stringStartDate = formatDateForDisplay(startDate);
-    const stringEndDate = formatDateForDisplay(endDate);
-
-    return stringStartDate === stringEndDate
-      ? stringStartDate
-      : `${stringStartDate} - ${stringEndDate}`;
   };
 
   const handleSelect = (ranges: RangeKeyDict) => {
@@ -103,6 +128,7 @@ const CalendarButton: React.FC<CalendarButtonProps> = ({
             onChange={handleSelect}
             rangeColors={["var(--primary)"]}
             moveRangeOnFirstSelection={false}
+            disabledDates={disabledDates}
             locale={pl}
           />
         </StyledDateRange>
@@ -182,6 +208,15 @@ const StyledDateRange = styled.div`
 
   .rdrMonthsVertical {
     align-items: center;
+    font-size: 13px;
+
+    @media (max-width: 500px) {
+      font-size: 12px;
+    }
+
+    @media (max-width: 350px) {
+      font-size: 10px;
+    }
   }
 
   .rdrDateDisplayWrapper {
@@ -190,8 +225,9 @@ const StyledDateRange = styled.div`
 
   .rdrMonthPicker select,
   .rdrYearPicker select {
+    font-size: 15px;
     @media (max-width: 440px) {
-      font-size: 12px;
+      font-size: 14px;
     }
 
     @media (max-width: 340px) {

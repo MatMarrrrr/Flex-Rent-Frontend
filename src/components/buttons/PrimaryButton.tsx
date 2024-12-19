@@ -14,6 +14,7 @@ const PrimaryButton: React.FC<ButtonProps> = ({
   background,
   desktopMaxWidth,
   mobileMaxWidth,
+  mobileFontSize,
   mobileStart,
   children,
 }) => {
@@ -29,6 +30,7 @@ const PrimaryButton: React.FC<ButtonProps> = ({
       disabled={disabled}
       $desktopMaxWidth={desktopMaxWidth}
       $mobileMaxWidth={mobileMaxWidth}
+      $mobileFontSize={mobileFontSize}
       $mobileStart={mobileStart}
     >
       {children}

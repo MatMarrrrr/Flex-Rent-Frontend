@@ -1,5 +1,10 @@
 import { RequestStatus } from "@/types/types";
 
+export interface ReservedPeriod {
+  startDate: string;
+  endDate: string;
+}
+
 export interface Request {
   id: number;
   image: string;

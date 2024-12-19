@@ -12,6 +12,7 @@ export interface ButtonProps {
   background?: string;
   desktopMaxWidth?: string;
   mobileMaxWidth?: string;
+  mobileFontSize?: string;
   mobileStart?: number;
   children: React.ReactNode;
 }
@@ -27,6 +28,7 @@ const Button: React.FC<ButtonProps> = ({
   background,
   desktopMaxWidth,
   mobileMaxWidth,
+  mobileFontSize,
   mobileStart,
   children,
 }) => {
@@ -42,6 +44,7 @@ const Button: React.FC<ButtonProps> = ({
       disabled={disabled}
       $desktopMaxWidth={desktopMaxWidth}
       $mobileMaxWidth={mobileMaxWidth}
+      $mobileFontSize={mobileFontSize}
       $mobileStart={mobileStart}
     >
       {children}
@@ -60,6 +63,7 @@ export const StyledButton = styled.button<{
   $background?: string;
   $desktopMaxWidth?: string;
   $mobileMaxWidth?: string;
+  $mobileFontSize?: string;
   $mobileStart?: number;
 }>`
   border: 2px solid ${({ $borderColor }) => $borderColor || "var(--dark)"};
@@ -93,11 +97,12 @@ export const StyledButton = styled.button<{
     transform: none;
   }
 
-  ${({ $mobileStart, $mobileMaxWidth }) =>
+  ${({ $mobileStart, $mobileMaxWidth, $mobileFontSize }) =>
     $mobileStart &&
     `
     @media (max-width: ${$mobileStart}px) {
       max-width: ${$mobileMaxWidth || "none"};
+      font-size: ${$mobileFontSize || "18px"};
     }
   `}
 `;

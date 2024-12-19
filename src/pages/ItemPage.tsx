@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import styled from "styled-components";
-import { MoveLeft as ArrowBackIcon } from "lucide-react";
-import { MapPin as MapPinIcon } from "lucide-react";
+import {
+  MoveLeft as ArrowBackIcon,
+  MapPin as MapPinIcon,
+  Send as SendIcon,
+  Pencil as PencilIcon,
+  CalendarDays as CalendarDaysIcon,
+} from "lucide-react";
 import test_item from "@/assets/test_item.jpg";
 import CalendarButton, {
   convertToMidnightTimestamp,
+  generateDisabledDates,
+  getDateRangeString,
 } from "@/components/buttons/CalendarButton";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 import Loader from "@/components/ui/Loader";
@@ -28,13 +35,15 @@ export default function ItemPage() {
   });
   const [startDateTimestamp, setStartDateTimestamp] = useState<number>(0);
   const [endDateTimestamp, setEndDateTimestamp] = useState<number>(0);
+  const [isRequestSent, setIsRequestSent] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const [isPeriodError, setIsPeriodError] = useState<boolean>(false);
 
   let reservedPeriods = [
     { startDate: "2024-12-01", endDate: "2024-12-05" },
     { startDate: "2024-12-10", endDate: "2024-12-15" },
   ];
+
+  const disabledDates = generateDisabledDates(reservedPeriods);
 
   const handleBack = () => {
     navigate(-1);
@@ -54,47 +63,13 @@ export default function ItemPage() {
   };
 
   const handleRentClick = () => {
+    setIsRequestSent(true);
     console.log(`${startDateTimestamp}  ${endDateTimestamp}`);
   };
 
   const handleEditClick = (id: string) => {
     navigate(`/edit-listing/${id}`);
   };
-
-  const isOverlapping = (
-    reservedPeriods: { startDate: string; endDate: string }[]
-  ): boolean => {
-    if (startDateTimestamp === 0 || endDateTimestamp === 0) return false;
-
-    return reservedPeriods.some((reservedPeriod) => {
-      const reservedStartTimestamp = convertToMidnightTimestamp(
-        new Date(reservedPeriod.startDate).getTime()
-      );
-      const reservedEndTimestamp = convertToMidnightTimestamp(
-        new Date(reservedPeriod.endDate).getTime()
-      );
-
-      return (
-        (startDateTimestamp >= reservedStartTimestamp &&
-          startDateTimestamp <= reservedEndTimestamp) ||
-        (endDateTimestamp >= reservedStartTimestamp &&
-          endDateTimestamp <= reservedEndTimestamp) ||
-        (startDateTimestamp <= reservedStartTimestamp &&
-          endDateTimestamp >= reservedEndTimestamp)
-      );
-    });
-  };
-
-  useEffect(() => {
-    if (!selectedDateRange.startDate || !selectedDateRange.endDate) {
-      setIsPeriodError(false);
-      return;
-    }
-
-    const overlapping = isOverlapping(reservedPeriods);
-
-    setIsPeriodError(overlapping);
-  }, [selectedDateRange, reservedPeriods]);
 
   useEffect(() => {
     if (!id || isNaN(Number(id))) {
@@ -110,146 +85,139 @@ export default function ItemPage() {
     return () => clearTimeout(timeout);
   }, []);
 
-  let isRequestSent = false;
   let isOwner = false;
 
   if (error) {
     return <ErrorLayout message={error} />;
   }
 
-  return (
-    <div>
-      {isLoading ? (
-        <LoaderContainer>
-          <Loader />
-          <LoaderText>Wczytywanie ogłoszenia</LoaderText>
-        </LoaderContainer>
-      ) : (
-        <Container>
-          <BackContainer onClick={handleBack}>
-            <ArrowBack />
-            <BackText>Powrót</BackText>
-          </BackContainer>
-          <ItemContainer>
-            <MobileBackContainer onClick={handleBack}>
-              <ArrowBack />
-              <BackText>Powrót</BackText>
-            </MobileBackContainer>
+  return isLoading ? (
+    <LoaderContainer>
+      <Loader />
+      <LoaderText>Wczytywanie ogłoszenia</LoaderText>
+    </LoaderContainer>
+  ) : (
+    <Container>
+      <BackContainer onClick={handleBack}>
+        <ArrowBack />
+        <BackText>Powrót</BackText>
+      </BackContainer>
+      <ItemContainer>
+        <MobileBackContainer onClick={handleBack}>
+          <ArrowBack />
+          <BackText>Powrót</BackText>
+        </MobileBackContainer>
+        <ItemContentWrapper>
+          <ItemLeftContainer>
+            <ItemImage src={test_item} />
+          </ItemLeftContainer>
+          <ItemRightContainer>
+            <ItemName>Nazwa rzeczy do wypożyczenia</ItemName>
+            <ItemCategory>Kategoria</ItemCategory>
+            <ItemDetailsContainer>
+              <ItemDetailText>
+                100{getSymbolFromCurrency("PLN")} / Dzień
+              </ItemDetailText>
+              <ItemLocalizationContainer>
+                <ItemLocalizationIcon />
+                <ItemDetailText>Lokalizacja</ItemDetailText>
+              </ItemLocalizationContainer>
+            </ItemDetailsContainer>
+            {!isLogin && (
+              <PrimaryButton
+                type="button"
+                onClick={handleRegisterRedirect}
+                margin="20px 0px 20px 0px"
+                desktopMaxWidth="500px"
+                mobileStart={1230}
+                mobileMaxWidth="600px"
+              >
+                Zarejestruj się
+              </PrimaryButton>
+            )}
 
-            <ItemContentWrapper>
-              <ItemLeftContainer>
-                <ItemImage src={test_item} />
-              </ItemLeftContainer>
+            {isLogin && isOwner && id && (
+              <PrimaryButton
+                type="button"
+                onClick={() => handleEditClick(id)}
+                margin="20px 0px 20px 0px"
+                desktopMaxWidth="500px"
+                mobileStart={1230}
+                mobileMaxWidth="600px"
+              >
+                <PencilIcon /> Edytuj
+              </PrimaryButton>
+            )}
 
-              <ItemRightContainer>
-                <ItemName>Nazwa rzeczy do wypożyczenia</ItemName>
-                <ItemCategory>Kategoria</ItemCategory>
-                <ItemDetailsContainer>
-                  <ItemDetailText>
-                    100{getSymbolFromCurrency("PLN")} / Dzień
-                  </ItemDetailText>
-                  <ItemLocalizationContainer>
-                    <ItemLocalizationIcon />
-                    <ItemDetailText>Lokalizacja</ItemDetailText>
-                  </ItemLocalizationContainer>
-                </ItemDetailsContainer>
-                {!isLogin && (
-                  <PrimaryButton
-                    type="button"
-                    onClick={handleRegisterRedirect}
-                    margin="20px 0px 20px 0px"
-                    desktopMaxWidth="500px"
-                    mobileStart={1230}
-                    mobileMaxWidth="600px"
-                  >
-                    Zarejestruj się
-                  </PrimaryButton>
-                )}
+            {isLogin && !isOwner && isRequestSent && (
+              <RequestStatusContainer>
+                <RequestStatusText>
+                  <SendIcon />
+                  Wysłano prośbę
+                </RequestStatusText>
+                <RequestStatusText>
+                  <CalendarDaysIcon />
+                  <RequestStatusText $isBold={true}>
+                    Wybrany okres:
+                  </RequestStatusText>
+                  <RequestStatusText>
+                    {getDateRangeString({
+                      startDate: selectedDateRange.startDate,
+                      endDate: selectedDateRange.endDate,
+                    })}
+                  </RequestStatusText>
+                </RequestStatusText>
+              </RequestStatusContainer>
+            )}
 
-                {isLogin && isOwner && id && (
-                  <PrimaryButton
-                    type="button"
-                    onClick={() => handleEditClick(id)}
-                    margin="20px 0px 20px 0px"
-                    desktopMaxWidth="500px"
-                    mobileStart={1230}
-                    mobileMaxWidth="600px"
-                  >
-                    Edytuj
-                  </PrimaryButton>
-                )}
-
-                {isLogin && !isOwner && isRequestSent && (
-                  <PrimaryButton
-                    type="button"
-                    disabled={true}
-                    margin="10px 0px 20px 0px"
-                    desktopMaxWidth="500px"
-                    mobileStart={1230}
-                    mobileMaxWidth="600px"
-                  >
-                    Wysłano prośbę
-                  </PrimaryButton>
-                )}
-
-                {isLogin && !isOwner && !isRequestSent && (
-                  <>
-                    <CalendarButton
-                      selectedDateRange={selectedDateRange}
-                      onSelect={handleSelect}
-                    />
-                    <PrimaryButton
-                      type="button"
-                      onClick={handleRentClick}
-                      disabled={startDateTimestamp === 0 || isPeriodError}
-                      margin="10px 0px 10px 0px"
-                      desktopMaxWidth="500px"
-                      mobileStart={1230}
-                      mobileMaxWidth="600px"
-                    >
-                      Wyślij prośbę o wynajem
-                    </PrimaryButton>
-                    {isPeriodError && (
-                      <PeriodErrorText>
-                        Wybrany okres nachodzi na zarezerwowane terminy.
-                      </PeriodErrorText>
-                    )}
-                  </>
-                )}
-                {isLogin && reservedPeriods.length > 0 && (
-                  <ReservedPeriodsContainer>
-                    <ReservedPeriodsTitle>
-                      Zarezerwowane okresy
-                    </ReservedPeriodsTitle>
-
-                    <ReservedPeriodsList>
-                      {reservedPeriods.map((period, index) => (
-                        <ReservedPeriod key={index}>
-                          {period.startDate} - {period.endDate}
-                        </ReservedPeriod>
-                      ))}
-                    </ReservedPeriodsList>
-                  </ReservedPeriodsContainer>
-                )}
-              </ItemRightContainer>
-
-              <ItemDescriptionContainer>
-                <ItemDescriptionTitle>Opis</ItemDescriptionTitle>
-                <ItemDescription>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. In
-                  nec sapien et dui ultricies congue at id leo. Etiam imperdiet,
-                  erat eu dictum pharetra, metus quam luctus metus, nec laoreet
-                  lectus ipsum id orci. Etiam tortor orci, convallis nec orci
-                  at, tempor viverra orci. Vestibulum congue bibendum vulputate.
-                </ItemDescription>
-              </ItemDescriptionContainer>
-            </ItemContentWrapper>
-          </ItemContainer>
-        </Container>
-      )}
-    </div>
+            {isLogin && !isOwner && !isRequestSent && (
+              <>
+                <CalendarButton
+                  selectedDateRange={selectedDateRange}
+                  disabledDates={disabledDates}
+                  onSelect={handleSelect}
+                />
+                <PrimaryButton
+                  type="button"
+                  onClick={handleRentClick}
+                  disabled={startDateTimestamp === 0}
+                  margin="10px 0px 10px 0px"
+                  desktopMaxWidth="500px"
+                  mobileStart={1230}
+                  mobileMaxWidth="600px"
+                  mobileFontSize="16px"
+                >
+                  <SendIcon />
+                  Wyślij prośbę o wynajem
+                </PrimaryButton>
+              </>
+            )}
+          </ItemRightContainer>
+        </ItemContentWrapper>
+        <ItemDescriptionContainer>
+          <ItemDescriptionTitle>Opis</ItemDescriptionTitle>
+          <ItemDescription>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec
+            sapien et dui ultricies congue at id leo. Etiam imperdiet, erat eu
+            dictum pharetra, metus quam luctus metus, nec laoreet lectus ipsum
+            id orci. Etiam tortor orci, convallis nec orci at, tempor viverra
+            orci. Vestibulum congue bibendum vulputate.
+          </ItemDescription>
+        </ItemDescriptionContainer>
+      </ItemContainer>
+    </Container>
   );
 }
+
+const ItemContentWrapper = styled.div`
+  display: flex;
+  gap: 50px;
+
+  @media (max-width: 1330px) {
+    flex-direction: column;
+    gap: 10px;
+  }
+`;
 
 const LoaderContainer = styled.div`
   padding: 20px 10% 40px 10%;
@@ -281,13 +249,26 @@ const Container = styled.div`
   }
 `;
 
-const ItemContentWrapper = styled.div`
-  display: contents;
+const RequestStatusText = styled.p<{ $isBold?: boolean }>`
+  color: var(--dark);
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  font-weight: ${({ $isBold }) => ($isBold ? "bold" : "normal")};
+  gap: 10px;
 
-  @media (max-width: 1230px) {
-    display: flex;
-    flex-direction: column;
+  @media (max-width: 1420px) {
+    font-size: 18px;
   }
+`;
+
+const RequestStatusContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 10px;
+  justify-content: start;
+  gap: 20px;
 `;
 
 const BackContainer = styled.div`
@@ -304,7 +285,7 @@ const BackContainer = styled.div`
     transform: scale(1.003);
   }
 
-  @media (max-width: 1230px) {
+  @media (max-width: 1330px) {
     display: none;
   }
 
@@ -317,7 +298,7 @@ const MobileBackContainer = styled(BackContainer)`
   display: none;
   margin: 0 0 10px 0;
 
-  @media (max-width: 1230px) {
+  @media (max-width: 1330px) {
     display: flex;
   }
 `;
@@ -334,17 +315,16 @@ const BackText = styled.p`
 `;
 
 const ItemContainer = styled.div`
-  display: grid;
-  gap: 40px;
-  grid-template-columns: repeat(2, 1fr);
+  display: flex;
+  flex-direction: column;
   background-color: var(--white);
   padding: 30px;
+  gap: 30px;
   max-width: 1400px;
   border-radius: 8px;
 
-  @media (max-width: 1230px) {
-    grid-template-columns: 1fr;
-    gap: 0;
+  @media (max-width: 1330px) {
+    gap: 10px;
     padding-top: 20px;
     max-width: 600px;
   }
@@ -352,22 +332,31 @@ const ItemContainer = styled.div`
 
 const ItemLeftContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-grow: 1;
+  border-radius: 8px;
 `;
 
 const ItemRightContainer = styled.div`
   display: flex;
   flex-direction: column;
+  min-width: 400px;
+  flex-grow: 1;
+
+  @media (max-width: 1330px) {
+    min-width: 100%;
+  }
 `;
 
 const ItemImage = styled(SkeletonLoaderImage)`
-  width: 100%;
-  max-width: 600px;
+  width: 600px;
   height: auto;
+  max-height: 400px;
   border-radius: 8px;
 
-  @media (max-width: 1230px) {
+  @media (max-width: 1330px) {
     margin-bottom: 10px;
+    width: 100%;
+    max-height: 100%;
   }
 `;
 
@@ -377,7 +366,7 @@ const ItemName = styled.p`
   color: var(--dark);
   margin-bottom: 15px;
 
-  @media (max-width: 1230px) {
+  @media (max-width: 1330px) {
     font-size: 28px;
   }
 
@@ -422,6 +411,11 @@ const ItemLocalizationIcon = styled(MapPinIcon)`
 const ItemDescriptionContainer = styled.div`
   display: flex;
   flex-direction: column;
+  max-width: 50%;
+
+  @media (max-width: 1330px) {
+    max-width: 100%;
+  }
 `;
 
 const ItemDescriptionTitle = styled.p`
@@ -434,40 +428,4 @@ const ItemDescriptionTitle = styled.p`
 const ItemDescription = styled.p`
   font-size: 16px;
   color: var(--dark);
-`;
-
-const ReservedPeriodsContainer = styled.div`
-  margin-top: 20px;
-  background-color: var(--light-gray);
-  border-radius: 8px;
-`;
-
-const ReservedPeriodsTitle = styled.h3`
-  font-size: 20px;
-  font-weight: bold;
-  color: var(--dark);
-  margin-bottom: 10px;
-`;
-
-const ReservedPeriodsList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 0;
-`;
-
-const ReservedPeriod = styled.li`
-  font-size: 16px;
-  color: var(--dark);
-  margin-bottom: 5px;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
-`;
-
-const PeriodErrorText = styled.p`
-  font-size: 14px;
-  color: red;
-  margin-top: 5px;
-  text-align: left;
 `;
