@@ -8,97 +8,19 @@ import {
 import styled from "styled-components";
 import { useState } from "react";
 import pl from "date-fns/locale/pl";
-import { ReservedPeriod } from "@/types/interfaces";
+import { getDateRangeString } from "@/utils/dataHelpers";
 
 interface CalendarButtonProps {
   selectedDateRange: Range;
   disabledDates: Date[];
+  disabled: boolean;
   onSelect: (range: Range) => void;
 }
-
-export const timestampToDate = (timestamp: number): string => {
-  const date = new Date(timestamp);
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const year = date.getFullYear();
-  return `${day}.${month}.${year}`;
-};
-
-export const dateToTimestamp = (dateString: string): number => {
-  const [day, month, year] = dateString.split(".");
-  const date = new Date(Number(year), Number(month) - 1, Number(day));
-  return date.getTime();
-};
-
-export const convertToMidnightTimestamp = (timestamp: number): number => {
-  const date = new Date(timestamp);
-  date.setHours(0, 0, 0, 0);
-  return date.getTime();
-};
-
-export const generateDisabledDates = (
-  reservedPeriods: ReservedPeriod[]
-): Date[] => {
-  const disabledDates: Date[] = [];
-
-  reservedPeriods.forEach((period) => {
-    const start = new Date(period.startDate);
-    const end = new Date(period.endDate);
-
-    start.setHours(0, 0, 0, 0);
-    end.setHours(0, 0, 0, 0);
-
-    const currentDate = new Date(start);
-    while (currentDate <= end) {
-      disabledDates.push(new Date(currentDate));
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-  });
-
-  return disabledDates;
-};
-
-export const calculateDaysDifference = (
-  startDateString: string,
-  endDateString: string
-): number => {
-  const startTimestamp = dateToTimestamp(startDateString);
-  const endTimestamp = dateToTimestamp(endDateString);
-
-  const differenceInMilliseconds = Math.abs(endTimestamp - startTimestamp);
-  const daysDifference = Math.floor(
-    differenceInMilliseconds / (1000 * 60 * 60 * 24)
-  );
-
-  return daysDifference + 1;
-};
-
-export const formatDateForDisplay = (date: Date): string => {
-  if (!date) return "";
-
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const year = date.getFullYear();
-
-  return `${day}.${month}.${year}`;
-};
-
-export const getDateRangeString = (selectedRange: Range): string => {
-  const { startDate, endDate } = selectedRange;
-
-  if (!startDate || !endDate) return "";
-
-  const stringStartDate = formatDateForDisplay(startDate);
-  const stringEndDate = formatDateForDisplay(endDate);
-
-  return stringStartDate === stringEndDate
-    ? stringStartDate
-    : `${stringStartDate} - ${stringEndDate}`;
-};
 
 const CalendarButton: React.FC<CalendarButtonProps> = ({
   selectedDateRange,
   disabledDates,
+  disabled = true,
   onSelect,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -116,7 +38,7 @@ const CalendarButton: React.FC<CalendarButtonProps> = ({
 
   return (
     <CalendarContainer>
-      <StyledButton onClick={toggleDatePicker}>
+      <StyledButton onClick={toggleDatePicker} $disabled={disabled}>
         <CalendarIcon />
         {buttonText}
         <ArrowDown $isOpen={isOpen} />
@@ -147,7 +69,7 @@ const CalendarContainer = styled.div`
   }
 `;
 
-const StyledButton = styled.button`
+const StyledButton = styled.button<{ $disabled: boolean }>`
   border: none;
   border-radius: 50px;
   background-color: var(--primary);
@@ -160,16 +82,14 @@ const StyledButton = styled.button`
   font-weight: bold;
   color: var(--dark);
   padding: 16px 0px;
+  pointer-events: ${({ $disabled }) => ($disabled ? "none" : "auto")};
+  opacity: ${({ $disabled }) => ($disabled ? "0.7" : "1")};
   box-shadow: var(--shadow);
   cursor: pointer;
   transition: transform 0.3s ease;
 
   &:hover {
     transform: scale(1.03);
-  }
-
-  &:disabled:hover {
-    transform: none;
   }
 
   @media (max-width: 1230px) {

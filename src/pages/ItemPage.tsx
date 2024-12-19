@@ -9,11 +9,7 @@ import {
   CalendarDays as CalendarDaysIcon,
 } from "lucide-react";
 import test_item from "@/assets/test_item.jpg";
-import CalendarButton, {
-  convertToMidnightTimestamp,
-  generateDisabledDates,
-  getDateRangeString,
-} from "@/components/buttons/CalendarButton";
+import CalendarButton from "@/components/buttons/CalendarButton";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 import Loader from "@/components/ui/Loader";
 import { Range } from "react-date-range";
@@ -21,9 +17,16 @@ import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
 import getSymbolFromCurrency from "currency-symbol-map";
 import ErrorLayout from "@/components/ui/ErrorLayout";
 import { useUser } from "@/contexts/UserContext";
+import { useToast } from "@/contexts/ToastContext";
+import {
+  convertToMidnightTimestamp,
+  generateDisabledDates,
+  getDateRangeString,
+} from "@/utils/dataHelpers";
 
 export default function ItemPage() {
   const { isLogin } = useUser();
+  const { notify } = useToast();
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -36,6 +39,7 @@ export default function ItemPage() {
   const [startDateTimestamp, setStartDateTimestamp] = useState<number>(0);
   const [endDateTimestamp, setEndDateTimestamp] = useState<number>(0);
   const [isRequestSent, setIsRequestSent] = useState<boolean>(false);
+  const [isRequestSending, setIsRequestSending] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
   let reservedPeriods = [
@@ -63,8 +67,13 @@ export default function ItemPage() {
   };
 
   const handleRentClick = () => {
-    setIsRequestSent(true);
-    console.log(`${startDateTimestamp}  ${endDateTimestamp}`);
+    setIsRequestSending(true);
+    setTimeout(() => {
+      setIsRequestSending(false);
+      setIsRequestSent(true);
+      console.log(`${startDateTimestamp}  ${endDateTimestamp}`);
+      notify("Prośba o wynajem została wysłana", "success");
+    }, 1000);
   };
 
   const handleEditClick = (id: string) => {
@@ -149,11 +158,36 @@ export default function ItemPage() {
               </PrimaryButton>
             )}
 
+            {isLogin && !isOwner && !isRequestSent && (
+              <>
+                <CalendarButton
+                  selectedDateRange={selectedDateRange}
+                  disabledDates={disabledDates}
+                  onSelect={handleSelect}
+                  disabled={isRequestSending}
+                />
+                <PrimaryButton
+                  type="button"
+                  onClick={handleRentClick}
+                  disabled={startDateTimestamp === 0 || isRequestSending}
+                  margin="10px 0px 10px 0px"
+                  desktopMaxWidth="500px"
+                  mobileStart={1230}
+                  mobileMaxWidth="600px"
+                  mobileFontSize="16px"
+                >
+                  <SendIcon />
+                  Wyślij prośbę o wynajem
+                  {isRequestSending && <Loader size={18} />}
+                </PrimaryButton>
+              </>
+            )}
+
             {isLogin && !isOwner && isRequestSent && (
               <RequestStatusContainer>
-                <RequestStatusText>
+                <RequestStatusText $isBold={true}>
                   <SendIcon />
-                  Wysłano prośbę
+                  Prośba została wysłana
                 </RequestStatusText>
                 <RequestStatusText>
                   <CalendarDaysIcon />
@@ -168,29 +202,6 @@ export default function ItemPage() {
                   </RequestStatusText>
                 </RequestStatusText>
               </RequestStatusContainer>
-            )}
-
-            {isLogin && !isOwner && !isRequestSent && (
-              <>
-                <CalendarButton
-                  selectedDateRange={selectedDateRange}
-                  disabledDates={disabledDates}
-                  onSelect={handleSelect}
-                />
-                <PrimaryButton
-                  type="button"
-                  onClick={handleRentClick}
-                  disabled={startDateTimestamp === 0}
-                  margin="10px 0px 10px 0px"
-                  desktopMaxWidth="500px"
-                  mobileStart={1230}
-                  mobileMaxWidth="600px"
-                  mobileFontSize="16px"
-                >
-                  <SendIcon />
-                  Wyślij prośbę o wynajem
-                </PrimaryButton>
-              </>
             )}
           </ItemRightContainer>
         </ItemContentWrapper>
@@ -249,7 +260,7 @@ const Container = styled.div`
   }
 `;
 
-const RequestStatusText = styled.p<{ $isBold?: boolean }>`
+const RequestStatusText = styled.div<{ $isBold?: boolean }>`
   color: var(--dark);
   font-size: 20px;
   display: flex;

@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import Button from "@/components/buttons/Button";
 import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
-import { calculateDaysDifference } from "@/components/buttons/CalendarButton";
 import getSymbolFromCurrency from "currency-symbol-map";
+import { calculateDaysDifference } from "@/utils/dataHelpers";
 
 interface RentalItemProps {
   id: number;

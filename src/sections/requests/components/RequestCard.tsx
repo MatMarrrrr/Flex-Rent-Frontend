@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
-import { calculateDaysDifference } from "@/components/buttons/CalendarButton";
 import getSymbolFromCurrency from "currency-symbol-map";
 import { Request } from "@/types/interfaces";
+import { calculateDaysDifference } from "@/utils/dataHelpers";
 
 interface RequestCardProps {
   request: Request;
