@@ -33,8 +33,10 @@ interface ListingFormProps {
   headerText: string;
   submitText: string;
   submittingText: string;
+  submitedText: string;
   initialImage: ImageType;
   isSubmitting: boolean;
+  isSubmited: boolean;
   onSubmit: (values: any, imageFile: ImageType) => void;
   handleBack: () => void;
 }
@@ -44,8 +46,10 @@ const ListingForm: React.FC<ListingFormProps> = ({
   headerText,
   submitText,
   submittingText,
+  submitedText,
   initialImage,
   isSubmitting = false,
+  isSubmited = false,
   onSubmit,
   handleBack,
 }) => {
@@ -94,7 +98,7 @@ const ListingForm: React.FC<ListingFormProps> = ({
         <UploadImageContainer
           setImageFile={setImageFile}
           initialImage={initialImage}
-          disabled={isSubmitting}
+          disabled={isSubmitting || isSubmited}
         />
         {isImageError && (
           <ImageErrorText>Dodanie zdjęcia jest wymagane</ImageErrorText>
@@ -112,7 +116,7 @@ const ListingForm: React.FC<ListingFormProps> = ({
             type="text"
             isRequired={true}
             margin="0px 0px 10px 0px"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isSubmited}
           />
           <FormikSelectField
             name="category"
@@ -121,7 +125,7 @@ const ListingForm: React.FC<ListingFormProps> = ({
             startValue="Wybierz kategorię"
             isRequired={true}
             margin="0px 0px 25px 0px"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isSubmited}
           />
           <PriceInputContainer>
             <FormikInputField
@@ -130,7 +134,7 @@ const ListingForm: React.FC<ListingFormProps> = ({
               type="number"
               isRequired={true}
               margin="0px 0px 15px 0px"
-              disabled={isSubmitting}
+              disabled={isSubmitting || isSubmited}
             />
             <PerDayText>za dzień</PerDayText>
           </PriceInputContainer>
@@ -141,14 +145,14 @@ const ListingForm: React.FC<ListingFormProps> = ({
             startValue="Wybierz walutę"
             isRequired={true}
             margin="0px 0px 25px 0px"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isSubmited}
           />
           <FormikLocalizationField
             name="localization"
             label="Lokalizacja"
             isRequired={true}
             margin="0px 0px 15px 0px"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isSubmited}
           />
           <FormikTextAreaField
             name="description"
@@ -156,15 +160,23 @@ const ListingForm: React.FC<ListingFormProps> = ({
             type="text"
             isRequired={true}
             margin="0px 0px 15px 0px"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isSubmited}
           />
           <PrimaryButton
             type="submit"
             margin="15px 0px 0px 0px"
-            disabled={isSubmitting}
+            disabled={isSubmitting || isSubmited}
           >
-            {isSubmitting ? submittingText : submitText}
-            {isSubmitting && <Loader size={20} color="var(--white)" />}
+            {isSubmitting ? (
+              <>
+                {submittingText}
+                <Loader size={20} color="var(--white)" />
+              </>
+            ) : isSubmited ? (
+              submitedText
+            ) : (
+              submitText
+            )}
           </PrimaryButton>
         </FormikForm>
       </RightContainer>

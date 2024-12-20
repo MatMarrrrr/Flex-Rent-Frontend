@@ -5,6 +5,7 @@ import { listingInitialValues } from "@/consts/initialValues";
 import { useState } from "react";
 import { MoveLeft as ArrowBackIcon } from "lucide-react";
 import { ImageType } from "@/types/types";
+import { useToast } from "@/contexts/ToastContext";
 
 interface ListingFormValues {
   name: string;
@@ -17,22 +18,35 @@ interface ListingFormValues {
 
 export default function AddListingPage() {
   const navigate = useNavigate();
+  const { notify } = useToast();
+
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isSubmited, setIsSubmited] = useState<boolean>(false);
 
   const handleBack = () => {
     navigate(-1);
   };
 
   const handleSubmit = (values: ListingFormValues, imageFile: ImageType) => {
-    setIsSubmitting(true);
     const finalValues = { ...values, image: imageFile };
-    console.log(finalValues);
+    setIsSubmitting(true);
+
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setIsSubmited(true);
+      notify("Ogłoszenie zostało dodane!", "success");
+      console.log(finalValues);
+
+      setTimeout(() => {
+        navigate(-1);
+      }, 1000);
+    }, 1000);
   };
 
   return (
     <Container>
       <BackContainer onClick={handleBack}>
-        <ArrowBack/>
+        <ArrowBack />
         <BackText>Powrót</BackText>
       </BackContainer>
       <ListingForm
@@ -40,10 +54,12 @@ export default function AddListingPage() {
         headerText="Utwórz ogłoszenie"
         submitText="Opublikuj ogłoszenie"
         submittingText="Publikowanie"
+        submitedText="Opublikowano"
         initialImage={null}
         onSubmit={handleSubmit}
         handleBack={handleBack}
         isSubmitting={isSubmitting}
+        isSubmited={isSubmited}
       />
     </Container>
   );

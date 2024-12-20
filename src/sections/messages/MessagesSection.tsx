@@ -140,7 +140,6 @@ const Container = styled.div`
   min-height: calc(100vh - 493px);
   display: flex;
   justify-content: center;
-  align-items: center;
   gap: 50px;
   background-color: var(--white);
 

@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import Loader from "@/components/ui/Loader";
 import ErrorLayout from "@/components/ui/ErrorLayout";
 import { ImageType } from "@/types/types";
+import { useToast } from "@/contexts/ToastContext";
 
 interface ListingFormValues {
   name: string;
@@ -21,6 +22,7 @@ interface ListingFormValues {
 export default function EditListingPage() {
   const navigate = useNavigate();
   const { id } = useParams();
+  const { notify } = useToast();
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [listingData, setListingData] =
@@ -28,15 +30,26 @@ export default function EditListingPage() {
   const [listingImage, setListingImage] = useState<ImageType>(null);
   const [error, setError] = useState<string>("");
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isSubmited, setIsSubmited] = useState<boolean>(false);
 
   const handleBack = () => {
     navigate(-1);
   };
 
   const handleSubmit = (values: ListingFormValues, imageFile: ImageType) => {
-    setIsSubmitting(true);
     const finalValues = { ...values, image: imageFile };
-    console.log(finalValues);
+    setIsSubmitting(true);
+
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setIsSubmited(true);
+      notify("Ogłoszenie zostało zaktualizowane!", "success");
+      console.log(finalValues);
+
+      setTimeout(() => {
+        navigate(-1);
+      }, 1000);
+    }, 1000);
   };
 
   useEffect(() => {
@@ -84,7 +97,7 @@ export default function EditListingPage() {
       ) : (
         <>
           <BackContainer onClick={handleBack}>
-            <ArrowBack/>
+            <ArrowBack />
             <BackText>Powrót</BackText>
           </BackContainer>
           <ListingForm
@@ -92,10 +105,12 @@ export default function EditListingPage() {
             headerText="Edytuj ogłoszenie"
             submitText="Zapisz"
             submittingText="Zapisywanie"
+            submitedText="Zapisano"
             initialImage={listingImage}
             onSubmit={handleSubmit}
             handleBack={handleBack}
             isSubmitting={isSubmitting}
+            isSubmited={isSubmited}
           />
         </>
       )}
