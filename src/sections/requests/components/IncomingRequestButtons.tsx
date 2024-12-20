@@ -1,17 +1,24 @@
 import Button from "@/components/buttons/Button";
-import { RequestStatus } from "@/types/types";
-import { Check as CheckIcon, X as XIcon } from "lucide-react";
+import Loader from "@/components/ui/Loader";
+import { RequestAction, RequestStatus } from "@/types/types";
+import { Check as CheckIcon, X as XIcon, Send as SendIcon } from "lucide-react";
 
 interface IncomingRequestButtonsProps {
   requestStatus: RequestStatus;
+  isUpdating: boolean;
+  updatingAction: RequestAction | null;
   onAcceptClick: () => void;
   onDeclineClick: () => void;
+  onSendMessageClick: () => void;
 }
 
 const IncomingRequestButtons: React.FC<IncomingRequestButtonsProps> = ({
   requestStatus,
+  isUpdating,
+  updatingAction,
   onAcceptClick,
   onDeclineClick,
+  onSendMessageClick,
 }) => (
   <>
     {requestStatus !== "declined" && (
@@ -20,11 +27,20 @@ const IncomingRequestButtons: React.FC<IncomingRequestButtonsProps> = ({
         mobileStart={1320}
         mobileMaxWidth="700px"
         margin="20px 0px 0px 0px"
-        disabled={requestStatus === "accepted"}
+        disabled={requestStatus === "accepted" || isUpdating}
         onClick={onAcceptClick}
       >
         <CheckIcon />
-        {requestStatus === "accepted" ? "Zaakceptowano" : "Zaakceptuj"}
+        {isUpdating && updatingAction === "accepting" ? (
+          <>
+            Akceptowanie
+            <Loader size={18} />
+          </>
+        ) : requestStatus === "accepted" ? (
+          "Zaakceptowano"
+        ) : (
+          "Zaakceptuj"
+        )}
       </Button>
     )}
     {requestStatus !== "accepted" && (
@@ -33,11 +49,32 @@ const IncomingRequestButtons: React.FC<IncomingRequestButtonsProps> = ({
         mobileStart={1320}
         mobileMaxWidth="700px"
         margin="20px 0px 0px 0px"
-        disabled={requestStatus === "declined"}
+        disabled={requestStatus === "declined" || isUpdating}
         onClick={onDeclineClick}
       >
         <XIcon />
-        {requestStatus === "declined" ? "Odrzucono" : "Odrzuć"}
+        {isUpdating && updatingAction === "declining" ? (
+          <>
+            Odrzucanie
+            <Loader size={18} />
+          </>
+        ) : requestStatus === "declined" ? (
+          "Odrzucono"
+        ) : (
+          "Odrzuć"
+        )}
+      </Button>
+    )}
+    {requestStatus === "accepted" && (
+      <Button
+        desktopMaxWidth="500px"
+        mobileStart={1320}
+        mobileMaxWidth="700px"
+        margin="20px 0px 0px 0px"
+        onClick={onSendMessageClick}
+      >
+        <SendIcon />
+        Wyślij wiadomość
       </Button>
     )}
   </>

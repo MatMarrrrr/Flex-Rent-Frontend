@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
 import getSymbolFromCurrency from "currency-symbol-map";
-import { Request } from "@/types/interfaces";
+import { Period, Request } from "@/types/interfaces";
 import { calculateDaysDifference } from "@/utils/dataHelpers";
 
 interface RequestCardProps {
@@ -10,13 +10,11 @@ interface RequestCardProps {
 }
 
 const RequestCard: React.FC<RequestCardProps> = ({ request, children }) => {
-  const calculateCost = (
-    rentedPeriod: { from: string; to: string },
-    price: number
-  ) => {
+
+  const calculateCost = (rentedPeriod: Period, price: number) => {
     const daysPeriod = calculateDaysDifference(
-      rentedPeriod.from,
-      rentedPeriod.to
+      rentedPeriod.startDate,
+      rentedPeriod.endDate
     );
     return daysPeriod * price;
   };
@@ -33,7 +31,7 @@ const RequestCard: React.FC<RequestCardProps> = ({ request, children }) => {
         </ItemDetailContainer>
         <ItemDetailContainer>
           <ItemDetailTextBold>Okres: </ItemDetailTextBold>
-          <ItemDetailText>{`${request.rentedPeriod.from} - ${request.rentedPeriod.to}`}</ItemDetailText>
+          <ItemDetailText>{`${request.rentedPeriod.startDate} - ${request.rentedPeriod.endDate}`}</ItemDetailText>
         </ItemDetailContainer>
         <ItemDetailContainer>
           <ItemDetailTextBold>Koszt: </ItemDetailTextBold>

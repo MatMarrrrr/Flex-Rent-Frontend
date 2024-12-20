@@ -13,7 +13,7 @@ export interface Request {
   price: number;
   currency: string;
   localization: string;
-  rentedPeriod: { from: string; to: string };
+  rentedPeriod: Period;
   status: RequestStatus;
 }
 

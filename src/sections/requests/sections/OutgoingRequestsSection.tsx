@@ -7,24 +7,33 @@ import { fromBottomVariants03 } from "@/consts/motionVariants";
 import RequestCard from "@/sections/requests/components/RequestCard";
 import OutgoingRequestButtons from "@/sections/requests/components/OutgoingRequestButtons";
 import { RequestStatus } from "@/types/types";
-import { Request } from "@/types/interfaces";
+import { Period, Request } from "@/types/interfaces";
+import { useToast } from "@/contexts/ToastContext";
 
 export default function OutgoingRequestsSection() {
+  const { notify } = useToast();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [outgoingRequests, setOutgoingRequests] = useState<Request[]>([]);
+  const [updatingRequestIds, setUpdatingRequestIds] = useState<number[]>([]);
 
-  const handleCancelClick = (requestID: number) => {
-    updateRequestStatus(requestID, "canceled");
+  const handleCancelClick = (requestId: number) => {
+    setUpdatingRequestIds((prev) => [...prev, requestId]);
+
+    setTimeout(() => {
+      setUpdatingRequestIds((prev) => prev.filter((id) => id !== requestId));
+      updateRequestStatus(requestId, "canceled");
+      notify("Prośba została anulowana", "success");
+    }, 1000);
   };
 
   const handleSendMessageClick = (chatId: number) => {
     console.log(chatId);
   };
 
-  const updateRequestStatus = (id: number, newStatus: RequestStatus) => {
+  const updateRequestStatus = (requestId: number, newStatus: RequestStatus) => {
     setOutgoingRequests((prevRequests) =>
       prevRequests.map((request) =>
-        request.id === id ? { ...request, status: newStatus } : request
+        request.id === requestId ? { ...request, status: newStatus } : request
       )
     );
   };
@@ -38,7 +47,10 @@ export default function OutgoingRequestsSection() {
       price: 100,
       currency: "PLN",
       localization: `Warszawa`,
-      rentedPeriod: { from: "22.12.2024", to: "28.12.2024" },
+      rentedPeriod: {
+        startDate: "22.12.2024",
+        endDate: "28.12.2024",
+      } as Period,
       status: "waiting" as RequestStatus,
     }));
     setOutgoingRequests(requests);
@@ -59,15 +71,20 @@ export default function OutgoingRequestsSection() {
         </LoaderContainer>
       ) : (
         <MotionWrapper variants={fromBottomVariants03}>
-          {outgoingRequests.map((request) => (
-            <RequestCard request={request}>
-              <OutgoingRequestButtons
-                requestStatus={request.status}
-                onCancelClick={() => handleCancelClick(request.id)}
-                onSendMessageClick={() => handleSendMessageClick(request.id)}
-              />
-            </RequestCard>
-          ))}
+          {outgoingRequests.map((request) => {
+            const isUpdating = updatingRequestIds.includes(request.id);
+
+            return (
+              <RequestCard request={request} key={request.id}>
+                <OutgoingRequestButtons
+                  requestStatus={request.status}
+                  isUpdating={isUpdating}
+                  onCancelClick={() => handleCancelClick(request.id)}
+                  onSendMessageClick={() => handleSendMessageClick(request.id)}
+                />
+              </RequestCard>
+            );
+          })}
         </MotionWrapper>
       )}
     </Container>
