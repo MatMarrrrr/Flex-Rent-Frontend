@@ -10,6 +10,7 @@ interface FormikInputFieldProps {
   isRequired?: boolean;
   disabled?: boolean;
   margin?: string;
+  padding? :string;
 }
 
 const FormikInputField: React.FC<FormikInputFieldProps> = ({
@@ -19,6 +20,7 @@ const FormikInputField: React.FC<FormikInputFieldProps> = ({
   isRequired = false,
   disabled = false,
   margin,
+  padding,
 }) => (
   <FieldWrapper>
     <Field
@@ -29,6 +31,7 @@ const FormikInputField: React.FC<FormikInputFieldProps> = ({
       isRequired={isRequired}
       disabled={disabled}
       margin={margin}
+      padding={padding}
     />
     <ErrorWrapper>
       <ErrorMessage name={name} />

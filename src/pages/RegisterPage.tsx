@@ -81,6 +81,7 @@ export default function RegisterPage() {
                 passwordShown={passwordShown}
                 onToggle={handlePasswordVisibilityChange}
                 margin="-10px 0px 15px 0px"
+                padding="0px 40px 0px 10px"
               />
               <FormikPasswordField
                 name="repeatPassword"
@@ -89,6 +90,7 @@ export default function RegisterPage() {
                 passwordShown={repeatPasswordShown}
                 onToggle={handleRepeatPasswordVisibilityChange}
                 margin="0px 0px 15px 0px"
+                padding="0px 40px 0px 10px"
               />
 
               <RedirectContainer>

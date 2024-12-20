@@ -11,6 +11,7 @@ interface FormikLocalizationFieldProps {
   isRequired?: boolean;
   disabled?: boolean;
   margin?: string;
+  padding?: string;
 }
 
 const FormikLocalizationField: React.FC<FormikLocalizationFieldProps> = ({
@@ -19,6 +20,7 @@ const FormikLocalizationField: React.FC<FormikLocalizationFieldProps> = ({
   isRequired = false,
   disabled = false,
   margin,
+  padding,
 }) => {
   const { setFieldValue, setFieldTouched } = useFormikContext();
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -42,6 +44,7 @@ const FormikLocalizationField: React.FC<FormikLocalizationFieldProps> = ({
           isRequired={isRequired}
           disabled={disabled}
           margin={margin}
+          padding={padding}
         />
         <LocalizationIcon $disabled={disabled} onClick={showModal} />
       </InputContainer>

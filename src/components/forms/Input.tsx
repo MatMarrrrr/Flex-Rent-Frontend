@@ -39,7 +39,7 @@ const Input: React.FC<InputProps> = ({
   };
 
   return (
-    <Container $margin={margin} $padding={padding}>
+    <Container $margin={margin}>
       <InputText>
         {isRequired && <RequiredStar>* </RequiredStar>}
         {label}
@@ -51,6 +51,7 @@ const Input: React.FC<InputProps> = ({
         onBlur={onBlur}
         name={name}
         disabled={disabled}
+        $padding={padding}
         step={type === "number" ? "0.01" : undefined}
       />
     </Container>
@@ -59,13 +60,12 @@ const Input: React.FC<InputProps> = ({
 
 export default Input;
 
-const Container = styled.div<{ $margin?: string; $padding?: string }>`
+const Container = styled.div<{ $margin?: string }>`
   display: flex;
   flex-direction: column;
   max-width: 400px;
   width: 100%;
   margin: ${({ $margin }) => $margin || "0"};
-  padding: ${({ $padding }) => $padding || "0"};
 `;
 
 const InputText = styled.p`
@@ -75,12 +75,12 @@ const InputText = styled.p`
   margin: 0;
 `;
 
-const StyledInput = styled.input`
+const StyledInput = styled.input<{ $padding?: string }>`
   border: 1px solid var(--dark-25);
   border-radius: 5px;
   height: 45px;
   font-size: 18px;
-  padding: 0px 10px;
+  padding: ${({ $padding }) => $padding || "0px 10px"};
   width: 100%;
 
   &:focus {

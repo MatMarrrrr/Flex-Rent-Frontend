@@ -152,6 +152,7 @@ const ListingForm: React.FC<ListingFormProps> = ({
             label="Lokalizacja"
             isRequired={true}
             margin="0px 0px 15px 0px"
+            padding="0px 50px 0px 10px"
             disabled={isSubmitting || isSubmited}
           />
           <FormikTextAreaField
