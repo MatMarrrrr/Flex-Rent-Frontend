@@ -12,6 +12,7 @@ interface InputProps {
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   margin?: string;
+  padding?: string;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -24,6 +25,7 @@ const Input: React.FC<InputProps> = ({
   onBlur,
   onChange,
   margin,
+  padding,
 }) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputVal = e.target.value;
@@ -37,7 +39,7 @@ const Input: React.FC<InputProps> = ({
   };
 
   return (
-    <Container $margin={margin}>
+    <Container $margin={margin} $padding={padding}>
       <InputText>
         {isRequired && <RequiredStar>* </RequiredStar>}
         {label}
@@ -57,12 +59,13 @@ const Input: React.FC<InputProps> = ({
 
 export default Input;
 
-const Container = styled.div<{ $margin?: string }>`
+const Container = styled.div<{ $margin?: string; $padding?: string }>`
   display: flex;
   flex-direction: column;
   max-width: 400px;
   width: 100%;
   margin: ${({ $margin }) => $margin || "0"};
+  padding: ${({ $padding }) => $padding || "0"};
 `;
 
 const InputText = styled.p`

@@ -50,7 +50,7 @@ export default function LoginPage() {
             isRequired={true}
             passwordShown={passwordShown}
             onToggle={handlePasswordVisibilityChange}
-            margin="0px 0px 15px 0px"
+            margin="-10px 0px 15px 0px"
           />
           <RedirectContainer>
             <RedirectText>Nie masz konta?</RedirectText>

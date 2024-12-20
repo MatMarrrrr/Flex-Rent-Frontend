@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { loginSchema } from "@/validations/loginSchema";
 import { personalDataSchema } from "@/validations/personalDataSchema";
 import {
   loginInitialValues,
@@ -18,10 +17,13 @@ import PrimaryButton from "@/components/buttons/PrimaryButton";
 import FormikInputField from "@/components/forms/FormikInputField";
 import FormikPasswordField from "@/components/forms/FormikPasswordField";
 import FormikForm from "@/components/forms/FormikForm";
+import { registerSchema } from "@/validations/registerSchema";
 
 export default function RegisterPage() {
   const [step, setStep] = useState<number>(1);
   const [passwordShown, setPasswordShown] = useState<boolean>(false);
+  const [repeatPasswordShown, setRepeatPasswordShown] =
+    useState<boolean>(false);
   const [registerData, setRegisterData] = useState<{
     email: string;
     password: string;
@@ -29,6 +31,10 @@ export default function RegisterPage() {
 
   const handlePasswordVisibilityChange = () => {
     setPasswordShown(!passwordShown);
+  };
+
+  const handleRepeatPasswordVisibilityChange = () => {
+    setRepeatPasswordShown(!repeatPasswordShown);
   };
 
   const handleNext = (values: { email: string; password: string }) => {
@@ -58,7 +64,7 @@ export default function RegisterPage() {
             <Header>Zarejestruj się</Header>
             <FormikForm
               initialValues={registerData}
-              validationSchema={loginSchema}
+              validationSchema={registerSchema}
               onSubmit={handleNext}
             >
               <FormikInputField
@@ -74,6 +80,14 @@ export default function RegisterPage() {
                 isRequired={true}
                 passwordShown={passwordShown}
                 onToggle={handlePasswordVisibilityChange}
+                margin="-10px 0px 15px 0px"
+              />
+              <FormikPasswordField
+                name="repeatPassword"
+                label="Powtórzone hasło"
+                isRequired={true}
+                passwordShown={repeatPasswordShown}
+                onToggle={handleRepeatPasswordVisibilityChange}
                 margin="0px 0px 15px 0px"
               />
 
