@@ -7,6 +7,14 @@ import CategoryCard from "@/pages/main/components/CategoryCard";
 export default function MainPage() {
   const navigate = useNavigate();
 
+  const formatLocalization = (localization: string): string => {
+    return localization
+      .split(",")
+      .map((part) => part.trim())
+      .filter((part) => part)
+      .join(" ");
+  };
+
   const handleSearch = (
     query: string,
     categoryId: number,
@@ -14,9 +22,10 @@ export default function MainPage() {
   ) => {
     const searchParams = new URLSearchParams();
 
-    if (query) searchParams.set("query", query);
+    if (query) searchParams.set("query", query.trim());
     if (categoryId) searchParams.set("categoryId", categoryId.toString());
-    if (localization) searchParams.set("localization", localization);
+    if (localization)
+      searchParams.set("localization", formatLocalization(localization));
 
     navigate(`/search?${searchParams.toString()}`);
   };

@@ -23,15 +23,23 @@ export default function SearchPage() {
     categoryIdParam === 0 &&
     localizationParam.trim() === "";
 
+  const formatLocalization = (localization: string): string => {
+    return localization
+      .split(",")
+      .map((part) => part.trim())
+      .filter((part) => part)
+      .join(" ");
+  };
+
   const handleSearch = (
     query: string,
     categoryId: number,
     localization: string
   ) => {
     const newSearchParams = new URLSearchParams();
-    if (query) newSearchParams.set("query", query);
+    if (query) newSearchParams.set("query", query.trim());
     if (categoryId) newSearchParams.set("categoryId", categoryId.toString());
-    if (localization) newSearchParams.set("localization", localization);
+    if (localization) newSearchParams.set("localization", formatLocalization(localization));
 
     navigate(`?${newSearchParams.toString()}`);
   };
