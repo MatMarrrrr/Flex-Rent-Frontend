@@ -124,7 +124,7 @@ const ListingForm: React.FC<ListingFormProps> = ({
             options={options}
             startValue="Wybierz kategorię"
             isRequired={true}
-            margin="0px 0px 25px 0px"
+            margin="0px 0px 15px 0px"
             disabled={isSubmitting || isSubmited}
           />
           <PriceInputContainer>
@@ -144,7 +144,7 @@ const ListingForm: React.FC<ListingFormProps> = ({
             options={currencies}
             startValue="Wybierz walutę"
             isRequired={true}
-            margin="0px 0px 25px 0px"
+            margin="0px 0px 15px 0px"
             disabled={isSubmitting || isSubmited}
           />
           <FormikLocalizationField

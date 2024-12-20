@@ -62,7 +62,7 @@ const Select: React.FC<SelectProps> = ({
       <Dropdown>
         <DropdownHeader onClick={handleSelectClick} $disabled={disabled}>
           {selectedOption ? selectedOption.label : startValue}
-          <ArrowIcon $isOpen={isOpen} />
+          <ArrowIcon $isOpen={isOpen} $disabled={disabled} />
         </DropdownHeader>
         {isOpen && (
           <DropdownList>
@@ -144,7 +144,10 @@ const DropdownHeader = styled.div<{ $disabled?: boolean }>`
   justify-content: space-between;
 `;
 
-const ArrowIcon = styled(ChevronDownIcon)<{ $isOpen: boolean }>`
+const ArrowIcon = styled(ChevronDownIcon)<{
+  $isOpen: boolean;
+  $disabled: boolean;
+}>`
   height: 24px;
   width: 24px;
   color: var(--dark);
@@ -152,6 +155,7 @@ const ArrowIcon = styled(ChevronDownIcon)<{ $isOpen: boolean }>`
   background-repeat: no-repeat;
   transition: transform 0.3s ease;
   transform: rotate(${({ $isOpen }) => ($isOpen ? "180deg" : "0deg")});
+  color: ${({ $disabled }) => ($disabled ? "var(--dark-80)" : "var(--dark)")};
   user-select: none;
 `;
 
