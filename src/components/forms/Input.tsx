@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { RequiredStar } from "@/styledComponents/authComponents";
 
@@ -25,18 +25,13 @@ const Input: React.FC<InputProps> = ({
   onChange,
   margin,
 }) => {
-  const [inputValue, setInputValue] = useState<string>(value || "");
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-
+    const inputVal = e.target.value;
     if (type === "number") {
-      if (/^\d*\.?\d{0,2}$/.test(value)) {
-        setInputValue(value);
+      if (/^\d*\.?\d{0,2}$/.test(inputVal)) {
         onChange(e);
       }
     } else {
-      setInputValue(value);
       onChange(e);
     }
   };
@@ -49,7 +44,7 @@ const Input: React.FC<InputProps> = ({
       </InputText>
       <StyledInput
         type={type}
-        value={inputValue}
+        value={value || ""}
         onChange={handleInputChange}
         onBlur={onBlur}
         name={name}

@@ -5,8 +5,10 @@ import {
   Search as SearchIcon,
   LayoutGrid as LayoutGridIcon,
   MapPin as MapPinIcon,
+  Map as MapIcon,
 } from "lucide-react";
 import CategoryModal from "@/components/modals/CategoryModal";
+import LocalizationModal from "@/components/modals/LocalizationModal";
 
 interface SearchBarProps {
   initialQuery?: string;
@@ -27,16 +29,16 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const [category, setCategory] = useState<string>("");
   const [categoryId, setCategoryId] = useState<number>(initialCategoryId);
   const [localization, setLocalization] = useState<string>(initialLocalization);
-  const [isSearchDisabled, setSearchDisabled] = useState<boolean>(true);
-  const [isModalVisible, setModalVisible] = useState<boolean>(false);
+  const [isSearchDisabled, setIsSearchDisabled] = useState<boolean>(true);
+  const [isCategoryModalVisible, setIsCategoryModalVisible] =
+    useState<boolean>(false);
+  const [isLocalizationModalVisible, setIsLocalizationModalVisible] =
+    useState<boolean>(false);
 
-  const showModal = () => {
-    setModalVisible(true);
-  };
-
-  const hideModal = () => {
-    setModalVisible(false);
-  };
+  const showCategoryModal = () => setIsCategoryModalVisible(true);
+  const hideCategoryModal = () => setIsCategoryModalVisible(false);
+  const showLocalizationModal = () => setIsLocalizationModalVisible(true);
+  const hideLocalizationModal = () => setIsLocalizationModalVisible(false);
 
   const handleSearchClick = () => {
     if (onSearch) {
@@ -46,7 +48,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
   const handleModalCategoryClick = (categoryId: number) => {
     setCategoryId(categoryId);
-    hideModal();
+    hideCategoryModal();
   };
 
   useEffect(() => {
@@ -59,27 +61,33 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
   useEffect(() => {
     const isDisabled = !query && categoryId === 0 && !localization;
-    setSearchDisabled(isDisabled);
+    setIsSearchDisabled(isDisabled);
   }, [query, categoryId, localization]);
 
   return (
     <>
       <CategoryModal
-        isVisible={isModalVisible}
-        onClose={hideModal}
+        isVisible={isCategoryModalVisible}
+        onClose={hideCategoryModal}
         onCategoryClick={handleModalCategoryClick}
       />
+      <LocalizationModal
+        isVisible={isLocalizationModalVisible}
+        onClose={hideLocalizationModal}
+        onLocalizationSelect={(localization) => setLocalization(localization)}
+        languageCode="pl"
+      />
       <Container data-aos={isFadeIn ? "fade-up" : undefined}>
-        <MainInputContainer>
+        <QueryInputContainer>
           <QueryIcon />
           <StyledInput
             placeholder="Czego szukasz?"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
           />
-        </MainInputContainer>
+        </QueryInputContainer>
         <Divider />
-        <CategoryInputContainer onClick={showModal}>
+        <CategoryInputContainer onClick={showCategoryModal}>
           <CategoryIcon />
           <StyledInput
             placeholder="Kategoria"
@@ -88,13 +96,17 @@ const SearchBar: React.FC<SearchBarProps> = ({
             readOnly
           />
         </CategoryInputContainer>
+        <Divider />
         <LocalizationInputContainer>
           <LocalizationIcon />
-          <StyledInput
+          <StyledLocalizationInput
             placeholder="Lokalizacja"
             value={localization}
             onChange={(e) => setLocalization(e.target.value)}
           />
+          <LocalizationMapIconWrapper onClick={showLocalizationModal}>
+            <LocalizationMapIcon />
+          </LocalizationMapIconWrapper>
         </LocalizationInputContainer>
         <SearchButton onClick={handleSearchClick} disabled={isSearchDisabled}>
           Wyszukaj
@@ -124,11 +136,11 @@ const Container = styled.div`
   }
 `;
 
-const MainInputContainer = styled.div`
+const QueryInputContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
-  flex-grow: 1;
+  flex-grow: 2.5;
 
   @media (max-width: 700px) {
     background-color: var(--white);
@@ -154,6 +166,7 @@ const CategoryInputContainer = styled.div`
   align-items: center;
   gap: 10px;
   cursor: pointer;
+  flex-grow: 0.6;
 
   @media (max-width: 700px) {
     background-color: var(--white);
@@ -167,7 +180,9 @@ const CategoryInputContainer = styled.div`
 const LocalizationInputContainer = styled.div`
   display: flex;
   align-items: center;
+  position: relative;
   gap: 10px;
+  flex-grow: 1;
 
   @media (max-width: 700px) {
     background-color: var(--white);
@@ -190,7 +205,30 @@ const CategoryIcon = styled(LayoutGridIcon)`
   color: var(--dark);
 `;
 
+const LocalizationMapIconWrapper = styled.div`
+  position: absolute;
+  right: 10px;
+  top: 5%;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.03);
+  }
+
+  @media (max-width: 700px) {
+    top: 30%;
+    right: 20px;
+  }
+`;
+
 const LocalizationIcon = styled(MapPinIcon)`
+  height: 20px;
+  width: 20px;
+  color: var(--dark);
+`;
+
+const LocalizationMapIcon = styled(MapIcon)`
   height: 20px;
   width: 20px;
   color: var(--dark);
@@ -211,6 +249,10 @@ const StyledInput = styled.input`
   &::placeholder {
     color: var(--dark-50);
   }
+`;
+
+const StyledLocalizationInput = styled(StyledInput)`
+  padding-right: 40px;
 `;
 
 const SearchButton = styled.button`

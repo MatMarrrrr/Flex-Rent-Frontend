@@ -13,6 +13,7 @@ import PrimaryButton from "@/components/buttons/PrimaryButton";
 import { excludedCurrencies } from "@/consts/excludedCurrencies";
 import Loader from "@/components/ui/Loader";
 import { ImageType } from "@/types/types";
+import FormikLocalizationField from "@/components/forms/FormikLocalizationField";
 
 interface Category {
   id: number;
@@ -142,10 +143,9 @@ const ListingForm: React.FC<ListingFormProps> = ({
             margin="0px 0px 25px 0px"
             disabled={isSubmitting}
           />
-          <FormikInputField
+          <FormikLocalizationField
             name="localization"
             label="Lokalizacja"
-            type="text"
             isRequired={true}
             margin="0px 0px 15px 0px"
             disabled={isSubmitting}
