@@ -6,7 +6,7 @@ import {
   LayoutGrid as LayoutGridIcon,
   MapPin as MapPinIcon,
 } from "lucide-react";
-import CategoryModal from "@/components/ui/CategoryModal";
+import CategoryModal from "@/components/modals/CategoryModal";
 
 interface SearchBarProps {
   initialQuery?: string;

@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import MotionWrapper from "@/components/ui/MotionWrapper";
 import { fromBottomVariants03 } from "@/consts/motionVariants";
 import { useNavigate } from "react-router";
-import DeleteListingModal from "@/components/ui/DeleteListingModal";
+import DeleteListingModal from "@/components/modals/DeleteListingModal";
 import { useToast } from "@/contexts/ToastContext";
 import { Listing, Period } from "@/types/interfaces";
 import { ListingStatus } from "@/types/types";
