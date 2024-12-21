@@ -43,8 +43,8 @@ export default function ItemPage() {
   const [error, setError] = useState<string>("");
 
   let reservedPeriods = [
-    { startDate: "2024-12-01", endDate: "2024-12-05" },
-    { startDate: "2024-12-10", endDate: "2024-12-15" },
+    { startDate: "2025-02-01", endDate: "2025-02-10" },
+    { startDate: "2025-02-15", endDate: "2025-02-18" },
   ];
 
   const disabledDates = generateDisabledDates(reservedPeriods);

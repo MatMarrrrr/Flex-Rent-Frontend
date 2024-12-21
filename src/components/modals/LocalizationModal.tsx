@@ -5,7 +5,7 @@ import { fadeIn, fadeOut } from "@/styledComponents/keyframes";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import axios from "axios";
-import PrimaryButton from "../buttons/PrimaryButton";
+import PrimaryButton from "@/components/buttons/PrimaryButton";
 
 interface LocalizationModalProps {
   isVisible: boolean;

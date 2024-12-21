@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import { Map as MapIcon } from "lucide-react";
 import LocalizationModal from "@/components/modals/LocalizationModal";
-import FormikInputField from "./FormikInputField";
+import FormikInputField from "@/components/forms/FormikInputField";
 
 interface FormikLocalizationFieldProps {
   name: string;

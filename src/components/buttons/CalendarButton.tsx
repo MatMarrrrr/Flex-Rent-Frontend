@@ -8,7 +8,7 @@ import {
 import styled from "styled-components";
 import { useState } from "react";
 import pl from "date-fns/locale/pl";
-import { getDateRangeString } from "@/utils/dataHelpers";
+import { getDateRangeString, getPastDates } from "@/utils/dataHelpers";
 
 interface CalendarButtonProps {
   selectedDateRange: Range;
@@ -25,6 +25,7 @@ const CalendarButton: React.FC<CalendarButtonProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [buttonText, setButtonText] = useState<string>("Wybierz okres");
+  const allDisabledDates = [...getPastDates(), ...disabledDates];
 
   const toggleDatePicker = () => {
     setIsOpen((prev) => !prev);
@@ -50,7 +51,7 @@ const CalendarButton: React.FC<CalendarButtonProps> = ({
             onChange={handleSelect}
             rangeColors={["var(--primary)"]}
             moveRangeOnFirstSelection={false}
-            disabledDates={disabledDates}
+            disabledDates={allDisabledDates}
             locale={pl}
           />
         </StyledDateRange>
@@ -124,6 +125,11 @@ const StyledDateRange = styled.div`
     @media (max-width: 340px) {
       font-size: 8px;
     }
+  }
+
+  .rdrDays {
+    border-radius: 8px;
+    overflow: hidden;
   }
 
   .rdrMonthsVertical {
