@@ -15,6 +15,7 @@ interface LocalizationModalProps {
 }
 
 interface Address {
+  state?: string;
   city?: string;
   town?: string;
   village?: string;
@@ -26,6 +27,11 @@ interface LocalizationResponse {
   address?: Address;
 }
 
+interface LocalizationState {
+  selected: string | null;
+  error: boolean;
+}
+
 const LocalizationModal: React.FC<LocalizationModalProps> = ({
   isVisible,
   onClose,
@@ -33,9 +39,10 @@ const LocalizationModal: React.FC<LocalizationModalProps> = ({
   languageCode,
 }) => {
   const [isClosing, setIsClosing] = useState<boolean>(false);
-  const [selectedLocalization, setSelectedLocalization] = useState<
-    string | null
-  >(null);
+  const [localizationState, setLocalizationState] = useState<LocalizationState>(
+    { selected: null, error: false }
+  );
+
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<L.Map | null>(null);
   const openStreetmapApiUrl = import.meta.env.VITE_OPEN_STREETMAP_API_URL;
@@ -49,22 +56,34 @@ const LocalizationModal: React.FC<LocalizationModalProps> = ({
   };
 
   const handleAccept = async () => {
-    if (selectedLocalization) {
-      onLocalizationSelect(selectedLocalization);
+    if (localizationState.selected) {
+      onLocalizationSelect(localizationState.selected);
       handleClose();
-      setSelectedLocalization("");
+      setLocalizationState((prev) => ({ ...prev, selected: null }));
     }
   };
 
-  const parseLocalization = (address: Address | undefined): string => {
-    if (!address) return "Nieznana lokalizacja";
+  const capitalizeFirstLetter = (text: string): string => {
+    if (text.length === 1) return text.toUpperCase();
+    return text[0].toUpperCase() + text.slice(1);
+  };
 
-    const city = address.city || address.town || address.village;
-    const district = address.city_district || address.suburb;
+  const getProvinceValue = (text: string) => {
+    const parts = text.split(" ");
+    return parts.length > 0
+      ? capitalizeFirstLetter(parts[1])
+      : capitalizeFirstLetter(text);
+  };
 
-    return city && district
-      ? `${city} ${district}`
-      : city || "Nieznana lokalizacja";
+  const parseLocalization = (address: Address | undefined): string | null => {
+    if (!address) return null;
+
+    const province = address.state ? getProvinceValue(address.state) : null;
+    const city = address.city || address.town || address.village || null;
+    const district = address.city_district || address.suburb || null;
+
+    const parts = [province, city, district].filter(Boolean);
+    return parts.length > 0 ? parts.join(" ") : null;
   };
 
   const fetchLocalizationData = async (
@@ -72,32 +91,47 @@ const LocalizationModal: React.FC<LocalizationModalProps> = ({
     lng: number,
     apiUrl: string,
     languageCode: string
-  ): Promise<LocalizationResponse> => {
-    const response = await axios.get<LocalizationResponse>(apiUrl, {
-      params: {
-        lat,
-        lon: lng,
-        format: "json",
-        "accept-language": languageCode,
-      },
-    });
-    return response.data;
+  ): Promise<LocalizationResponse | null> => {
+    try {
+      const response = await axios.get<LocalizationResponse>(apiUrl, {
+        params: {
+          lat,
+          lon: lng,
+          format: "json",
+          "accept-language": languageCode,
+        },
+      });
+
+      if (!response.data?.address) {
+        return null;
+      }
+
+      return response.data;
+    } catch {
+      return null;
+    }
   };
 
   const handleMapClick = async (e: L.LeafletMouseEvent) => {
     const { lat, lng } = e.latlng;
-    try {
-      const data = await fetchLocalizationData(
-        lat,
-        lng,
-        openStreetmapApiUrl,
-        languageCode
-      );
-      const localization = parseLocalization(data?.address);
-      setSelectedLocalization(localization || "Nieznana lokalizacja");
-    } catch (error) {
-      console.error("Error fetching localization data:", error);
-      setSelectedLocalization("Nieznana lokalizacja");
+
+    const data = await fetchLocalizationData(
+      lat,
+      lng,
+      openStreetmapApiUrl,
+      languageCode
+    );
+
+    if (data && data.address) {
+      const localization = parseLocalization(data.address);
+      if (localization) {
+        setLocalizationState((prev) => ({ ...prev, selected: localization }));
+        setLocalizationState((prev) => ({ ...prev, error: false }));
+      } else {
+        setLocalizationState((prev) => ({ ...prev, error: true }));
+      }
+    } else {
+      setLocalizationState((prev) => ({ ...prev, error: true }));
     }
   };
 
@@ -134,18 +168,17 @@ const LocalizationModal: React.FC<LocalizationModalProps> = ({
         <MapContainer ref={mapRef} />
         <SelectedLocalizationContainer>
           <SelectedLocalizationText>
-            {selectedLocalization
-              ? `Wybrana lokalizacja: ${selectedLocalization}`
+            {localizationState.error
+              ? "Nie udało się wybrać lokalizacji. Spróbuj ponownie."
+              : localizationState.selected
+              ? `Wybrana lokalizacja: ${localizationState.selected}`
               : "Kliknij na mapę, aby wybrać lokalizację"}
           </SelectedLocalizationText>
         </SelectedLocalizationContainer>
         <ButtonContainer>
           <PrimaryButton
             onClick={handleAccept}
-            disabled={
-              !selectedLocalization ||
-              selectedLocalization == "Nieznana lokalizacja"
-            }
+            disabled={!localizationState.selected || localizationState.error}
             desktopMaxWidth="300px"
           >
             <CheckIcon /> Akceptuj
