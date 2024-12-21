@@ -9,12 +9,61 @@ import OutgoingRequestButtons from "@/sections/requests/components/OutgoingReque
 import { RequestStatus } from "@/types/types";
 import { Period, Request } from "@/types/interfaces";
 import { useToast } from "@/contexts/ToastContext";
+import { Range } from "react-date-range";
+import ChangePeriodModal from "@/components/modals/ChangePeriodModal";
+import { formatDateForDisplay } from "@/utils/dataHelpers";
 
 export default function OutgoingRequestsSection() {
   const { notify } = useToast();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [outgoingRequests, setOutgoingRequests] = useState<Request[]>([]);
   const [updatingRequestIds, setUpdatingRequestIds] = useState<number[]>([]);
+  const [isChanging, setIsChanging] = useState<boolean>(false);
+  const [modalData, setModalData] = useState<{
+    isVisible: boolean;
+    requestId: number | null;
+  }>({
+    isVisible: false,
+    requestId: null,
+  });
+
+  const updateRequestPeriod = (requestId: number, selectedRange: Range) => {
+    setOutgoingRequests((prevRequests) =>
+      prevRequests.map((request) =>
+        request.id === requestId
+          ? {
+              ...request,
+              rentedPeriod: {
+                startDate: formatDateForDisplay(selectedRange.startDate!),
+                endDate: formatDateForDisplay(selectedRange.endDate!),
+              },
+            }
+          : request
+      )
+    );
+  };
+
+  const updateRequestStatus = (requestId: number, newStatus: RequestStatus) => {
+    setOutgoingRequests((prevRequests) =>
+      prevRequests.map((request) =>
+        request.id === requestId ? { ...request, status: newStatus } : request
+      )
+    );
+  };
+
+  const showChangePeriodModal = (requestId: number) => {
+    setModalData({
+      isVisible: true,
+      requestId: requestId,
+    });
+  };
+
+  const hideChangePeriodModal = () => {
+    setModalData({
+      isVisible: false,
+      requestId: null,
+    });
+  };
 
   const handleCancelClick = (requestId: number) => {
     setUpdatingRequestIds((prev) => [...prev, requestId]);
@@ -30,12 +79,19 @@ export default function OutgoingRequestsSection() {
     console.log(chatId);
   };
 
-  const updateRequestStatus = (requestId: number, newStatus: RequestStatus) => {
-    setOutgoingRequests((prevRequests) =>
-      prevRequests.map((request) =>
-        request.id === requestId ? { ...request, status: newStatus } : request
-      )
-    );
+  const handleChangePeriodClick = (requestId: number) => {
+    showChangePeriodModal(requestId);
+  };
+
+  const handlePeriodChange = (requestId: number, selectedRange: Range) => {
+    setIsChanging(true);
+
+    setTimeout(() => {
+      updateRequestPeriod(requestId, selectedRange);
+      setIsChanging(false);
+      setModalData((prev) => ({ ...prev, isVisible: false }));
+      notify("Okres wypożyczenia został zmieniony", "success");
+    }, 1000);
   };
 
   useEffect(() => {
@@ -51,7 +107,7 @@ export default function OutgoingRequestsSection() {
         startDate: "22.12.2024",
         endDate: "28.12.2024",
       } as Period,
-      status: "waiting" as RequestStatus,
+      status: "accepted" as RequestStatus,
     }));
     setOutgoingRequests(requests);
 
@@ -64,6 +120,13 @@ export default function OutgoingRequestsSection() {
 
   return (
     <Container>
+      <ChangePeriodModal
+        isVisible={modalData.isVisible}
+        isChanging={isChanging}
+        requestId={modalData.requestId!}
+        onAcceptClick={handlePeriodChange}
+        onClose={hideChangePeriodModal}
+      />
       {isLoading ? (
         <LoaderContainer>
           <Loader />
@@ -71,20 +134,18 @@ export default function OutgoingRequestsSection() {
         </LoaderContainer>
       ) : (
         <MotionWrapper variants={fromBottomVariants03}>
-          {outgoingRequests.map((request) => {
-            const isUpdating = updatingRequestIds.includes(request.id);
-
-            return (
-              <RequestCard request={request} key={request.id}>
-                <OutgoingRequestButtons
-                  requestStatus={request.status}
-                  isUpdating={isUpdating}
-                  onCancelClick={() => handleCancelClick(request.id)}
-                  onSendMessageClick={() => handleSendMessageClick(request.id)}
-                />
-              </RequestCard>
-            );
-          })}
+          {outgoingRequests.map((request) => (
+            <RequestCard request={request} key={request.id}>
+              <OutgoingRequestButtons
+                requestId={request.id}
+                requestStatus={request.status}
+                isUpdating={updatingRequestIds.includes(request.id)}
+                onCancelClick={() => handleCancelClick(request.id)}
+                onSendMessageClick={() => handleSendMessageClick(request.id)}
+                onChangePeriodClick={() => handleChangePeriodClick(request.id)}
+              />
+            </RequestCard>
+          ))}
         </MotionWrapper>
       )}
     </Container>

@@ -7,6 +7,11 @@ interface DateRangeCalendarProps {
   selectedDateRange: Range;
   disabledDates: Date[];
   locale: Locale;
+  position?: string;
+  boxShadow?: string;
+  background?: string;
+  isBorder?: boolean;
+  disabled?: boolean;
   onSelect: (ranges: RangeKeyDict) => void;
 }
 
@@ -14,10 +19,21 @@ const DateRangeCalendar: React.FC<DateRangeCalendarProps> = ({
   selectedDateRange,
   disabledDates,
   locale,
+  position,
+  boxShadow,
+  background,
+  isBorder,
+  disabled = false,
   onSelect,
 }) => {
   return (
-    <StyledDateRange>
+    <StyledDateRange
+      $position={position}
+      $boxShadow={boxShadow}
+      $background={background}
+      $isBorder={isBorder}
+      $isDisabled={disabled}
+    >
       <DateRange
         ranges={[selectedDateRange]}
         onChange={onSelect}
@@ -25,6 +41,7 @@ const DateRangeCalendar: React.FC<DateRangeCalendarProps> = ({
         moveRangeOnFirstSelection={false}
         disabledDates={disabledDates}
         locale={locale}
+        minDate={new Date()}
       />
     </StyledDateRange>
   );
@@ -32,17 +49,31 @@ const DateRangeCalendar: React.FC<DateRangeCalendarProps> = ({
 
 export default DateRangeCalendar;
 
-const StyledDateRange = styled.div`
+const StyledDateRange = styled.div<{
+  $position?: string;
+  $boxShadow?: string;
+  $background?: string;
+  $isBorder?: boolean;
+  $isDisabled?: boolean;
+}>`
+  width: fit-content;
+
   .rdrCalendarWrapper {
     width: 100%;
     max-width: 500px;
     border-radius: 8px;
-    box-shadow: var(--shadow);
+    box-shadow: ${({ $boxShadow }) => $boxShadow || "var(--shadow)"};
+    pointer-events: ${({ $isDisabled }) => ($isDisabled ? "none" : "auto")};
+    background-color: ${({ $background }) => $background || "var(--white)"};
     color: var(--dark);
+    border: ${({ $isBorder }) =>
+      $isBorder ? "2px solid var(--dark)" : "none"};
+
     font-family: Arial, sans-serif;
-    position: absolute;
+    position: ${({ $position }) => $position || "absolute"};
     top: 58px;
     z-index: 2;
+    padding: 10px;
 
     @media (max-width: 1230px) {
       max-width: 600px;

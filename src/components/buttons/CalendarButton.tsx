@@ -8,7 +8,7 @@ import {
 import styled from "styled-components";
 import { useState } from "react";
 import pl from "date-fns/locale/pl";
-import { getDateRangeString, getPastDates } from "@/utils/dataHelpers";
+import { getDateRangeString } from "@/utils/dataHelpers";
 import DateRangeCalendar from "@/components/ui/DateRangeCalendar";
 
 interface CalendarButtonProps {
@@ -26,7 +26,6 @@ const CalendarButton: React.FC<CalendarButtonProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [buttonText, setButtonText] = useState<string>("Wybierz okres");
-  const allDisabledDates = [...getPastDates(), ...disabledDates];
 
   const toggleDatePicker = () => {
     setIsOpen((prev) => !prev);
@@ -48,7 +47,7 @@ const CalendarButton: React.FC<CalendarButtonProps> = ({
       {isOpen && (
         <DateRangeCalendar
           selectedDateRange={selectedDateRange}
-          disabledDates={allDisabledDates}
+          disabledDates={disabledDates}
           locale={pl}
           onSelect={handleSelect}
         />

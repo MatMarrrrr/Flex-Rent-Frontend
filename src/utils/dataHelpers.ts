@@ -66,30 +66,23 @@ export const formatDateForDisplay = (date: Date): string => {
   return `${day}.${month}.${year}`;
 };
 
-export const getDateRangeString = (selectedRange: Range): string => {
-  const { startDate, endDate } = selectedRange;
+export const getDateRangeString = (selectedRange: Range | Period): string => {
+  if (!selectedRange.startDate || !selectedRange.endDate) return "";
 
-  if (!startDate || !endDate) return "";
+  let startDate: string | Date;
+  let endDate: string | Date;
 
-  const stringStartDate = formatDateForDisplay(startDate);
-  const stringEndDate = formatDateForDisplay(endDate);
-
-  return stringStartDate === stringEndDate
-    ? stringStartDate
-    : `${stringStartDate} - ${stringEndDate}`;
-};
-
-export const getPastDates = (): Date[] => {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const disabledDates: Date[] = [];
-  let currentDate = new Date(today.getFullYear(), 0, 1);
-
-  while (currentDate < today) {
-    disabledDates.push(new Date(currentDate));
-    currentDate.setDate(currentDate.getDate() + 1);
+  if (isRangeType(selectedRange)) {
+    startDate = formatDateForDisplay(selectedRange.startDate);
+    endDate = formatDateForDisplay(selectedRange.endDate);
+  } else {
+    startDate = selectedRange.startDate;
+    endDate = selectedRange.endDate;
   }
 
-  return disabledDates;
+  return startDate === endDate ? startDate : `${startDate} - ${endDate}`;
+};
+
+const isRangeType = (range: Range | Period): range is Range => {
+  return (range as Range).startDate instanceof Date;
 };
