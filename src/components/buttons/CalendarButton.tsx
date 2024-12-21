@@ -1,4 +1,4 @@
-import { DateRange, Range, RangeKeyDict } from "react-date-range";
+import { Range, RangeKeyDict } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import {
@@ -9,6 +9,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import pl from "date-fns/locale/pl";
 import { getDateRangeString, getPastDates } from "@/utils/dataHelpers";
+import DateRangeCalendar from "@/components/ui/DateRangeCalendar";
 
 interface CalendarButtonProps {
   selectedDateRange: Range;
@@ -45,16 +46,12 @@ const CalendarButton: React.FC<CalendarButtonProps> = ({
         <ArrowDown $isOpen={isOpen} />
       </StyledButton>
       {isOpen && (
-        <StyledDateRange>
-          <DateRange
-            ranges={[selectedDateRange]}
-            onChange={handleSelect}
-            rangeColors={["var(--primary)"]}
-            moveRangeOnFirstSelection={false}
-            disabledDates={allDisabledDates}
-            locale={pl}
-          />
-        </StyledDateRange>
+        <DateRangeCalendar
+          selectedDateRange={selectedDateRange}
+          disabledDates={allDisabledDates}
+          locale={pl}
+          onSelect={handleSelect}
+        />
       )}
     </CalendarContainer>
   );
@@ -99,66 +96,6 @@ const StyledButton = styled.button<{ $disabled: boolean }>`
 
   @media (max-width: 600px) {
     font-size: 14px;
-  }
-`;
-
-const StyledDateRange = styled.div`
-  .rdrCalendarWrapper {
-    width: 100%;
-    max-width: 500px;
-    border-radius: 8px;
-    box-shadow: var(--shadow);
-    color: var(--dark);
-    font-family: Arial, sans-serif;
-    position: absolute;
-    top: 58px;
-    z-index: 2;
-
-    @media (max-width: 1230px) {
-      max-width: 600px;
-    }
-
-    @media (max-width: 440px) {
-      font-size: 10px;
-    }
-
-    @media (max-width: 340px) {
-      font-size: 8px;
-    }
-  }
-
-  .rdrDays {
-    border-radius: 8px;
-    overflow: hidden;
-  }
-
-  .rdrMonthsVertical {
-    align-items: center;
-    font-size: 13px;
-
-    @media (max-width: 500px) {
-      font-size: 12px;
-    }
-
-    @media (max-width: 350px) {
-      font-size: 10px;
-    }
-  }
-
-  .rdrDateDisplayWrapper {
-    display: none;
-  }
-
-  .rdrMonthPicker select,
-  .rdrYearPicker select {
-    font-size: 15px;
-    @media (max-width: 440px) {
-      font-size: 14px;
-    }
-
-    @media (max-width: 340px) {
-      font-size: 10px;
-    }
   }
 `;
 
