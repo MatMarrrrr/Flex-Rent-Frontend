@@ -12,6 +12,7 @@ import PrimaryButton from "@/components/buttons/PrimaryButton";
 import FormikInputField from "@/components/forms/FormikInputField";
 import FormikPasswordField from "@/components/forms/FormikPasswordField";
 import FormikForm from "@/components/forms/FormikForm";
+import { FormikCheckboxField } from "@/components/forms/FormikCheckboxField";
 
 export default function LoginPage() {
   const [passwordShown, setPasswordShown] = useState<boolean>(false);
@@ -52,6 +53,7 @@ export default function LoginPage() {
             onToggle={handlePasswordVisibilityChange}
             margin="-10px 0px 15px 0px"
           />
+          <FormikCheckboxField name="remember" label="Zapamiętaj mnie" />
           <RedirectContainer>
             <RedirectText>Nie masz konta?</RedirectText>
             <RedirectLink to="/register">Zarejestruj się</RedirectLink>
