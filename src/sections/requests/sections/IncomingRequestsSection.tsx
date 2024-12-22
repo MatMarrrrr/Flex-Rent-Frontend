@@ -56,6 +56,22 @@ export default function IncomingRequestsSection() {
     console.log(chatId);
   };
 
+  const handleConfirmRentalClick = (requestId: number) => {
+    setUpdatingRequests((prev) => [
+      ...prev,
+      { requestId, action: "confirming" },
+    ]);
+    setTimeout(() => {
+      setUpdatingRequests((prev) =>
+        prev.filter(
+          (req) => req.requestId !== requestId || req.action !== "confirming"
+        )
+      );
+      updateRequestStatus(requestId, "confirmed");
+      notify("Wynajem został potwierdzony", "success");
+    }, 1000);
+  };
+
   const updateRequestStatus = (requestId: number, newStatus: RequestStatus) => {
     setIncomingRequests((prevRequests) =>
       prevRequests.map((request) =>
@@ -106,22 +122,33 @@ export default function IncomingRequestsSection() {
               (req) =>
                 req.requestId === request.id && req.action === "declining"
             );
+            const isUpdatingConfirm = updatingRequests.some(
+              (req) =>
+                req.requestId === request.id && req.action === "confirming"
+            );
 
             return (
               <RequestCard request={request} key={request.id}>
                 <IncomingRequestButtons
                   requestStatus={request.status}
-                  isUpdating={isUpdatingAccept || isUpdatingDecline}
+                  isUpdating={
+                    isUpdatingAccept || isUpdatingDecline || isUpdatingConfirm
+                  }
                   updatingAction={
                     isUpdatingAccept
                       ? "accepting"
                       : isUpdatingDecline
                       ? "declining"
+                      : isUpdatingConfirm
+                      ? "confirming"
                       : null
                   }
                   onAcceptClick={() => handleAcceptClick(request.id)}
                   onDeclineClick={() => handleDeclineClick(request.id)}
                   onSendMessageClick={() => handleSendMessageClick(request.id)}
+                  onConfirmRentalClick={() =>
+                    handleConfirmRentalClick(request.id)
+                  }
                 />
               </RequestCard>
             );
