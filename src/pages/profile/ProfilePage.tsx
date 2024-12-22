@@ -7,6 +7,7 @@ import ProfileImageCircle from "@/pages/profile/components/ProfileImageCircle";
 import { useEffect, useState } from "react";
 import Loader from "@/components/ui/Loader";
 import { ImageType } from "@/types/types";
+import { useToast } from "@/contexts/ToastContext";
 
 interface ProfileData {
   email: string;
@@ -20,6 +21,7 @@ export default function ProfilePage() {
   const [imageFile, setImageFile] = useState<ImageType>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { notify } = useToast();
 
   const profileData = {
     email: "email@email.com",
@@ -31,8 +33,12 @@ export default function ProfilePage() {
 
   const handleSubmit = (values: ProfileData) => {
     setIsSubmitting(true);
-    const finalValues = { ...values, profileImage: imageFile };
-    console.log(finalValues);
+    setTimeout(() => {
+      const finalValues = { ...values, profileImage: imageFile };
+      setIsSubmitting(false);
+      console.log(finalValues);
+      notify("Dane zostały poprawnie zmienione", "success");
+    }, 1000);
   };
 
   useEffect(() => {
