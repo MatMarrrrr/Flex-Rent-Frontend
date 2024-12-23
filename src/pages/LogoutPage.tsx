@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useUser } from "@/contexts/UserContext";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
+import Loader from "@/components/ui/Loader";
 
 export default function LogoutPage() {
   const { logout } = useUser();
@@ -18,6 +19,7 @@ export default function LogoutPage() {
 
   return (
     <LogoutLoader>
+      <Loader size={50} />
       <LoaderText>Wylogowywanie...</LoaderText>
     </LogoutLoader>
   );
@@ -30,27 +32,16 @@ const LogoutLoader = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
+  gap: 10px;
   justify-content: center;
   align-items: center;
   background-color: #f3f8fc;
 `;
 
-const LoaderText = styled.div`
-  font-size: 3vh;
-  color: #3498db;
-  font-family: "Exo 2", sans-serif;
-  transition: transform 0.5s ease-in-out;
-  animation: pulse 1.5s infinite linear;
-
-  @keyframes pulse {
-    0% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.3);
-    }
-    100% {
-      transform: scale(1);
-    }
-  }
+const LoaderText = styled.p`
+  font-size: 30px;
+  font-weight: bold;
+  color: var(--dark);
+  text-align: center;
 `;
