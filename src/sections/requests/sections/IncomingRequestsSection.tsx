@@ -9,6 +9,7 @@ import IncomingRequestButtons from "@/sections/requests/components/IncomingReque
 import { RequestStatus, RequestAction } from "@/types/types";
 import { Period, Request } from "@/types/interfaces";
 import { useToast } from "@/contexts/ToastContext";
+import FilterCheckbox from "@/sections/requests/components/FilterCheckbox";
 
 export default function IncomingRequestsSection() {
   const { notify } = useToast();
@@ -17,6 +18,21 @@ export default function IncomingRequestsSection() {
   const [updatingRequests, setUpdatingRequests] = useState<
     { requestId: number; action: RequestAction }[]
   >([]);
+  const [filterStatuses, setFilterStatuses] = useState<RequestStatus[]>([
+    "waiting",
+  ]);
+
+  const handleFilterChange = (status: RequestStatus) => {
+    setFilterStatuses((prev) =>
+      prev.includes(status)
+        ? prev.filter((s) => s !== status)
+        : [...prev, status]
+    );
+  };
+
+  const filteredRequests = incomingRequests.filter((request) =>
+    filterStatuses.length > 0 ? filterStatuses.includes(request.status) : true
+  );
 
   const handleAcceptClick = (requestId: number) => {
     setUpdatingRequests((prev) => [
@@ -93,7 +109,7 @@ export default function IncomingRequestsSection() {
         startDate: "22.12.2024",
         endDate: "28.12.2024",
       } as Period,
-      status: "waiting" as RequestStatus,
+      status: index % 2 === 0 ? "waiting" : ("accepted" as RequestStatus),
     }));
     setIncomingRequests(requests);
 
@@ -112,55 +128,78 @@ export default function IncomingRequestsSection() {
           <LoaderText>Wczytywanie próśb</LoaderText>
         </LoaderContainer>
       ) : (
-        <MotionWrapper variants={fromBottomVariants03}>
-          {incomingRequests.map((request) => {
-            const isUpdatingAccept = updatingRequests.some(
-              (req) =>
-                req.requestId === request.id && req.action === "accepting"
-            );
-            const isUpdatingDecline = updatingRequests.some(
-              (req) =>
-                req.requestId === request.id && req.action === "declining"
-            );
-            const isUpdatingConfirm = updatingRequests.some(
-              (req) =>
-                req.requestId === request.id && req.action === "confirming"
-            );
+        <>
+          <FilterCheckboxesContainer>
+            {["waiting", "accepted", "canceled"].map((status) => (
+              <FilterCheckbox
+                key={status}
+                label={
+                  status === "waiting"
+                    ? "Oczekujące"
+                    : status === "accepted"
+                    ? "Zaakceptowane"
+                    : "Zatwierdzone"
+                }
+                isChecked={filterStatuses.includes(status as RequestStatus)}
+                onChange={() => handleFilterChange(status as RequestStatus)}
+              />
+            ))}
+          </FilterCheckboxesContainer>
+          <MotionWrapper variants={fromBottomVariants03}>
+            {filteredRequests.map((request) => {
+              const isUpdatingAccept = updatingRequests.some(
+                (req) =>
+                  req.requestId === request.id && req.action === "accepting"
+              );
+              const isUpdatingDecline = updatingRequests.some(
+                (req) =>
+                  req.requestId === request.id && req.action === "declining"
+              );
+              const isUpdatingConfirm = updatingRequests.some(
+                (req) =>
+                  req.requestId === request.id && req.action === "confirming"
+              );
 
-            return (
-              <RequestCard request={request} key={request.id}>
-                <IncomingRequestButtons
-                  requestStatus={request.status}
-                  isUpdating={
-                    isUpdatingAccept || isUpdatingDecline || isUpdatingConfirm
-                  }
-                  updatingAction={
-                    isUpdatingAccept
-                      ? "accepting"
-                      : isUpdatingDecline
-                      ? "declining"
-                      : isUpdatingConfirm
-                      ? "confirming"
-                      : null
-                  }
-                  onAcceptClick={() => handleAcceptClick(request.id)}
-                  onDeclineClick={() => handleDeclineClick(request.id)}
-                  onSendMessageClick={() => handleSendMessageClick(request.id)}
-                  onConfirmRentalClick={() =>
-                    handleConfirmRentalClick(request.id)
-                  }
-                />
-              </RequestCard>
-            );
-          })}
-        </MotionWrapper>
+              return (
+                <RequestCard request={request} key={request.id}>
+                  <IncomingRequestButtons
+                    requestStatus={request.status}
+                    isUpdating={
+                      isUpdatingAccept || isUpdatingDecline || isUpdatingConfirm
+                    }
+                    updatingAction={
+                      isUpdatingAccept
+                        ? "accepting"
+                        : isUpdatingDecline
+                        ? "declining"
+                        : isUpdatingConfirm
+                        ? "confirming"
+                        : null
+                    }
+                    onAcceptClick={() => handleAcceptClick(request.id)}
+                    onDeclineClick={() => handleDeclineClick(request.id)}
+                    onSendMessageClick={() =>
+                      handleSendMessageClick(request.id)
+                    }
+                    onConfirmRentalClick={() =>
+                      handleConfirmRentalClick(request.id)
+                    }
+                  />
+                </RequestCard>
+              );
+            })}
+            {filteredRequests.length === 0 && (
+              <NoResultsText>Nie znaleziono próśb</NoResultsText>
+            )}
+          </MotionWrapper>
+        </>
       )}
     </Container>
   );
 }
 
 const Container = styled.div`
-  padding: 30px 10% 60px 10%;
+  padding: 10px 10% 60px 10%;
   display: flex;
   flex-direction: column;
   gap: 40px;
@@ -187,4 +226,15 @@ const LoaderText = styled.p`
   color: var(--dark);
   font-weight: bold;
   text-align: center;
+`;
+
+const FilterCheckboxesContainer = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const NoResultsText = styled.p`
+  font-size: 24px;
+  color: var(--dark);
+  font-weight: bold;
 `;

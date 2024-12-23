@@ -12,6 +12,7 @@ import { useToast } from "@/contexts/ToastContext";
 import { Range } from "react-date-range";
 import ChangePeriodModal from "@/components/modals/ChangePeriodModal";
 import { formatDateForDisplay } from "@/utils/dataHelpers";
+import FilterCheckbox from "@/sections/requests/components/FilterCheckbox";
 
 export default function OutgoingRequestsSection() {
   const { notify } = useToast();
@@ -26,6 +27,21 @@ export default function OutgoingRequestsSection() {
     isVisible: false,
     requestId: null,
   });
+  const [filterStatuses, setFilterStatuses] = useState<RequestStatus[]>([
+    "waiting",
+  ]);
+
+  const handleFilterChange = (status: RequestStatus) => {
+    setFilterStatuses((prev) =>
+      prev.includes(status)
+        ? prev.filter((s) => s !== status)
+        : [...prev, status]
+    );
+  };
+
+  const filteredRequests = outgoingRequests.filter((request) =>
+    filterStatuses.length > 0 ? filterStatuses.includes(request.status) : true
+  );
 
   const updateRequestPeriod = (requestId: number, selectedRange: Range) => {
     setOutgoingRequests((prevRequests) =>
@@ -107,7 +123,7 @@ export default function OutgoingRequestsSection() {
         startDate: "22.12.2024",
         endDate: "28.12.2024",
       } as Period,
-      status: "accepted" as RequestStatus,
+      status: index % 2 === 0 ? "waiting" : ("accepted" as RequestStatus),
     }));
     setOutgoingRequests(requests);
 
@@ -133,27 +149,52 @@ export default function OutgoingRequestsSection() {
           <LoaderText>Wczytywanie próśb</LoaderText>
         </LoaderContainer>
       ) : (
-        <MotionWrapper variants={fromBottomVariants03}>
-          {outgoingRequests.map((request) => (
-            <RequestCard request={request} key={request.id}>
-              <OutgoingRequestButtons
-                requestId={request.id}
-                requestStatus={request.status}
-                isUpdating={updatingRequestIds.includes(request.id)}
-                onCancelClick={() => handleCancelClick(request.id)}
-                onSendMessageClick={() => handleSendMessageClick(request.id)}
-                onChangePeriodClick={() => handleChangePeriodClick(request.id)}
-              />
-            </RequestCard>
-          ))}
-        </MotionWrapper>
+        <>
+          <FilterCheckboxesContainer>
+            <FilterCheckboxesContainer>
+              {["waiting", "accepted", "canceled"].map((status) => (
+                <FilterCheckbox
+                  key={status}
+                  label={
+                    status === "waiting"
+                      ? "Oczekujące"
+                      : status === "accepted"
+                      ? "Zaakceptowane"
+                      : "Anulowane"
+                  }
+                  isChecked={filterStatuses.includes(status as RequestStatus)}
+                  onChange={() => handleFilterChange(status as RequestStatus)}
+                />
+              ))}
+            </FilterCheckboxesContainer>
+          </FilterCheckboxesContainer>
+          <MotionWrapper variants={fromBottomVariants03}>
+            {filteredRequests.map((request) => (
+              <RequestCard request={request} key={request.id}>
+                <OutgoingRequestButtons
+                  requestId={request.id}
+                  requestStatus={request.status}
+                  isUpdating={updatingRequestIds.includes(request.id)}
+                  onCancelClick={() => handleCancelClick(request.id)}
+                  onSendMessageClick={() => handleSendMessageClick(request.id)}
+                  onChangePeriodClick={() =>
+                    handleChangePeriodClick(request.id)
+                  }
+                />
+              </RequestCard>
+            ))}
+            {filteredRequests.length === 0 && (
+              <NoResultsText>Nie znaleziono próśb</NoResultsText>
+            )}
+          </MotionWrapper>
+        </>
       )}
     </Container>
   );
 }
 
 const Container = styled.div`
-  padding: 30px 10% 60px 10%;
+  padding: 10px 10% 60px 10%;
   display: flex;
   flex-direction: column;
   gap: 40px;
@@ -180,4 +221,15 @@ const LoaderText = styled.p`
   color: var(--dark);
   font-weight: bold;
   text-align: center;
+`;
+
+const FilterCheckboxesContainer = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const NoResultsText = styled.p`
+  font-size: 24px;
+  color: var(--dark);
+  font-weight: bold;
 `;
