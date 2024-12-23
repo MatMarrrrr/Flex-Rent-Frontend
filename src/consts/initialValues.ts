@@ -3,6 +3,12 @@ export const loginInitialValues = {
   password: "",
 };
 
+export const registerInitialValues = {
+  email: "",
+  password: "",
+  repeatPassword: "",
+};
+
 export const personalDataInitialValues = {
   name: "",
   surname: "",

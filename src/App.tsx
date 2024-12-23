@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ThemeProvider } from "styled-components";
 import { lightTheme } from "@/themes/themes";
 import { BrowserRouter as Router, Routes, Route } from "react-router";
@@ -18,8 +18,12 @@ import AddListingPage from "@/pages/listing/AddListingPage";
 import EditListingPage from "@/pages/listing/EditListingPage";
 import ProfilePage from "@/pages/profile/ProfilePage";
 import LogoutPage from "@/pages/LogoutPage";
+import { useUser } from "@/contexts/UserContext";
 
 function App() {
+  const { isUserLoading, isLogoutLoading } = useUser();
+  const [isPageLoader, setIsPageLoader] = useState(true);
+
   useEffect(() => {
     AOS.init({
       duration: 1000,
@@ -27,28 +31,42 @@ function App() {
     });
   }, []);
 
-  return (
-    <ThemeProvider theme={lightTheme}>
-      <GlobalStyle />
-      <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/logout" element={<LogoutPage />} />
-          <Route path="/search" element={<SearchPage />} />
-          <Route path="/item/:id" element={<ItemPage />} />
-          <Route path="/dashboard/*" element={<DashboardPage />} />
-          <Route path="/add-listing" element={<AddListingPage />} />
-          <Route path="/edit-listing/:id" element={<EditListingPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
+  useEffect(() => {
+    if (!isUserLoading) {
+      const loader = document.getElementById("page-loader");
+      if (loader) {
+        loader.classList.add("hidden");
+        setTimeout(() => {
+          loader.remove();
+          setIsPageLoader(false);
+        }, 600);
+      }
+    }
+  }, [isUserLoading]);
 
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-        <Footer />
-      </Router>
-    </ThemeProvider>
+  return (
+    !isPageLoader && (
+      <ThemeProvider theme={lightTheme}>
+        <GlobalStyle />
+        <Router>
+          {!isLogoutLoading && <Navbar />}
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/logout" element={<LogoutPage />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/item/:id" element={<ItemPage />} />
+            <Route path="/dashboard/*" element={<DashboardPage />} />
+            <Route path="/add-listing" element={<AddListingPage />} />
+            <Route path="/edit-listing/:id" element={<EditListingPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+          {!isLogoutLoading && <Footer />}
+        </Router>
+      </ThemeProvider>
+    )
   );
 }
 

@@ -46,6 +46,7 @@ export const StyledForm = styled(Form)`
 
 export const RedirectContainer = styled.div`
   max-width: 400px;
+  margin-bottom: 15px;
   width: 100%;
   display: flex;
   justify-content: start;
@@ -86,16 +87,27 @@ export const ErrorWrapper = styled.div`
   font-weight: bold;
 `;
 
+export const ErrorText = styled.p`
+  margin-bottom: 15px;
+  color: var(--error);
+  font-size: 16px;
+  font-weight: bold;
+  max-width: 400px;
+  overflow-wrap: break-word;
+  text-align: center;
+`;
+
 export const RequiredStar = styled.span`
   color: var(--error);
 `;
 
-export const ArrowBack = styled(ArrowBackIcon)`
+export const ArrowBack = styled(ArrowBackIcon)<{ $disabled: boolean }>`
   position: absolute;
   top: 41px;
   left: 30px;
   height: 30px;
   width: 30px;
+  pointer-events: ${({ $disabled }) => ($disabled ? "none" : "auto")};
   stroke-width: 1.5;
   cursor: pointer;
   transition: transform 0.3s ease;

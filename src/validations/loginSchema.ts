@@ -15,5 +15,5 @@ export const loginSchema = yup.object().shape({
       "Hasło musi zawierać co najmniej jeden znak specjalny"
     )
     .required("Pole hasło jest wymagane"),
-  remember: yup.boolean(),
+  remember: yup.boolean().default(false),
 });

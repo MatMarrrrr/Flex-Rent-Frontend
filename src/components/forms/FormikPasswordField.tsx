@@ -13,6 +13,7 @@ interface FormikPasswordFieldProps {
   passwordShown: boolean;
   margin: string;
   padding?: string;
+  disabled?: boolean;
   onToggle: () => void;
 }
 
@@ -23,6 +24,7 @@ const FormikPasswordField: React.FC<FormikPasswordFieldProps> = ({
   passwordShown,
   margin,
   padding,
+  disabled,
   onToggle,
 }) => (
   <>
@@ -34,6 +36,7 @@ const FormikPasswordField: React.FC<FormikPasswordFieldProps> = ({
         type={passwordShown ? "text" : "password"}
         isRequired={isRequired}
         padding={padding}
+        disabled={disabled}
       />
       <PasswordToggleButton onClick={onToggle} passwordShown={passwordShown} />
     </PasswordInputWrapper>
