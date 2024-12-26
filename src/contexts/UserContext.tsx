@@ -37,15 +37,16 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     const savedToken =
       localStorage.getItem("token") || sessionStorage.getItem("token");
     if (savedToken) {
-      setToken(savedToken);
-      setIsLogin(true);
-
       try {
         const response = await apiClient.get("/user", {
           headers: { Authorization: `Bearer ${savedToken}` },
         });
         setUser(response.data);
+        setToken(savedToken);
+        setIsLogin(true);
       } catch {
+        localStorage.removeItem("token");
+        sessionStorage.removeItem("token");
         setToken(null);
         setIsLogin(false);
       } finally {
@@ -68,14 +69,12 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
       if (response.status === 200) {
         const { token, user } = response.data;
-
         setToken(token);
         setUser(user);
         setIsLogin(true);
 
         const storage = remember ? localStorage : sessionStorage;
         storage.setItem("token", token);
-
         return { success: true };
       }
     } catch (error: any) {

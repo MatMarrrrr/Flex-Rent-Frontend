@@ -6,23 +6,14 @@ import GlobalStyle from "@/themes/GlobalStyle";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import Navbar from "@/components/ui/Navbar";
-import MainPage from "@/pages/main/MainPage";
 import Footer from "@/components/ui/Footer";
-import LoginPage from "@/pages/LoginPage";
-import RegisterPage from "@/pages/RegisterPage";
-import SearchPage from "@/pages/search/SearchPage";
-import ItemPage from "@/pages/ItemPage";
-import NotFoundPage from "@/pages/NotFoundPage";
-import DashboardPage from "@/pages/dashboard/DashboardPage";
-import AddListingPage from "@/pages/listing/AddListingPage";
-import EditListingPage from "@/pages/listing/EditListingPage";
-import ProfilePage from "@/pages/profile/ProfilePage";
-import LogoutPage from "@/pages/LogoutPage";
 import { useUser } from "@/contexts/UserContext";
 import { useCategories } from "./contexts/CategoriesContext";
+import { routes } from "@/consts/routes";
+import ProtectedRoute from "@/routes/ProtectedRoute";
 
 function App() {
-  const { isUserLoading, isLogoutLoading } = useUser();
+  const { isUserLoading, isLogoutLoading, isLogin } = useUser();
   const { isCategoriesLoading } = useCategories();
   const [isPageLoader, setIsPageLoader] = useState(true);
 
@@ -53,17 +44,20 @@ function App() {
         <Router>
           {!isLogoutLoading && <Navbar />}
           <Routes>
-            <Route path="/" element={<MainPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/logout" element={<LogoutPage />} />
-            <Route path="/search" element={<SearchPage />} />
-            <Route path="/item/:id" element={<ItemPage />} />
-            <Route path="/dashboard/*" element={<DashboardPage />} />
-            <Route path="/add-listing" element={<AddListingPage />} />
-            <Route path="/edit-listing/:id" element={<EditListingPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="*" element={<NotFoundPage />} />
+            {routes.map(({ path, element, requireAuth }) => (
+              <Route
+                key={path}
+                path={path}
+                element={
+                  <ProtectedRoute
+                    isAuthenticated={isLogin}
+                    requireAuth={requireAuth}
+                  >
+                    {element}
+                  </ProtectedRoute>
+                }
+              />
+            ))}
           </Routes>
           {!isLogoutLoading && <Footer />}
         </Router>
