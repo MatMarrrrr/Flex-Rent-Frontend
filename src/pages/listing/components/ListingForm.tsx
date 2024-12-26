@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { categories } from "@/consts/categories";
 import currencyCodes from "currency-codes";
 import { MoveLeft as ArrowBackIcon } from "lucide-react";
 import { listingSchema } from "@/validations/listingSchema";
@@ -14,12 +13,8 @@ import { excludedCurrencies } from "@/consts/excludedCurrencies";
 import Loader from "@/components/ui/Loader";
 import { ImageType } from "@/types/types";
 import FormikLocalizationField from "@/components/forms/FormikLocalizationField";
-
-interface Category {
-  id: number;
-  name: string;
-  icon: string;
-}
+import { Category } from "@/types/interfaces";
+import { useCategories } from "@/contexts/CategoriesContext";
 
 interface ListingFormProps {
   initialValues: {
@@ -53,6 +48,7 @@ const ListingForm: React.FC<ListingFormProps> = ({
   onSubmit,
   handleBack,
 }) => {
+  const { categories } = useCategories();
   const [imageFile, setImageFile] = useState<ImageType>(initialImage);
   const [isImageError, setIsImageError] = useState<boolean>(false);
 

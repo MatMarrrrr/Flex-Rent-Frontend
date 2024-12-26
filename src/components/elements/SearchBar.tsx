@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { categories } from "@/consts/categories";
 import styled from "styled-components";
 import {
   Search as SearchIcon,
@@ -9,6 +8,7 @@ import {
 } from "lucide-react";
 import CategoryModal from "@/components/modals/CategoryModal";
 import LocalizationModal from "@/components/modals/LocalizationModal";
+import { useCategories } from "@/contexts/CategoriesContext";
 
 interface SearchBarProps {
   initialQuery?: string;
@@ -25,6 +25,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   isFadeIn = false,
   onSearch,
 }) => {
+  const { categories } = useCategories();
   const [query, setQuery] = useState<string>(initialQuery);
   const [category, setCategory] = useState<string>("");
   const [categoryId, setCategoryId] = useState<number>(initialCategoryId);

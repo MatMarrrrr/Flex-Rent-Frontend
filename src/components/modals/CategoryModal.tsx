@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { categories } from "@/consts/categories";
 import { X as XIcon } from "lucide-react";
 import { fadeIn, fadeOut } from "@/styledComponents/keyframes";
+import { useCategories } from "@/contexts/CategoriesContext";
 
 interface CategoryModalProps {
   isVisible: boolean;
@@ -15,8 +15,8 @@ const CategoryModal: React.FC<CategoryModalProps> = ({
   onClose,
   onCategoryClick,
 }) => {
+  const { categories } = useCategories();
   const [isClosing, setisClosing] = useState<boolean>(false);
-
   const handleCategoryClick = (categoryId: number) => {
     onCategoryClick(categoryId);
     handleClose();

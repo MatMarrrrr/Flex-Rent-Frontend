@@ -1,6 +1,5 @@
 import { useNavigate, useSearchParams } from "react-router";
 import { useEffect, useState } from "react";
-import { categories } from "@/consts/categories";
 import styled from "styled-components";
 import SearchBar from "@/components/elements/SearchBar";
 import ResultCard from "@/pages/search/components/ResultCard";
@@ -8,8 +7,10 @@ import test_item from "@/assets/test_item.jpg";
 import Loader from "@/components/ui/Loader";
 import MotionWrapper from "@/components/ui/MotionWrapper";
 import { fromRightVariants01 } from "@/consts/motionVariants";
+import { useCategories } from "@/contexts/CategoriesContext";
 
 export default function SearchPage() {
+  const { categories } = useCategories();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [result, setResult] = useState<Array<any>>([]);
@@ -39,7 +40,8 @@ export default function SearchPage() {
     const newSearchParams = new URLSearchParams();
     if (query) newSearchParams.set("query", query.trim());
     if (categoryId) newSearchParams.set("categoryId", categoryId.toString());
-    if (localization) newSearchParams.set("localization", formatLocalization(localization));
+    if (localization)
+      newSearchParams.set("localization", formatLocalization(localization));
 
     navigate(`?${newSearchParams.toString()}`);
   };

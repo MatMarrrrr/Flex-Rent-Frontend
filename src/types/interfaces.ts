@@ -1,5 +1,11 @@
 import { ListingStatus, RequestStatus } from "@/types/types";
 
+export interface Category {
+  id: number;
+  name: string;
+  icon: string;
+}
+
 export interface Period {
   startDate: string;
   endDate: string;

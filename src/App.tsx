@@ -19,9 +19,11 @@ import EditListingPage from "@/pages/listing/EditListingPage";
 import ProfilePage from "@/pages/profile/ProfilePage";
 import LogoutPage from "@/pages/LogoutPage";
 import { useUser } from "@/contexts/UserContext";
+import { useCategories } from "./contexts/CategoriesContext";
 
 function App() {
   const { isUserLoading, isLogoutLoading } = useUser();
+  const { isCategoriesLoading } = useCategories();
   const [isPageLoader, setIsPageLoader] = useState(true);
 
   useEffect(() => {
@@ -32,7 +34,7 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (!isUserLoading) {
+    if (!isUserLoading && !isCategoriesLoading) {
       const loader = document.getElementById("page-loader");
       if (loader) {
         loader.classList.add("hidden");
@@ -42,7 +44,7 @@ function App() {
         }, 600);
       }
     }
-  }, [isUserLoading]);
+  }, [isUserLoading, isCategoriesLoading]);
 
   return (
     !isPageLoader && (

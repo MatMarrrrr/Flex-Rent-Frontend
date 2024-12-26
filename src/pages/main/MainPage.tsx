@@ -1,10 +1,11 @@
-import { categories } from "@/consts/categories";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
 import SearchBar from "@/components/elements/SearchBar";
 import CategoryCard from "@/pages/main/components/CategoryCard";
+import { useCategories } from "@/contexts/CategoriesContext";
 
 export default function MainPage() {
+  const { categories } = useCategories();
   const navigate = useNavigate();
 
   const formatLocalization = (localization: string): string => {
