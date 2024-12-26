@@ -65,25 +65,27 @@ const Select: React.FC<SelectProps> = ({
           <ArrowIcon $isOpen={isOpen} $disabled={disabled} />
         </DropdownHeader>
         {isOpen && (
-          <DropdownList>
+          <DropdownContainer>
             <SearchInput
               type="text"
               placeholder="Wyszukaj..."
               value={filterText}
               onChange={(e) => setFilterText(e.target.value)}
             />
-            {filteredOptions.map((option) => (
-              <DropdownItem
-                key={option.value}
-                onClick={() => handleSelect(option.value)}
-              >
-                {option.label}
-              </DropdownItem>
-            ))}
-            {filteredOptions.length === 0 && (
-              <NoOptionsMessage>Nie znaleziono opcji</NoOptionsMessage>
-            )}
-          </DropdownList>
+            <OptionsList>
+              {filteredOptions.map((option) => (
+                <DropdownItem
+                  key={option.value}
+                  onClick={() => handleSelect(option.value)}
+                >
+                  {option.label}
+                </DropdownItem>
+              ))}
+              {filteredOptions.length === 0 && (
+                <NoOptionsMessage>Nie znaleziono opcji</NoOptionsMessage>
+              )}
+            </OptionsList>
+          </DropdownContainer>
         )}
 
         <HiddenSelect
@@ -159,19 +161,25 @@ const ArrowIcon = styled(ChevronDownIcon)<{
   user-select: none;
 `;
 
-const DropdownList = styled.ul`
+const DropdownContainer = styled.div`
   position: absolute;
   width: 100%;
-  max-height: 264px;
-  overflow-y: auto;
+  max-height: 280px;
   margin: 0;
   padding: 10px;
-  list-style: none;
   border: 1px solid var(--dark-25);
   border-top: 0;
   border-radius: 5px;
   background: var(--white);
   z-index: 10;
+  display: flex;
+  flex-direction: column;
+`;
+
+const OptionsList = styled.ul`
+  flex: 1;
+  overflow-y: auto;
+  list-style: none;
 `;
 
 const DropdownItem = styled.li`
