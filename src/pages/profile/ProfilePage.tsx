@@ -4,10 +4,12 @@ import FormikInputField from "@/components/forms/FormikInputField";
 import { profileDataSchema } from "@/validations/profileSchema";
 import styled from "styled-components";
 import ProfileImageCircle from "@/pages/profile/components/ProfileImageCircle";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Loader from "@/components/ui/Loader";
 import { ImageType } from "@/types/types";
 import { useToast } from "@/contexts/ToastContext";
+import { useUser } from "@/contexts/UserContext";
+import apiClient from "@/utils/apiClient";
 
 interface ProfileData {
   email: string;
@@ -20,122 +22,141 @@ interface ProfileData {
 export default function ProfilePage() {
   const [imageFile, setImageFile] = useState<ImageType>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const { notify } = useToast();
+  const { user, token, setUser } = useUser();
 
   const profileData = {
-    email: "email@email.com",
-    name: "Imię",
-    surname: "Nazwisko",
-    city: "Miasto",
-    province: "Województwo",
+    email: user!.email,
+    name: user!.name,
+    surname: user!.surname,
+    city: user!.city,
+    province: user!.province,
   };
 
-  const handleSubmit = (values: ProfileData) => {
+  const profileText = `${user!.name[0]}${user!.surname[0]}`;
+  const profileImage = user!.profile_image ?? null;
+
+  const handleSubmit = async (values: ProfileData) => {
     setIsSubmitting(true);
-    setTimeout(() => {
-      const finalValues = { ...values, profileImage: imageFile };
+
+    try {
+      const response = await apiClient.patch("/user", values, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        const updatedData = response.data.updated_data;
+
+        setUser({
+          ...user!,
+          ...updatedData,
+        });
+
+        if (imageFile) {
+          const formData = new FormData();
+          formData.append("profile_image", imageFile);
+
+          const imageResponse = await apiClient.post(
+            "/user/profile-image",
+            formData,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+
+          if (imageResponse.status === 200) {
+            const { image_url } = imageResponse.data;
+            setUser({
+              ...user!,
+              profile_image: image_url,
+            });
+          } else {
+            notify(
+              "Wystąpił błąd podczas aktualizacji zdjęcia profilowego",
+              "error"
+            );
+          }
+        }
+
+        notify("Dane konta zostały poprawnie zmienione", "success");
+      }
+    } catch (error) {
+      notify("Wystąpił błąd podczas zmieniania danych konta", "error");
+    } finally {
       setIsSubmitting(false);
-      console.log(finalValues);
-      notify("Dane zostały poprawnie zmienione", "success");
-    }, 1000);
+    }
   };
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(timeout);
-  }, []);
 
   return (
     <Container>
-      {isLoading ? (
-        <LoaderContainer>
-          <Loader />
-          <LoaderText>Wczytywanie danych</LoaderText>
-        </LoaderContainer>
-      ) : (
-        <Wrapper data-aos="fade-up">
-          <Header>Twój profil</Header>
-          <ProfileImageCircle
-            profileImage={null}
-            profileText="MM"
-            setImageFile={setImageFile}
+      <Wrapper data-aos="fade-up">
+        <Header>Twój profil</Header>
+        <ProfileImageCircle
+          profileImage={profileImage}
+          profileText={profileText}
+          setImageFile={setImageFile}
+          disabled={isSubmitting}
+        />
+        <FormHeader>Twoje Dane</FormHeader>
+        <FormikForm
+          initialValues={profileData}
+          onSubmit={handleSubmit}
+          validationSchema={profileDataSchema}
+        >
+          <FormikInputField
+            name="email"
+            label="E-mail"
+            type="text"
+            isRequired={true}
+            margin="0px 0px 15px 0px"
             disabled={isSubmitting}
           />
-          <FormHeader>Twoje Dane</FormHeader>
-          <FormikForm
-            initialValues={profileData}
-            onSubmit={handleSubmit}
-            validationSchema={profileDataSchema}
-          >
-            <FormikInputField
-              name="email"
-              label="E-mail"
-              type="text"
-              isRequired={true}
-              margin="0px 0px 15px 0px"
-              disabled={isSubmitting}
-            />
-            <FormikInputField
-              name="name"
-              label="Imie"
-              type="text"
-              isRequired={true}
-              margin="0px 0px 15px 0px"
-              disabled={isSubmitting}
-            />
-            <FormikInputField
-              name="surname"
-              label="Nazwisko"
-              type="text"
-              isRequired={true}
-              margin="0px 0px 15px 0px"
-              disabled={isSubmitting}
-            />
-            <FormikInputField
-              name="city"
-              label="Miasto"
-              type="text"
-              isRequired={true}
-              margin="0px 0px 15px 0px"
-              disabled={isSubmitting}
-            />
-            <FormikInputField
-              name="province"
-              label="Województwo"
-              type="text"
-              isRequired={true}
-              margin="0px 0px 15px 0px"
-              disabled={isSubmitting}
-            />
-            <PrimaryButton type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Zmienianie" : "Zmień"}
-              {isSubmitting && <Loader size={18} />}
-            </PrimaryButton>
-          </FormikForm>
-        </Wrapper>
-      )}
+          <FormikInputField
+            name="name"
+            label="Imie"
+            type="text"
+            isRequired={true}
+            margin="0px 0px 15px 0px"
+            disabled={isSubmitting}
+          />
+          <FormikInputField
+            name="surname"
+            label="Nazwisko"
+            type="text"
+            isRequired={true}
+            margin="0px 0px 15px 0px"
+            disabled={isSubmitting}
+          />
+          <FormikInputField
+            name="city"
+            label="Miasto"
+            type="text"
+            isRequired={true}
+            margin="0px 0px 15px 0px"
+            disabled={isSubmitting}
+          />
+          <FormikInputField
+            name="province"
+            label="Województwo"
+            type="text"
+            isRequired={true}
+            margin="0px 0px 15px 0px"
+            disabled={isSubmitting}
+          />
+          <PrimaryButton type="submit" disabled={isSubmitting}>
+            {isSubmitting ? "Zmienianie" : "Zmień"}
+            {isSubmitting && <Loader size={18} />}
+          </PrimaryButton>
+        </FormikForm>
+      </Wrapper>
     </Container>
   );
 }
-
-const LoaderContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-`;
-
-const LoaderText = styled.p`
-  text-align: center;
-  color: var(--dark);
-  font-size: 24px;
-  font-weight: bold;
-`;
 
 const Container = styled.div`
   padding: 40px 10%;

@@ -15,6 +15,7 @@ interface UserContextType {
   isLogoutLoading: boolean;
   token: string | null;
   setIsLogin: (value: boolean) => void;
+  setUser: (user: User | null) => void;
   login: (data: LoginData) => Promise<AuthResult>;
   register: (data: RegisterData) => Promise<AuthResult>;
   logout: () => Promise<AuthResult>;
@@ -145,6 +146,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         isLogoutLoading,
         token,
         setIsLogin,
+        setUser,
         login,
         register,
         logout,
