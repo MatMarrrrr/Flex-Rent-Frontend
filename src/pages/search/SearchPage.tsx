@@ -47,7 +47,7 @@ export default function SearchPage() {
   };
 
   const handleItemClick = (id: number) => {
-    navigate(`/item/${id}`);
+    navigate(`/listing/${id}`);
   };
 
   const getCategoryName = (categoryId: number) => {

@@ -24,7 +24,7 @@ import {
   getDateRangeString,
 } from "@/utils/dataHelpers";
 
-export default function ItemPage() {
+export default function ListingPage() {
   const { isLogin } = useUser();
   const { notify } = useToast();
   const navigate = useNavigate();
@@ -111,27 +111,27 @@ export default function ItemPage() {
         <ArrowBack />
         <BackText>Powrót</BackText>
       </BackContainer>
-      <ItemContainer>
+      <ListingContainer>
         <MobileBackContainer onClick={handleBack}>
           <ArrowBack />
           <BackText>Powrót</BackText>
         </MobileBackContainer>
-        <ItemContentWrapper>
-          <ItemLeftContainer>
-            <ItemImage src={test_item} />
-          </ItemLeftContainer>
-          <ItemRightContainer>
-            <ItemName>Nazwa rzeczy do wypożyczenia</ItemName>
-            <ItemCategory>Kategoria</ItemCategory>
-            <ItemDetailsContainer>
-              <ItemDetailText>
+        <ListingContentWrapper>
+          <ListingLeftContainer>
+            <ListingImage src={test_item} />
+          </ListingLeftContainer>
+          <ListingRightContainer>
+            <ListingName>Nazwa rzeczy do wypożyczenia</ListingName>
+            <ListingCategory>Kategoria</ListingCategory>
+            <ListingDetailsContainer>
+              <ListingDetailText>
                 100{getSymbolFromCurrency("PLN")} / Dzień
-              </ItemDetailText>
-              <ItemLocalizationContainer>
-                <ItemLocalizationIcon />
-                <ItemDetailText>Lokalizacja</ItemDetailText>
-              </ItemLocalizationContainer>
-            </ItemDetailsContainer>
+              </ListingDetailText>
+              <ListingLocalizationContainer>
+                <ListingLocalizationIcon />
+                <ListingDetailText>Lokalizacja</ListingDetailText>
+              </ListingLocalizationContainer>
+            </ListingDetailsContainer>
             {!isLogin && (
               <PrimaryButton
                 type="button"
@@ -203,24 +203,24 @@ export default function ItemPage() {
                 </RequestStatusText>
               </RequestStatusContainer>
             )}
-          </ItemRightContainer>
-        </ItemContentWrapper>
-        <ItemDescriptionContainer>
-          <ItemDescriptionTitle>Opis</ItemDescriptionTitle>
-          <ItemDescription>
+          </ListingRightContainer>
+        </ListingContentWrapper>
+        <ListingDescriptionContainer>
+          <ListingDescriptionTitle>Opis</ListingDescriptionTitle>
+          <ListingDescription>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec
             sapien et dui ultricies congue at id leo. Etiam imperdiet, erat eu
             dictum pharetra, metus quam luctus metus, nec laoreet lectus ipsum
             id orci. Etiam tortor orci, convallis nec orci at, tempor viverra
             orci. Vestibulum congue bibendum vulputate.
-          </ItemDescription>
-        </ItemDescriptionContainer>
-      </ItemContainer>
+          </ListingDescription>
+        </ListingDescriptionContainer>
+      </ListingContainer>
     </Container>
   );
 }
 
-const ItemContentWrapper = styled.div`
+const ListingContentWrapper = styled.div`
   display: flex;
   gap: 50px;
 
@@ -325,7 +325,7 @@ const BackText = styled.p`
   color: var(--dark);
 `;
 
-const ItemContainer = styled.div`
+const ListingContainer = styled.div`
   display: flex;
   flex-direction: column;
   background-color: var(--white);
@@ -341,13 +341,13 @@ const ItemContainer = styled.div`
   }
 `;
 
-const ItemLeftContainer = styled.div`
+const ListingLeftContainer = styled.div`
   display: flex;
   flex-grow: 1;
   border-radius: 8px;
 `;
 
-const ItemRightContainer = styled.div`
+const ListingRightContainer = styled.div`
   display: flex;
   flex-direction: column;
   min-width: 400px;
@@ -358,7 +358,7 @@ const ItemRightContainer = styled.div`
   }
 `;
 
-const ItemImage = styled(SkeletonLoaderImage)`
+const ListingImage = styled(SkeletonLoaderImage)`
   width: 600px;
   height: auto;
   max-height: 400px;
@@ -371,7 +371,7 @@ const ItemImage = styled(SkeletonLoaderImage)`
   }
 `;
 
-const ItemName = styled.p`
+const ListingName = styled.p`
   font-size: 36px;
   font-weight: bold;
   color: var(--dark);
@@ -386,20 +386,20 @@ const ItemName = styled.p`
   }
 `;
 
-const ItemCategory = styled.p`
+const ListingCategory = styled.p`
   font-size: 20px;
   font-weight: bold;
   color: var(--dark);
   margin-bottom: 5px;
 `;
 
-const ItemDetailsContainer = styled.div`
+const ListingDetailsContainer = styled.div`
   display: flex;
   gap: 15px;
   margin-bottom: 20px;
 `;
 
-const ItemDetailText = styled.p`
+const ListingDetailText = styled.p`
   font-size: 16px;
   color: var(--dark);
 
@@ -408,18 +408,18 @@ const ItemDetailText = styled.p`
   }
 `;
 
-const ItemLocalizationContainer = styled.div`
+const ListingLocalizationContainer = styled.div`
   display: flex;
   gap: 5px;
 `;
 
-const ItemLocalizationIcon = styled(MapPinIcon)`
+const ListingLocalizationIcon = styled(MapPinIcon)`
   height: 18px;
   width: 18px;
   color: var(--dark);
 `;
 
-const ItemDescriptionContainer = styled.div`
+const ListingDescriptionContainer = styled.div`
   display: flex;
   flex-direction: column;
   max-width: 50%;
@@ -429,14 +429,14 @@ const ItemDescriptionContainer = styled.div`
   }
 `;
 
-const ItemDescriptionTitle = styled.p`
+const ListingDescriptionTitle = styled.p`
   font-size: 18px;
   font-weight: bold;
   color: var(--dark);
   margin-bottom: 5px;
 `;
 
-const ItemDescription = styled.p`
+const ListingDescription = styled.p`
   font-size: 16px;
   color: var(--dark);
 `;
