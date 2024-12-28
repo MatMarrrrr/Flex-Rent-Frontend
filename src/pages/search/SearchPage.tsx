@@ -105,6 +105,7 @@ export default function SearchPage() {
 
       if (response.status === 200) {
         setResult(response.data.results);
+        console.log(response.data.results);
       } else {
         setResult([]);
         notify("Wystąpił błąd podczas pobierania ogłoszeń", "error");
@@ -162,7 +163,7 @@ export default function SearchPage() {
                       image={item.image}
                       name={item.name}
                       price={item.price}
-                      currencyCode={item.currencyCode}
+                      currencyCode={item.currency}
                       localization={item.localization}
                       onClick={() => handleItemClick(item.id)}
                     />
