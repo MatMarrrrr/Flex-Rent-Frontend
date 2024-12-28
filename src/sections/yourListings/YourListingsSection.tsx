@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 import ListingItem from "@/sections/yourListings/components/ListingItem";
-import test_item from "@/assets/test_item.jpg";
 import Loader from "@/components/ui/Loader";
 import { useEffect, useState } from "react";
 import MotionWrapper from "@/components/ui/MotionWrapper";
@@ -9,12 +8,15 @@ import { fromBottomVariants03 } from "@/consts/motionVariants";
 import { useNavigate } from "react-router";
 import DeleteListingModal from "@/components/modals/DeleteListingModal";
 import { useToast } from "@/contexts/ToastContext";
-import { Listing, Period } from "@/types/interfaces";
+import { Listing } from "@/types/interfaces";
 import { ListingStatus } from "@/types/types";
+import apiClient from "@/utils/apiClient";
+import { useUser } from "@/contexts/UserContext";
 
 const YourListingsSection = () => {
   const navigate = useNavigate();
   const { notify } = useToast();
+  const { token } = useUser();
 
   const [yourListings, setYourListings] = useState<Listing[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -53,15 +55,24 @@ const YourListingsSection = () => {
     navigate(`/edit-listing/${listingId}`);
   };
 
-  const handleDeleteClick = (listingId: number) => {
+  const handleDeleteClick = async (listingId: number) => {
     setIsDeleting(true);
+    const response = await apiClient.delete(`/listings/${listingId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-    setTimeout(() => {
+    if (response.status === 200) {
       setIsDeleting(false);
       hideDeleteListingModal();
       updateListingsStatus(listingId, "deleted");
       notify("Ogłoszenie zostało usunięte", "success");
-    }, 2000);
+    } else {
+      setIsDeleting(false);
+      hideDeleteListingModal();
+      notify("Wystąpił błąd podczas usuwania ogłoszenia", "error");
+    }
   };
 
   const updateListingsStatus = (
@@ -75,28 +86,29 @@ const YourListingsSection = () => {
     );
   };
 
-  useEffect(() => {
-    const listings = Array.from({ length: 5 }, (_, index) => ({
-      id: index + 1,
-      image: test_item,
-      name: `Nazwa rzeczy do wypożyczenia ${index + 1}`,
-      category: "Kategoria",
-      price: 100,
-      currency: "PLN",
-      localization: `Lokalizacja`,
-      rentedPeriods: [
-        { startDate: "12.12.2024", endDate: "20.12.2024" },
-        { startDate: "22.12.2024", endDate: "28.12.2024" },
-      ] as Period[],
-      status: "active" as ListingStatus,
-    }));
+  const getListings = async () => {
+    try {
+      const response = await apiClient.get(`listings/owner`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    setYourListings(listings);
-    const timeout = setTimeout(() => {
+      if (response.status === 200) {
+        setYourListings(response.data);
+      } else {
+        setYourListings([]);
+        notify("Wystąpił błąd podczas pobierania ogłoszeń", "error");
+      }
+
       setIsLoading(false);
-    }, 1000);
+    } catch {
+      setIsLoading(false);
+    }
+  };
 
-    return () => clearTimeout(timeout);
+  useEffect(() => {
+    getListings();
   }, []);
 
   return (
@@ -124,7 +136,7 @@ const YourListingsSection = () => {
             <Loader />
             <LoaderText>Wczytywanie ogłoszeń</LoaderText>
           </LoaderContainer>
-        ) : (
+        ) : yourListings && yourListings.length > 0 ? (
           <MotionWrapper variants={fromBottomVariants03}>
             {yourListings
               .filter((listing) => listing.status !== "deleted")
@@ -139,6 +151,10 @@ const YourListingsSection = () => {
                 />
               ))}
           </MotionWrapper>
+        ) : (
+          <NoResultsContainer>
+            <NoResultsText>Nie masz jeszcze żadnych ogłoszeń</NoResultsText>
+          </NoResultsContainer>
         )}
       </Container>
     </>
@@ -174,5 +190,16 @@ const LoaderText = styled.p`
   font-size: 24px;
   color: var(--dark);
   font-weight: bold;
+  text-align: center;
+`;
+
+const NoResultsContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+`;
+
+const NoResultsText = styled.p`
+  font-size: 20px;
+  color: var(--dark-50);
   text-align: center;
 `;

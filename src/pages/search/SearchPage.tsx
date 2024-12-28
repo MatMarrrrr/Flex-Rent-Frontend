@@ -3,15 +3,23 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import SearchBar from "@/components/elements/SearchBar";
 import ResultCard from "@/pages/search/components/ResultCard";
-import test_item from "@/assets/test_item.jpg";
 import Loader from "@/components/ui/Loader";
 import MotionWrapper from "@/components/ui/MotionWrapper";
 import { fromRightVariants01 } from "@/consts/motionVariants";
 import { useCategories } from "@/contexts/CategoriesContext";
+import apiClient from "@/utils/apiClient";
+import { useToast } from "@/contexts/ToastContext";
+
+interface Filters {
+  query?: string;
+  category_id?: number;
+  localization?: string;
+}
 
 export default function SearchPage() {
   const { categories } = useCategories();
   const navigate = useNavigate();
+  const { notify } = useToast();
   const [searchParams] = useSearchParams();
   const [result, setResult] = useState<Array<any>>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -68,24 +76,50 @@ export default function SearchPage() {
     return [baseText, ...parts];
   };
 
-  useEffect(() => {
+  const getFilters = (): Filters => {
+    const filters: Filters = {};
+
+    if (queryParam.trim() !== "") {
+      filters.query = queryParam;
+    }
+
+    if (categoryIdParam !== 0) {
+      filters.category_id = categoryIdParam;
+    }
+
+    if (localizationParam.trim() !== "") {
+      filters.localization = localizationParam;
+    }
+
+    return filters;
+  };
+
+  const fetchListings = async () => {
     setIsLoading(true);
-    const tempResults = Array.from({ length: 8 }, (_, index) => ({
-      id: index + 1,
-      image: test_item,
-      name: `Nazwa rzeczy do wypożyczenia ${index + 1}`,
-      price: 100,
-      currencyCode: "PLN",
-      localization: `Lokalizacja`,
-    }));
+    try {
+      const filters = getFilters();
+      console.log(filters);
+      const response = await apiClient.get("listings/search", {
+        params: filters,
+      });
 
-    setResult(tempResults);
+      if (response.status === 200) {
+        setResult(response.data.results);
+      } else {
+        setResult([]);
+        notify("Wystąpił błąd podczas pobierania ogłoszeń", "error");
+      }
 
-    const timeout = setTimeout(() => {
       setIsLoading(false);
-    }, 1000);
+    } catch (error) {
+      console.error(error);
+      notify("Wystąpił błąd podczas pobierania ogłoszeń", "error");
+      setIsLoading(false);
+    }
+  };
 
-    return () => clearTimeout(timeout);
+  useEffect(() => {
+    fetchListings();
   }, [queryParam, categoryIdParam, localizationParam]);
 
   return (
@@ -189,6 +223,7 @@ const ResultsContainer = styled.div`
   display: grid;
   gap: 40px;
   grid-template-columns: repeat(3, 1fr);
+  align-items: stretch;
 
   @media (max-width: 1400px) {
     grid-template-columns: repeat(2, 1fr);

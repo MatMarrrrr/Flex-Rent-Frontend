@@ -47,6 +47,7 @@ const ResultCardContainer = styled.div`
   border-radius: 6px;
   box-shadow: var(--shadow);
   border-bottom: 4px solid var(--primary);
+  height: 100%;
   min-width: 240px;
   display: flex;
   align-items: center;
@@ -60,10 +61,9 @@ const ResultCardContainer = styled.div`
 `;
 
 const Image = styled(SkeletonLoaderImage)`
-  max-height: 400px;
-  max-width: 400px;
-  height: 100%;
   width: 100%;
+  max-width: 400px;
+  height: 300px;
   border-radius: 6px;
   margin-bottom: 10px;
 `;
@@ -82,10 +82,11 @@ const ItemName = styled.p`
 
 const ItemDetailsContainer = styled.div`
   display: flex;
-  gap: 15px;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 
   @media (max-width: 430px) {
-    flex-direction: column;
     gap: 5px;
   }
 `;

@@ -27,7 +27,7 @@ export interface Listing {
   id: number;
   image: string;
   name: string;
-  category: string;
+  category_id: string;
   price: number;
   currency: string;
   localization: string;

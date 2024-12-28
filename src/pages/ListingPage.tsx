@@ -8,7 +8,6 @@ import {
   Pencil as PencilIcon,
   CalendarDays as CalendarDaysIcon,
 } from "lucide-react";
-import test_item from "@/assets/test_item.jpg";
 import CalendarButton from "@/components/buttons/CalendarButton";
 import PrimaryButton from "@/components/buttons/PrimaryButton";
 import Loader from "@/components/ui/Loader";
@@ -23,12 +22,26 @@ import {
   generateDisabledDates,
   getDateRangeString,
 } from "@/utils/dataHelpers";
+import apiClient from "@/utils/apiClient";
+import { useTranslation } from "react-i18next";
+
+interface ListingDetails {
+  id: number;
+  name: string;
+  category_id: number;
+  price: number;
+  currency: string;
+  localization: string;
+  image: string;
+  description: string;
+}
 
 export default function ListingPage() {
-  const { isLogin } = useUser();
+  const { isLogin, user } = useUser();
   const { notify } = useToast();
   const navigate = useNavigate();
   const { id } = useParams();
+  const { t } = useTranslation();
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedDateRange, setSelectedDateRange] = useState<Range>({
@@ -38,6 +51,10 @@ export default function ListingPage() {
   });
   const [startDateTimestamp, setStartDateTimestamp] = useState<number>(0);
   const [endDateTimestamp, setEndDateTimestamp] = useState<number>(0);
+  const [listingsDetails, setListingDetails] = useState<ListingDetails | null>(
+    null
+  );
+  const [isOwner, setIsOwner] = useState(false);
   const [isRequestSent, setIsRequestSent] = useState<boolean>(false);
   const [isRequestSending, setIsRequestSending] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
@@ -80,6 +97,20 @@ export default function ListingPage() {
     navigate(`/edit-listing/${id}`);
   };
 
+  const getListingData = async () => {
+    try {
+      setIsLoading(true);
+      const response = await apiClient.get(`listings/${id}`);
+
+      user && setIsOwner(response.data.owner_id === user.id);
+      setListingDetails(response.data);
+    } catch (error) {
+      setError("Nieprawidłowy identyfikator ogłoszenia.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!id || isNaN(Number(id))) {
       setError("Nieprawidłowy identyfikator ogłoszenia.");
@@ -87,14 +118,8 @@ export default function ListingPage() {
       return;
     }
 
-    const timeout = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(timeout);
+    getListingData();
   }, []);
-
-  let isOwner = false;
 
   if (error) {
     return <ErrorLayout message={error} />;
@@ -118,18 +143,23 @@ export default function ListingPage() {
         </MobileBackContainer>
         <ListingContentWrapper>
           <ListingLeftContainer>
-            <ListingImage src={test_item} />
+            <ListingImage src={listingsDetails!.image} />
           </ListingLeftContainer>
           <ListingRightContainer>
-            <ListingName>Nazwa rzeczy do wypożyczenia</ListingName>
-            <ListingCategory>Kategoria</ListingCategory>
+            <ListingName>{listingsDetails!.name}</ListingName>
+            <ListingCategory>
+              {t(`category${listingsDetails!.category_id}`)}
+            </ListingCategory>
             <ListingDetailsContainer>
               <ListingDetailText>
-                100{getSymbolFromCurrency("PLN")} / Dzień
+                {listingsDetails!.price}
+                {getSymbolFromCurrency(listingsDetails!.currency)} / Dzień
               </ListingDetailText>
               <ListingLocalizationContainer>
                 <ListingLocalizationIcon />
-                <ListingDetailText>Lokalizacja</ListingDetailText>
+                <ListingDetailText>
+                  {listingsDetails!.localization}
+                </ListingDetailText>
               </ListingLocalizationContainer>
             </ListingDetailsContainer>
             {!isLogin && (
@@ -208,11 +238,7 @@ export default function ListingPage() {
         <ListingDescriptionContainer>
           <ListingDescriptionTitle>Opis</ListingDescriptionTitle>
           <ListingDescription>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nec
-            sapien et dui ultricies congue at id leo. Etiam imperdiet, erat eu
-            dictum pharetra, metus quam luctus metus, nec laoreet lectus ipsum
-            id orci. Etiam tortor orci, convallis nec orci at, tempor viverra
-            orci. Vestibulum congue bibendum vulputate.
+            {listingsDetails!.description}
           </ListingDescription>
         </ListingDescriptionContainer>
       </ListingContainer>
@@ -287,7 +313,8 @@ const BackContainer = styled.div`
   align-items: center;
   gap: 10px;
   margin: 0px 0px 10px 10px;
-  max-width: 1400px;
+  max-width: 1200px;
+  width: 100%;
   width: 100%;
   cursor: pointer;
   transition: transform 0.3s ease;
@@ -331,7 +358,8 @@ const ListingContainer = styled.div`
   background-color: var(--white);
   padding: 30px;
   gap: 30px;
-  max-width: 1400px;
+  max-width: 1200px;
+  width: 100%;
   border-radius: 8px;
 
   @media (max-width: 1330px) {

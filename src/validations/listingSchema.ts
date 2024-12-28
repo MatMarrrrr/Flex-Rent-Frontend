@@ -5,7 +5,7 @@ export const listingSchema = yup.object().shape({
     .string()
     .required("Nazwa przedmiotu jest wymagana")
     .max(255, "Nazwa przedmiotu może mieć maksymalnie 255 znaków"),
-  category: yup.string().required("Kategoria jest wymagana"),
+  category_id: yup.string().required("Kategoria jest wymagana"),
   price: yup.number().nullable().required("Cena jest wymagana"),
   currency: yup
     .string()

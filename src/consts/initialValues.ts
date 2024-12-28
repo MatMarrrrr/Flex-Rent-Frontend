@@ -18,7 +18,7 @@ export const personalDataInitialValues = {
 
 export const listingInitialValues = {
   name: "",
-  category: "",
+  category_id: "",
   price: null,
   currency: "",
   localization: "",

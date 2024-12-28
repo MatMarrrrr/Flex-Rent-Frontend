@@ -2,17 +2,18 @@ import styled from "styled-components";
 import { MoveLeft as ArrowBackIcon } from "lucide-react";
 import { useNavigate, useParams } from "react-router";
 import ListingForm from "@/pages/listing/components/ListingForm";
-import test_item from "@/assets/test_item.jpg";
 import { listingInitialValues } from "@/consts/initialValues";
 import { useEffect, useState } from "react";
 import Loader from "@/components/ui/Loader";
 import ErrorLayout from "@/components/ui/ErrorLayout";
 import { ImageType } from "@/types/types";
 import { useToast } from "@/contexts/ToastContext";
+import apiClient from "@/utils/apiClient";
+import { useUser } from "@/contexts/UserContext";
 
 interface ListingFormValues {
   name: string;
-  category: string;
+  category_id: string;
   price: number | null;
   currency: string;
   localization: string;
@@ -23,6 +24,7 @@ export default function EditListingPage() {
   const navigate = useNavigate();
   const { id } = useParams();
   const { notify } = useToast();
+  const { token } = useUser();
 
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [listingData, setListingData] =
@@ -36,20 +38,78 @@ export default function EditListingPage() {
     navigate(-1);
   };
 
-  const handleSubmit = (values: ListingFormValues, imageFile: ImageType) => {
-    const finalValues = { ...values, image: imageFile };
+  const handleSubmit = async (
+    values: ListingFormValues,
+    imageFile: ImageType
+  ) => {
     setIsSubmitting(true);
+    try {
+      const response = await apiClient.put(`/listings/${id}`, values, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    setTimeout(() => {
-      setIsSubmitting(false);
+      if (response.status === 200) {
+        if (imageFile) {
+          const formData = new FormData();
+          formData.append("image", imageFile);
+
+          const imageResponse = await apiClient.post(
+            `/listings/${id}/image`,
+            formData,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          if (imageResponse.status === 200) {
+            notify("Ogłoszenie zostało zaktualizowane!", "success");
+          } else {
+            notify(
+              "Wystąpił błąd podczas aktualizacji zdjęcia ogłoszenia",
+              "error"
+            );
+          }
+        }
+      }
+    } catch (error) {
+      console.error(error);
+      notify("Wystąpił błąd podczas aktualizacji ogłoszenia", "error");
+    } finally {
       setIsSubmited(true);
-      notify("Ogłoszenie zostało zaktualizowane!", "success");
-      console.log(finalValues);
-
+      setIsSubmitting(false);
       setTimeout(() => {
         navigate(-1);
       }, 1000);
-    }, 1000);
+    }
+  };
+
+  const getListingdata = async () => {
+    try {
+      const response = await apiClient.get(`listings/owner/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        const { image, ...listingData } = response.data;
+        listingData.category_id = String(listingData.category_id);
+        setListingData(listingData);
+
+        setListingImage(image);
+      } else {
+        setError("Nie masz dostępu do tej strony");
+      }
+
+      setIsLoading(false);
+    } catch {
+      setError("Nie masz dostępu do tej strony");
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -59,28 +119,7 @@ export default function EditListingPage() {
       return;
     }
 
-    const hasAccess = true;
-    if (!hasAccess) {
-      setError("Nie masz dostępu do tej strony");
-      setIsLoading(false);
-      return;
-    }
-
-    setListingData({
-      name: `Nazwa przedmiotu ${id}`,
-      category: `1`,
-      price: 123,
-      currency: "PLN",
-      localization: `Warszawa`,
-      description: `Opis przedmiotu ${id}`,
-    });
-    setListingImage(test_item);
-
-    const timeout = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(timeout);
+    getListingdata();
   }, []);
 
   if (error) {

@@ -44,17 +44,21 @@ function App() {
         <Router>
           {!isLogoutLoading && <Navbar />}
           <Routes>
-            {routes.map(({ path, element, requireAuth }) => (
+            {routes.map(({ path, element, requireAuth, public: isPublic }) => (
               <Route
                 key={path}
                 path={path}
                 element={
-                  <ProtectedRoute
-                    isAuthenticated={isLogin}
-                    requireAuth={requireAuth}
-                  >
-                    {element}
-                  </ProtectedRoute>
+                  isPublic ? (
+                    element
+                  ) : (
+                    <ProtectedRoute
+                      isAuthenticated={isLogin}
+                      requireAuth={requireAuth}
+                    >
+                      {element}
+                    </ProtectedRoute>
+                  )
                 }
               />
             ))}

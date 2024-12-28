@@ -6,6 +6,9 @@ import { useState } from "react";
 import { MoveLeft as ArrowBackIcon } from "lucide-react";
 import { ImageType } from "@/types/types";
 import { useToast } from "@/contexts/ToastContext";
+import apiClient from "@/utils/apiClient";
+import { useUser } from "@/contexts/UserContext";
+import { createFormData } from "@/utils/formDataHelpers";
 
 interface ListingFormValues {
   name: string;
@@ -19,6 +22,7 @@ interface ListingFormValues {
 export default function AddListingPage() {
   const navigate = useNavigate();
   const { notify } = useToast();
+  const { token } = useUser();
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isSubmited, setIsSubmited] = useState<boolean>(false);
@@ -27,20 +31,38 @@ export default function AddListingPage() {
     navigate(-1);
   };
 
-  const handleSubmit = (values: ListingFormValues, imageFile: ImageType) => {
-    const finalValues = { ...values, image: imageFile };
+  const handleSubmit = async (
+    values: ListingFormValues,
+    imageFile: ImageType
+  ) => {
     setIsSubmitting(true);
+    const finalValues = createFormData(values);
+    finalValues.append("image", imageFile!);
+    for (let pair of finalValues.entries()) {
+      console.log(`${pair[0]}: ${pair[1]}`);
+    }
 
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const response = await apiClient.post("/listings", finalValues, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        notify("Ogłoszenie zostało dodane!", "success");
+      } else {
+        notify("Wystąpił bład podczas dodawania ogłoszenia", "error");
+      }
+    } catch {
+      notify("Wystąpił bład podczas dodawania ogłoszenia", "error");
+    } finally {
       setIsSubmited(true);
-      notify("Ogłoszenie zostało dodane!", "success");
-      console.log(finalValues);
-
+      setIsSubmitting(false);
       setTimeout(() => {
         navigate(-1);
       }, 1000);
-    }, 1000);
+    }
   };
 
   return (

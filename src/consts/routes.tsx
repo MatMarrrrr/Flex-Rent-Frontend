@@ -14,22 +14,59 @@ export interface RouteConfig {
   path: string;
   element: JSX.Element;
   requireAuth: boolean;
+  public: boolean;
 }
 
 export const routes: RouteConfig[] = [
-  { path: "/", element: <MainPage />, requireAuth: false },
-  { path: "/login", element: <LoginPage />, requireAuth: false },
-  { path: "/register", element: <RegisterPage />, requireAuth: false },
-  { path: "/logout", element: <LogoutPage />, requireAuth: true },
-  { path: "/search", element: <SearchPage />, requireAuth: false },
-  { path: "/listing/:id", element: <ListingPage />, requireAuth: false },
-  { path: "/dashboard/*", element: <DashboardPage />, requireAuth: true },
-  { path: "/add-listing", element: <AddListingPage />, requireAuth: true },
+  { path: "/", element: <MainPage />, requireAuth: false, public: true },
+  { path: "/login", element: <LoginPage />, requireAuth: false, public: false },
+  {
+    path: "/register",
+    element: <RegisterPage />,
+    requireAuth: false,
+    public: false,
+  },
+  {
+    path: "/logout",
+    element: <LogoutPage />,
+    requireAuth: true,
+    public: false,
+  },
+  {
+    path: "/search",
+    element: <SearchPage />,
+    requireAuth: false,
+    public: true,
+  },
+  {
+    path: "/listing/:id",
+    element: <ListingPage />,
+    requireAuth: false,
+    public: true,
+  },
+  {
+    path: "/dashboard/*",
+    element: <DashboardPage />,
+    requireAuth: true,
+    public: false,
+  },
+  {
+    path: "/add-listing",
+    element: <AddListingPage />,
+    requireAuth: true,
+    public: false,
+  },
   {
     path: "/edit-listing/:id",
     element: <EditListingPage />,
     requireAuth: true,
+    public: false,
   },
-  { path: "/profile", element: <ProfilePage />, requireAuth: true },
-  { path: "*", element: <NotFoundPage />, requireAuth: false },
+  {
+    path: "/profile",
+    element: <ProfilePage />,
+    requireAuth: true,
+    public: false,
+  },
+  { path: "*", element: <NotFoundPage />, requireAuth: false, public: true },
 ];

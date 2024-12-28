@@ -19,7 +19,7 @@ import { useCategories } from "@/contexts/CategoriesContext";
 interface ListingFormProps {
   initialValues: {
     name: string;
-    category: string;
+    category_id: string;
     price: number | null;
     currency: string;
     localization: string;
@@ -66,7 +66,7 @@ const ListingForm: React.FC<ListingFormProps> = ({
 
   const handleSubmit = (values: {
     name: string;
-    category: string;
+    category_id: string;
     price: number | null;
     currency: string;
     localization: string;
@@ -115,7 +115,7 @@ const ListingForm: React.FC<ListingFormProps> = ({
             disabled={isSubmitting || isSubmited}
           />
           <FormikSelectField
-            name="category"
+            name="category_id"
             label="Kategoria"
             options={options}
             startValue="Wybierz kategorię"

@@ -25,7 +25,7 @@ const ListingItem: React.FC<ListingItemProps> = ({
       <Image src={listing.image} />
       <Wrapper>
         <Name>{listing.name}</Name>
-        <Category>{listing.category}</Category>
+        <Category>{listing.category_id}</Category>
         <ItemDetailsContainer>
           <ItemDetailText>
             {listing.price}
@@ -36,11 +36,12 @@ const ListingItem: React.FC<ListingItemProps> = ({
             <ItemDetailText>{listing.localization}</ItemDetailText>
           </ItemLocalizationContainer>
         </ItemDetailsContainer>
-        {listing.rentedPeriods.map((period, index) => (
-          <ItemDetailText key={index}>
-            Wypożyczone: {period.startDate} - {period.endDate}
-          </ItemDetailText>
-        ))}
+        {listing.rentedPeriods &&
+          listing.rentedPeriods.map((period, index) => (
+            <ItemDetailText key={index}>
+              Wypożyczone: {period.startDate} - {period.endDate}
+            </ItemDetailText>
+          ))}
         <Button
           desktopMaxWidth="500px"
           mobileStart={1320}
@@ -88,6 +89,7 @@ const Image = styled(SkeletonLoaderImage)`
   width: 100%;
   max-width: 600px;
   height: auto;
+  max-height: 350px;
   border-radius: 8px;
 
   @media (max-width: 1320px) {
