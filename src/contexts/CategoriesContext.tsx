@@ -37,10 +37,9 @@ export const CategoriesProvider: React.FC<CategoriesProviderProps> = ({
         name: t(`category${category.id}`),
       }));
       setCategories(transformedCategories);
+      setIsCategoriesLoading(false);
     } catch (error) {
       console.error("Error while fetching categories:", error);
-    } finally {
-      setIsCategoriesLoading(false);
     }
   };
 
