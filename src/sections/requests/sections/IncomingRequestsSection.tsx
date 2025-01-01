@@ -131,7 +131,7 @@ export default function IncomingRequestsSection() {
         <>
           <FilterCheckboxesContainer>
             <FilterText>Pokaż tylko:</FilterText>
-            {["waiting", "accepted", "canceled"].map((status) => (
+            {["waiting", "accepted", "confirmed"].map((status) => (
               <FilterCheckbox
                 key={status}
                 label={
@@ -233,6 +233,12 @@ const FilterCheckboxesContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 5px;
+
+  @media (max-width: 780px) {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
 `;
 
 const FilterText = styled.p`
