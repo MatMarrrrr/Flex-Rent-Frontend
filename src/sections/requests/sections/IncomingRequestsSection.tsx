@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import test_item from "@/assets/test_item.jpg";
 import Loader from "@/components/ui/Loader";
 import { useEffect, useState } from "react";
 import MotionWrapper from "@/components/ui/MotionWrapper";
@@ -7,12 +6,15 @@ import { fromBottomVariants03 } from "@/consts/motionVariants";
 import RequestCard from "@/sections/requests/components/RequestCard";
 import IncomingRequestButtons from "@/sections/requests/components/IncomingRequestButtons";
 import { RequestStatus, RequestAction } from "@/types/types";
-import { Period, Request } from "@/types/interfaces";
+import { Request } from "@/types/interfaces";
 import { useToast } from "@/contexts/ToastContext";
 import FilterCheckbox from "@/sections/requests/components/FilterCheckbox";
+import apiClient from "@/utils/apiClient";
+import { useUser } from "@/contexts/UserContext";
 
 export default function IncomingRequestsSection() {
   const { notify } = useToast();
+  const { token } = useUser();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [incomingRequests, setIncomingRequests] = useState<Request[]>([]);
   const [updatingRequests, setUpdatingRequests] = useState<
@@ -34,90 +36,147 @@ export default function IncomingRequestsSection() {
     filterStatuses.length > 0 ? filterStatuses.includes(request.status) : true
   );
 
-  const handleAcceptClick = (requestId: number) => {
+  const getStatusLabel = (status: RequestStatus) => {
+    switch (status) {
+      case "waiting":
+        return "Oczekujące";
+      case "accepted":
+        return "Zaakceptowane";
+      case "confirmed":
+        return "Zatwierdzone";
+      case "declined":
+        return "Odrzucone";
+      case "canceled":
+        return "Anulowane";
+    }
+  }
+
+  const handleAcceptClick = async (requestId: number) => {
     setUpdatingRequests((prev) => [
       ...prev,
       { requestId, action: "accepting" },
     ]);
 
-    setTimeout(() => {
+    try {
+      await apiClient.patch(`requests/${requestId}/accept`, null, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      updateRequestStatus(requestId, "accepted");
+      notify("Prośba została zaakceptowana", "success");
+    } catch (error) {
+      console.error(error);
+      notify("Wystąpił błąd podczas akceptowania prośby", "error");
+    } finally {
       setUpdatingRequests((prev) =>
         prev.filter(
           (req) => req.requestId !== requestId || req.action !== "accepting"
         )
       );
-      updateRequestStatus(requestId, "accepted");
-      notify("Prośba została zaakceptowana", "success");
-    }, 1000);
+    }
   };
 
-  const handleDeclineClick = (requestId: number) => {
+  const handleDeclineClick = async (requestId: number) => {
     setUpdatingRequests((prev) => [
       ...prev,
       { requestId, action: "declining" },
     ]);
 
-    setTimeout(() => {
+    try {
+      await apiClient.patch(`requests/${requestId}/decline`, null, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      updateRequestStatus(requestId, "declined");
+      notify("Prośba została odrzucona", "success");
+    } catch (error) {
+      console.error(error);
+      notify("Wystąpił błąd podczas odrzucania prośby", "error");
+    } finally {
       setUpdatingRequests((prev) =>
         prev.filter(
           (req) => req.requestId !== requestId || req.action !== "declining"
         )
       );
-      updateRequestStatus(requestId, "declined");
-      notify("Prośba została odrzucona", "success");
-    }, 1000);
+    }
   };
 
   const handleSendMessageClick = (chatId: number) => {
     console.log(chatId);
   };
 
-  const handleConfirmRentalClick = (requestId: number) => {
+  const handleConfirmRentalClick = async (requestId: number) => {
     setUpdatingRequests((prev) => [
       ...prev,
       { requestId, action: "confirming" },
     ]);
-    setTimeout(() => {
+
+    try {
+      await apiClient.patch(`requests/${requestId}/confirm`, null, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      updateRequestStatus(requestId, "confirmed");
+      notify("Wynajem został potwierdzony", "success");
+    } catch (error) {
+      console.error(error);
+      notify("Wystąpił błąd podczas potwierdzania wynajmu", "error");
+    } finally {
       setUpdatingRequests((prev) =>
         prev.filter(
           (req) => req.requestId !== requestId || req.action !== "confirming"
         )
       );
-      updateRequestStatus(requestId, "confirmed");
-      notify("Wynajem został potwierdzony", "success");
-    }, 1000);
+    }
   };
 
-  const updateRequestStatus = (requestId: number, newStatus: RequestStatus) => {
-    setIncomingRequests((prevRequests) =>
-      prevRequests.map((request) =>
-        request.id === requestId ? { ...request, status: newStatus } : request
-      )
+  const sortRequestsByStatus = (requests: Request[]): Request[] => {
+    const statusOrder: Record<RequestStatus, number> = {
+      waiting: 1,
+      accepted: 2,
+      confirmed: 3,
+      declined: 4,
+      canceled: 5,
+    };
+    const DEFAULT_ORDER = 999;
+
+    return [...requests].sort(
+      (a, b) =>
+        (statusOrder[a.status] || DEFAULT_ORDER) -
+        (statusOrder[b.status] || DEFAULT_ORDER)
     );
   };
 
-  useEffect(() => {
-    const requests = Array.from({ length: 5 }, (_, index) => ({
-      id: index + 1,
-      image: test_item,
-      name: `Nazwa rzeczy do wypożyczenia ${index + 1}`,
-      category: "Kategoria",
-      price: 100,
-      currency: "PLN",
-      localization: `Warszawa`,
-      rentedPeriod: {
-        startDate: "22.12.2024",
-        endDate: "28.12.2024",
-      } as Period,
-      status: index % 2 === 0 ? "waiting" : ("accepted" as RequestStatus),
-    }));
-    setIncomingRequests(requests);
+  const updateRequestStatus = (requestId: number, newStatus: RequestStatus) => {
+    setIncomingRequests((prevRequests) => {
+      const updatedRequests = prevRequests.map((request) =>
+        request.id === requestId ? { ...request, status: newStatus } : request
+      );
+      return sortRequestsByStatus(updatedRequests);
+    });
+  };
 
-    const timeout = setTimeout(() => {
+  const getIncomingRequests = async () => {
+    try {
+      setIsLoading(true);
+      const response = await apiClient.get(`requests/incoming`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setIncomingRequests(sortRequestsByStatus(response.data.requests));
+    } catch (error) {
+      console.log(error);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
+  };
 
-    return () => clearTimeout(timeout);
+  useEffect(() => {
+    getIncomingRequests();
   }, []);
 
   return (
@@ -131,20 +190,16 @@ export default function IncomingRequestsSection() {
         <>
           <FilterCheckboxesContainer>
             <FilterText>Pokaż tylko:</FilterText>
-            {["waiting", "accepted", "confirmed"].map((status) => (
-              <FilterCheckbox
-                key={status}
-                label={
-                  status === "waiting"
-                    ? "Oczekujące"
-                    : status === "accepted"
-                    ? "Zaakceptowane"
-                    : "Zatwierdzone"
-                }
-                isChecked={filterStatuses.includes(status as RequestStatus)}
-                onChange={() => handleFilterChange(status as RequestStatus)}
-              />
-            ))}
+            {["waiting", "accepted", "confirmed", "declined", "canceled"].map(
+              (status) => (
+                <FilterCheckbox
+                  key={status}
+                  label={getStatusLabel(status as RequestStatus)}
+                  isChecked={filterStatuses.includes(status as RequestStatus)}
+                  onChange={() => handleFilterChange(status as RequestStatus)}
+                />
+              )
+            )}
           </FilterCheckboxesContainer>
           <MotionWrapper variants={fromBottomVariants03}>
             {filteredRequests.map((request) => {
@@ -234,7 +289,7 @@ const FilterCheckboxesContainer = styled.div`
   align-items: center;
   gap: 5px;
 
-  @media (max-width: 780px) {
+  @media (max-width: 1150px) {
     flex-direction: column;
     align-items: flex-start;
     width: 100%;
@@ -242,7 +297,7 @@ const FilterCheckboxesContainer = styled.div`
 `;
 
 const FilterText = styled.p`
-  font-size: 22px;
+  font-size: 20px;
   gap: 10px;
 `;
 

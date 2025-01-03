@@ -10,14 +10,7 @@ export const timestampToDate = (timestamp: number): string => {
 };
 
 export const dateToTimestamp = (dateString: string): number => {
-  const [day, month, year] = dateString.split(".");
-  const date = new Date(Number(year), Number(month) - 1, Number(day));
-  return date.getTime();
-};
-
-export const convertToMidnightTimestamp = (timestamp: number): number => {
-  const date = new Date(timestamp);
-  date.setHours(0, 0, 0, 0);
+  const date = new Date(dateString);
   return date.getTime();
 };
 
@@ -56,19 +49,22 @@ export const calculateDaysDifference = (
   return daysDifference + 1;
 };
 
-export const formatDateForDisplay = (date: Date): string => {
+export const formatDateForDisplay = (date: Date | string): string => {
   if (!date) return "";
 
-  const day = String(date.getDate()).padStart(2, "0");
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const year = date.getFullYear();
+  const dateObj = typeof date === "string" ? new Date(date) : date;
+
+  if (isNaN(dateObj.getTime())) return "";
+
+  const day = String(dateObj.getDate()).padStart(2, "0");
+  const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+  const year = dateObj.getFullYear();
 
   return `${day}.${month}.${year}`;
 };
 
 export const getDateRangeString = (selectedRange: Range | Period): string => {
   if (!selectedRange.startDate || !selectedRange.endDate) return "";
-
   let startDate: string | Date;
   let endDate: string | Date;
 
@@ -76,8 +72,8 @@ export const getDateRangeString = (selectedRange: Range | Period): string => {
     startDate = formatDateForDisplay(selectedRange.startDate);
     endDate = formatDateForDisplay(selectedRange.endDate);
   } else {
-    startDate = selectedRange.startDate;
-    endDate = selectedRange.endDate;
+    startDate = formatDateForDisplay(selectedRange.startDate);
+    endDate = formatDateForDisplay(selectedRange.endDate);
   }
 
   return startDate === endDate ? startDate : `${startDate} - ${endDate}`;

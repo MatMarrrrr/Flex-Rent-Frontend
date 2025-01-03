@@ -1,8 +1,12 @@
 import styled from "styled-components";
 import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
 import getSymbolFromCurrency from "currency-symbol-map";
-import { Period, Request } from "@/types/interfaces";
-import { calculateDaysDifference, getDateRangeString } from "@/utils/dataHelpers";
+import { Request } from "@/types/interfaces";
+import {
+  calculateDaysDifference,
+  getDateRangeString,
+} from "@/utils/dataHelpers";
+import { useTranslation } from "react-i18next";
 
 interface RequestCardProps {
   request: Request;
@@ -10,34 +14,36 @@ interface RequestCardProps {
 }
 
 const RequestCard: React.FC<RequestCardProps> = ({ request, children }) => {
-
-  const calculateCost = (rentedPeriod: Period, price: number) => {
-    const daysPeriod = calculateDaysDifference(
-      rentedPeriod.startDate,
-      rentedPeriod.endDate
-    );
-    return daysPeriod * price;
+  const { t } = useTranslation();
+  const calculateCost = (startDate: string, endDate: string, price: number) => {
+    const daysPeriod = calculateDaysDifference(startDate, endDate);
+    return +(daysPeriod * price).toFixed(2);
   };
-
+  let listing = request.listing;
   return (
     <Container>
-      <Image src={request.image} />
+      <Image src={listing.image} />
       <Wrapper>
-        <Name>{request.name}</Name>
-        <Category>{request.category}</Category>
+        <Name>{listing.name}</Name>
+        <Category>{t(`category${listing.category_id}`)}</Category>
         <ItemDetailContainer>
           <ItemDetailTextBold>Lokalizacja: </ItemDetailTextBold>
-          <ItemDetailText>{request.localization}</ItemDetailText>
+          <ItemDetailText>{listing.localization}</ItemDetailText>
         </ItemDetailContainer>
         <ItemDetailContainer>
-          <ItemDetailTextBold>Okres: </ItemDetailTextBold>
-          <ItemDetailText>{getDateRangeString(request.rentedPeriod)}</ItemDetailText>
+          <ItemDetailTextBold>Okres:</ItemDetailTextBold>
+          <ItemDetailText>
+            {getDateRangeString({
+              startDate: request.start_date,
+              endDate: request.end_date,
+            })}
+          </ItemDetailText>
         </ItemDetailContainer>
         <ItemDetailContainer>
           <ItemDetailTextBold>Koszt: </ItemDetailTextBold>
           <ItemDetailText>
-            {calculateCost(request.rentedPeriod, request.price)}
-            {getSymbolFromCurrency(request.currency)}
+            {calculateCost(request.start_date, request.end_date, listing.price)}
+            {getSymbolFromCurrency(listing.currency)}
           </ItemDetailText>
         </ItemDetailContainer>
         {children}

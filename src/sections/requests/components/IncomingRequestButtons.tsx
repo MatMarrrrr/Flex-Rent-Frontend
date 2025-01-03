@@ -27,35 +27,69 @@ const IncomingRequestButtons: React.FC<IncomingRequestButtonsProps> = ({
     {requestStatus === "confirmed" && (
       <RequestStatusTextContainer>
         <CheckIcon />
-        <RequestStatusText>Wynajem został potwierdzony</RequestStatusText>
+        <RequestStatusText>Wynajem został zatwierdzony</RequestStatusText>
       </RequestStatusTextContainer>
     )}
+
     {requestStatus === "declined" && (
       <RequestStatusTextContainer>
         <XIcon />
-        <RequestStatusText>Prośba została odrzucona</RequestStatusText>
+        <RequestStatusText>
+          Prośba została odrzucona przez ciebie
+        </RequestStatusText>
       </RequestStatusTextContainer>
     )}
-    {requestStatus === "accepted" && (
-      <Button
-        desktopMaxWidth="500px"
-        mobileStart={1320}
-        mobileMaxWidth="700px"
-        margin="20px 0px 0px 0px"
-        disabled={isUpdating && updatingAction === "confirming"}
-        onClick={onConfirmRentalClick}
-      >
-        <CheckIcon />
-        {isUpdating && updatingAction === "confirming" ? (
-          <>
-            Zatwierdzanie
-            <Loader size={18} />
-          </>
-        ) : (
-          "Zatwierdź wynajem"
-        )}
-      </Button>
+
+    {requestStatus === "canceled" && (
+      <RequestStatusTextContainer>
+        <XIcon />
+        <RequestStatusText>
+          Prośba została anulowana przez wysyłającego
+        </RequestStatusText>
+      </RequestStatusTextContainer>
     )}
+
+    {requestStatus === "accepted" && (
+      <>
+        <Button
+          desktopMaxWidth="500px"
+          mobileStart={1320}
+          mobileMaxWidth="700px"
+          margin="20px 0px 0px 0px"
+          disabled={isUpdating && updatingAction === "confirming"}
+          onClick={onConfirmRentalClick}
+        >
+          <CheckIcon />
+          {isUpdating && updatingAction === "confirming" ? (
+            <>
+              Zatwierdzanie
+              <Loader size={18} />
+            </>
+          ) : (
+            "Zatwierdź wynajem"
+          )}
+        </Button>
+        <Button
+          desktopMaxWidth="500px"
+          mobileStart={1320}
+          mobileMaxWidth="700px"
+          margin="20px 0px 0px 0px"
+          disabled={isUpdating}
+          onClick={onDeclineClick}
+        >
+          <XIcon />
+          {isUpdating && updatingAction === "declining" ? (
+            <>
+              Odrzucanie wynajmu
+              <Loader size={18} />
+            </>
+          ) : (
+            "Odrzuć wynajem"
+          )}
+        </Button>
+      </>
+    )}
+
     {requestStatus === "waiting" && (
       <>
         <Button
@@ -96,6 +130,7 @@ const IncomingRequestButtons: React.FC<IncomingRequestButtonsProps> = ({
         </Button>
       </>
     )}
+
     {(requestStatus === "accepted" || requestStatus === "confirmed") && (
       <Button
         desktopMaxWidth="500px"

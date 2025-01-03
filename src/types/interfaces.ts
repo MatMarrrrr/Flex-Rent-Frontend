@@ -13,14 +13,10 @@ export interface Period {
 
 export interface Request {
   id: number;
-  image: string;
-  name: string;
-  category: string;
-  price: number;
-  currency: string;
-  localization: string;
-  rentedPeriod: Period;
+  start_date: string;
+  end_date: string;
   status: RequestStatus;
+  listing: Listing;
 }
 
 export interface Listing {
@@ -31,7 +27,7 @@ export interface Listing {
   price: number;
   currency: string;
   localization: string;
-  rentedPeriods: Period[];
+  rentedPeriods?: Period[];
   status: ListingStatus;
 }
 

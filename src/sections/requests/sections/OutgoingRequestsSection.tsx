@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import test_item from "@/assets/test_item.jpg";
 import Loader from "@/components/ui/Loader";
 import { useEffect, useState } from "react";
 import MotionWrapper from "@/components/ui/MotionWrapper";
@@ -7,15 +6,18 @@ import { fromBottomVariants03 } from "@/consts/motionVariants";
 import RequestCard from "@/sections/requests/components/RequestCard";
 import OutgoingRequestButtons from "@/sections/requests/components/OutgoingRequestButtons";
 import { RequestStatus } from "@/types/types";
-import { Period, Request } from "@/types/interfaces";
+import { Request } from "@/types/interfaces";
 import { useToast } from "@/contexts/ToastContext";
 import { Range } from "react-date-range";
 import ChangePeriodModal from "@/components/modals/ChangePeriodModal";
-import { formatDateForDisplay } from "@/utils/dataHelpers";
 import FilterCheckbox from "@/sections/requests/components/FilterCheckbox";
+import apiClient from "@/utils/apiClient";
+import { useUser } from "@/contexts/UserContext";
+import { format } from "date-fns";
 
 export default function OutgoingRequestsSection() {
   const { notify } = useToast();
+  const { token } = useUser();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [outgoingRequests, setOutgoingRequests] = useState<Request[]>([]);
   const [updatingRequestIds, setUpdatingRequestIds] = useState<number[]>([]);
@@ -43,28 +45,59 @@ export default function OutgoingRequestsSection() {
     filterStatuses.length > 0 ? filterStatuses.includes(request.status) : true
   );
 
+  const getStatusLabel = (status: RequestStatus) => {
+    switch (status) {
+      case "waiting":
+        return "Oczekujące";
+      case "accepted":
+        return "Zaakceptowane";
+      case "declined":
+        return "Odrzucone";
+      case "canceled":
+        return "Anulowane";
+      default:
+        return "Nieznany status";
+    }
+  }
+
   const updateRequestPeriod = (requestId: number, selectedRange: Range) => {
     setOutgoingRequests((prevRequests) =>
       prevRequests.map((request) =>
         request.id === requestId
           ? {
               ...request,
-              rentedPeriod: {
-                startDate: formatDateForDisplay(selectedRange.startDate!),
-                endDate: formatDateForDisplay(selectedRange.endDate!),
-              },
+              start_date: format(selectedRange.startDate!, "yyyy-MM-dd"),
+              end_date: format(selectedRange.endDate!, "yyyy-MM-dd"),
             }
           : request
       )
     );
   };
 
-  const updateRequestStatus = (requestId: number, newStatus: RequestStatus) => {
-    setOutgoingRequests((prevRequests) =>
-      prevRequests.map((request) =>
-        request.id === requestId ? { ...request, status: newStatus } : request
-      )
+  const sortRequestsByStatus = (requests: Request[]): Request[] => {
+    const statusOrder: Record<RequestStatus, number> = {
+      waiting: 1,
+      accepted: 2,
+      confirmed: 3,
+      declined: 4,
+      canceled: 5,
+    };
+    const DEFAULT_ORDER = 999;
+
+    return [...requests].sort(
+      (a, b) =>
+        (statusOrder[a.status] || DEFAULT_ORDER) -
+        (statusOrder[b.status] || DEFAULT_ORDER)
     );
+  };
+
+  const updateRequestStatus = (requestId: number, newStatus: RequestStatus) => {
+    setOutgoingRequests((prevRequests) => {
+      const updatedRequests = prevRequests.map((request) =>
+        request.id === requestId ? { ...request, status: newStatus } : request
+      );
+      return sortRequestsByStatus(updatedRequests);
+    });
   };
 
   const showChangePeriodModal = (requestId: number) => {
@@ -81,14 +114,22 @@ export default function OutgoingRequestsSection() {
     });
   };
 
-  const handleCancelClick = (requestId: number) => {
+  const handleCancelClick = async (requestId: number) => {
     setUpdatingRequestIds((prev) => [...prev, requestId]);
-
-    setTimeout(() => {
-      setUpdatingRequestIds((prev) => prev.filter((id) => id !== requestId));
+    try {
+      await apiClient.patch(`requests/${requestId}/cancel`, null, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       updateRequestStatus(requestId, "canceled");
       notify("Prośba została anulowana", "success");
-    }, 1000);
+    } catch (error) {
+      console.error(error);
+      notify("Wystąpił błąd podczas anulowania prośby", "error");
+    } finally {
+      setUpdatingRequestIds((prev) => prev.filter((id) => id !== requestId));
+    }
   };
 
   const handleSendMessageClick = (chatId: number) => {
@@ -99,39 +140,56 @@ export default function OutgoingRequestsSection() {
     showChangePeriodModal(requestId);
   };
 
-  const handlePeriodChange = (requestId: number, selectedRange: Range) => {
+  const handlePeriodChange = async (
+    requestId: number,
+    selectedRange: Range
+  ) => {
     setIsChanging(true);
+    const { startDate, endDate } = selectedRange;
+    if (!startDate || !endDate) return;
+    const start_date = format(startDate, "yyyy-MM-dd");
+    const end_date = format(endDate, "yyyy-MM-dd");
 
-    setTimeout(() => {
+    try {
+      await apiClient.patch(
+        `requests/${requestId}/update-period`,
+        { start_date: start_date, end_date: end_date },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       updateRequestPeriod(requestId, selectedRange);
       setIsChanging(false);
-      setModalData((prev) => ({ ...prev, isVisible: false }));
       notify("Okres wypożyczenia został zmieniony", "success");
-    }, 1000);
+    } catch (error) {
+      console.error(error);
+      notify("Wystąpił błąd podczas zmiany okresu wypożyczenia", "error");
+    } finally {
+      setUpdatingRequestIds((prev) => prev.filter((id) => id !== requestId));
+      setModalData((prev) => ({ ...prev, isVisible: false }));
+    }
+  };
+
+  const getOutgoingRequests = async () => {
+    try {
+      setIsLoading(true);
+      const response = await apiClient.get(`requests/outgoing`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setOutgoingRequests(sortRequestsByStatus(response.data.requests));
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
-    const requests = Array.from({ length: 5 }, (_, index) => ({
-      id: index + 1,
-      image: test_item,
-      name: `Nazwa rzeczy do wypożyczenia ${index + 1}`,
-      category: "Kategoria",
-      price: 100,
-      currency: "PLN",
-      localization: `Warszawa`,
-      rentedPeriod: {
-        startDate: "22.12.2024",
-        endDate: "28.12.2024",
-      } as Period,
-      status: index % 2 === 0 ? "waiting" : ("accepted" as RequestStatus),
-    }));
-    setOutgoingRequests(requests);
-
-    const timeout = setTimeout(() => {
-      setIsLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(timeout);
+    getOutgoingRequests();
   }, []);
 
   return (
@@ -153,16 +211,10 @@ export default function OutgoingRequestsSection() {
           <FilterCheckboxesContainer>
             <FilterText>Pokaż tylko: </FilterText>
             <FilterCheckboxesContainer>
-              {["waiting", "accepted", "canceled"].map((status) => (
+              {["waiting", "accepted", "declined", "canceled"].map((status) => (
                 <FilterCheckbox
                   key={status}
-                  label={
-                    status === "waiting"
-                      ? "Oczekujące"
-                      : status === "accepted"
-                      ? "Zaakceptowane"
-                      : "Anulowane"
-                  }
+                  label={getStatusLabel(status as RequestStatus)}
                   isChecked={filterStatuses.includes(status as RequestStatus)}
                   onChange={() => handleFilterChange(status as RequestStatus)}
                 />
@@ -170,20 +222,25 @@ export default function OutgoingRequestsSection() {
             </FilterCheckboxesContainer>
           </FilterCheckboxesContainer>
           <MotionWrapper variants={fromBottomVariants03}>
-            {filteredRequests.map((request) => (
-              <RequestCard request={request} key={request.id}>
-                <OutgoingRequestButtons
-                  requestId={request.id}
-                  requestStatus={request.status}
-                  isUpdating={updatingRequestIds.includes(request.id)}
-                  onCancelClick={() => handleCancelClick(request.id)}
-                  onSendMessageClick={() => handleSendMessageClick(request.id)}
-                  onChangePeriodClick={() =>
-                    handleChangePeriodClick(request.id)
-                  }
-                />
-              </RequestCard>
-            ))}
+            {filteredRequests.map((request) => {
+              console.log(request);
+              return (
+                <RequestCard request={request} key={request.id}>
+                  <OutgoingRequestButtons
+                    requestId={request.id}
+                    requestStatus={request.status}
+                    isUpdating={updatingRequestIds.includes(request.id)}
+                    onCancelClick={() => handleCancelClick(request.id)}
+                    onSendMessageClick={() =>
+                      handleSendMessageClick(request.id)
+                    }
+                    onChangePeriodClick={() =>
+                      handleChangePeriodClick(request.id)
+                    }
+                  />
+                </RequestCard>
+              );
+            })}
             {filteredRequests.length === 0 && (
               <NoResultsText>Nie znaleziono próśb</NoResultsText>
             )}
@@ -229,15 +286,15 @@ const FilterCheckboxesContainer = styled.div`
   align-items: center;
   gap: 5px;
 
-  @media (max-width: 780px) {
+  @media (max-width: 950px) {
     flex-direction: column;
     align-items: flex-start;
-    width: 100%;  
+    width: 100%;
   }
 `;
 
 const FilterText = styled.p`
-  font-size: 22px;
+  font-size: 20px;
   gap: 10px;
 `;
 

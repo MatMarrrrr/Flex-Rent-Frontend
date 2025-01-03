@@ -17,13 +17,10 @@ import getSymbolFromCurrency from "currency-symbol-map";
 import ErrorLayout from "@/components/ui/ErrorLayout";
 import { useUser } from "@/contexts/UserContext";
 import { useToast } from "@/contexts/ToastContext";
-import {
-  convertToMidnightTimestamp,
-  generateDisabledDates,
-  getDateRangeString,
-} from "@/utils/dataHelpers";
+import { generateDisabledDates, getDateRangeString } from "@/utils/dataHelpers";
 import apiClient from "@/utils/apiClient";
 import { useTranslation } from "react-i18next";
+import { format } from "date-fns";
 
 interface ListingDetails {
   id: number;
@@ -34,10 +31,11 @@ interface ListingDetails {
   localization: string;
   image: string;
   description: string;
+  owner_id: number;
 }
 
 export default function ListingPage() {
-  const { isLogin, user } = useUser();
+  const { isLogin, user, token } = useUser();
   const { notify } = useToast();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -49,8 +47,8 @@ export default function ListingPage() {
     endDate: new Date(),
     key: "selectedRange",
   });
-  const [startDateTimestamp, setStartDateTimestamp] = useState<number>(0);
-  const [endDateTimestamp, setEndDateTimestamp] = useState<number>(0);
+  const [selectedStartDate, setSelectedStartDate] = useState<string>("");
+  const [selectedEndDate, setSelectedEndDate] = useState<string>("");
   const [listingsDetails, setListingDetails] = useState<ListingDetails | null>(
     null
   );
@@ -75,26 +73,78 @@ export default function ListingPage() {
     if (!startDate || !endDate) return;
 
     setSelectedDateRange(selectedRange);
-    setStartDateTimestamp(convertToMidnightTimestamp(startDate.getTime()));
-    setEndDateTimestamp(convertToMidnightTimestamp(endDate.getTime()));
+    setSelectedStartDate(format(startDate, "yyyy-MM-dd"));
+    setSelectedEndDate(format(endDate, "yyyy-MM-dd"));
   };
 
   const handleRegisterRedirect = () => {
     navigate("/register");
   };
 
-  const handleRentClick = () => {
+  const handleRentClick = async () => {
+    if (!listingsDetails || !user || !token) return;
+
     setIsRequestSending(true);
-    setTimeout(() => {
-      setIsRequestSending(false);
+    try {
+      await apiClient.post(
+        "requests",
+        {
+          recipient_id: listingsDetails.owner_id,
+          listing_id: listingsDetails.id,
+          start_date: selectedStartDate,
+          end_date: selectedEndDate,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
       setIsRequestSent(true);
-      console.log(`${startDateTimestamp}  ${endDateTimestamp}`);
       notify("Prośba o wynajem została wysłana", "success");
-    }, 1000);
+    } catch (error) {
+      notify("Wystąpił błąd podczas wysyłania prośby", "error");
+    } finally {
+      setIsRequestSending(false);
+    }
   };
 
   const handleEditClick = (id: string) => {
     navigate(`/edit-listing/${id}`);
+  };
+
+  const checkIfRequestIsSent = async (
+    senderId: number,
+    recipientId: number,
+    listingId: number
+  ) => {
+    try {
+      const params = new URLSearchParams({
+        sender_id: senderId.toString(),
+        recipient_id: recipientId.toString(),
+        listing_id: listingId.toString(),
+      });
+      const response = await apiClient.get(
+        `requests/check?${params.toString()}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        const request = response.data.request;
+        setSelectedStartDate(request.start_date);
+        setSelectedEndDate(request.end_date);
+        setIsRequestSent(true);
+      }
+    } catch (error: any) {
+      if (error.response?.status !== 404) {
+        console.log(error);
+      }
+    }
   };
 
   const getListingData = async () => {
@@ -104,6 +154,18 @@ export default function ListingPage() {
 
       user && setIsOwner(response.data.owner_id === user.id);
       setListingDetails(response.data);
+      
+      if (isLogin) {
+        try {
+          await checkIfRequestIsSent(
+            user!.id,
+            response.data.owner_id,
+            response.data.id
+          );
+        } catch (error) {
+          console.log('Request check failed:', error);
+        }
+      }
     } catch (error) {
       setError("Nieprawidłowy identyfikator ogłoszenia.");
     } finally {
@@ -199,7 +261,7 @@ export default function ListingPage() {
                 <PrimaryButton
                   type="button"
                   onClick={handleRentClick}
-                  disabled={startDateTimestamp === 0 || isRequestSending}
+                  disabled={selectedStartDate === "" || isRequestSending}
                   margin="10px 0px 10px 0px"
                   desktopMaxWidth="500px"
                   mobileStart={1230}
@@ -225,10 +287,12 @@ export default function ListingPage() {
                     Wybrany okres:
                   </RequestStatusText>
                   <RequestStatusText>
-                    {getDateRangeString({
-                      startDate: selectedDateRange.startDate,
-                      endDate: selectedDateRange.endDate,
-                    })}
+                    {selectedStartDate &&
+                      selectedEndDate &&
+                      getDateRangeString({
+                        startDate: selectedStartDate,
+                        endDate: selectedEndDate,
+                      })}
                   </RequestStatusText>
                 </RequestStatusText>
               </RequestStatusContainer>
