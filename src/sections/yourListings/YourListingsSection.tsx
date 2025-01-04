@@ -198,7 +198,12 @@ const NoResultsContainer = styled.div`
 `;
 
 const NoResultsText = styled.p`
-  font-size: 20px;
-  color: var(--dark-50);
-  text-align: center;
+  font-size: 24px;
+  text-align: start;
+  color: var(--dark);
+  font-weight: bold;
+
+  @media (max-width: 620px) {
+    text-align: center;
+  }
 `;
