@@ -58,7 +58,7 @@ export default function OutgoingRequestsSection() {
       default:
         return "Nieznany status";
     }
-  }
+  };
 
   const updateRequestPeriod = (requestId: number, selectedRange: Range) => {
     setOutgoingRequests((prevRequests) =>
@@ -208,9 +208,9 @@ export default function OutgoingRequestsSection() {
         </LoaderContainer>
       ) : (
         <>
-          <FilterCheckboxesContainer>
+          <FilterContainer>
             <FilterText>Pokaż tylko: </FilterText>
-            <FilterCheckboxesContainer>
+            <CheckboxesContainer>
               {["waiting", "accepted", "declined", "canceled"].map((status) => (
                 <FilterCheckbox
                   key={status}
@@ -219,8 +219,8 @@ export default function OutgoingRequestsSection() {
                   onChange={() => handleFilterChange(status as RequestStatus)}
                 />
               ))}
-            </FilterCheckboxesContainer>
-          </FilterCheckboxesContainer>
+            </CheckboxesContainer>
+          </FilterContainer>
           <MotionWrapper variants={fromBottomVariants03}>
             {filteredRequests.map((request) => {
               console.log(request);
@@ -281,21 +281,47 @@ const LoaderText = styled.p`
   text-align: center;
 `;
 
-const FilterCheckboxesContainer = styled.div`
+const FilterContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 5px;
 
-  @media (max-width: 950px) {
-    flex-direction: column;
-    align-items: flex-start;
+  @media (max-width: 1320px) {
     width: 100%;
+    max-width: 700px;
+    justify-content: start;
+    align-items: start;
+  }
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
+`;
+
+const CheckboxesContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  grid-template-rows: auto;
+  column-gap: 15px;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    row-gap: 15px;
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, 1fr);
   }
 `;
 
 const FilterText = styled.p`
   font-size: 20px;
-  gap: 10px;
+  margin: 0 15px 0 0;
+
+  @media (max-width: 600px) {
+    margin: 0 0 10px 0;
+  }
 `;
 
 const NoResultsText = styled.p`

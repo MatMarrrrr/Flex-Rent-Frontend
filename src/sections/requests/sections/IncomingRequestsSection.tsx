@@ -49,7 +49,7 @@ export default function IncomingRequestsSection() {
       case "canceled":
         return "Anulowane";
     }
-  }
+  };
 
   const handleAcceptClick = async (requestId: number) => {
     setUpdatingRequests((prev) => [
@@ -188,19 +188,21 @@ export default function IncomingRequestsSection() {
         </LoaderContainer>
       ) : (
         <>
-          <FilterCheckboxesContainer>
+          <FilterContainer>
             <FilterText>Pokaż tylko:</FilterText>
-            {["waiting", "accepted", "confirmed", "declined", "canceled"].map(
-              (status) => (
-                <FilterCheckbox
-                  key={status}
-                  label={getStatusLabel(status as RequestStatus)}
-                  isChecked={filterStatuses.includes(status as RequestStatus)}
-                  onChange={() => handleFilterChange(status as RequestStatus)}
-                />
-              )
-            )}
-          </FilterCheckboxesContainer>
+            <CheckboxesContainer>
+              {["waiting", "accepted", "confirmed", "declined", "canceled"].map(
+                (status) => (
+                  <FilterCheckbox
+                    key={status}
+                    label={getStatusLabel(status as RequestStatus)}
+                    isChecked={filterStatuses.includes(status as RequestStatus)}
+                    onChange={() => handleFilterChange(status as RequestStatus)}
+                  />
+                )
+              )}
+            </CheckboxesContainer>
+          </FilterContainer>
           <MotionWrapper variants={fromBottomVariants03}>
             {filteredRequests.map((request) => {
               const isUpdatingAccept = updatingRequests.some(
@@ -284,21 +286,48 @@ const LoaderText = styled.p`
   text-align: center;
 `;
 
-const FilterCheckboxesContainer = styled.div`
+const FilterContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 5px;
+  margin-top: 10px;
 
-  @media (max-width: 1150px) {
-    flex-direction: column;
-    align-items: flex-start;
+  @media (max-width: 1320px) {
     width: 100%;
+    max-width: 700px;
+    justify-content: start;
+    align-items: start;
+  }
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
+`;
+
+const CheckboxesContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  grid-template-rows: auto;
+  column-gap: 15px;
+
+  @media (max-width: 1320px) {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    row-gap: 15px;
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(5, 1fr);
   }
 `;
 
 const FilterText = styled.p`
   font-size: 20px;
-  gap: 10px;
+  margin: 0 15px 0 0;
+
+  @media (max-width: 600px) {
+    margin: 0 0 10px 0;
+  }
 `;
 
 const NoResultsText = styled.p`

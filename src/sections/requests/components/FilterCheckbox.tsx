@@ -26,9 +26,9 @@ const CheckboxContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 12px;
   background-color: var(--light);
   border-radius: 8px;
+  max-width: fit-content;
   border: 1px solid var(--gray);
   transition: background-color 0.2s, border-color 0.2s;
 
