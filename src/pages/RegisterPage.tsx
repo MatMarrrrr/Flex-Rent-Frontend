@@ -51,15 +51,26 @@ export default function RegisterPage() {
     setRepeatPasswordShown(!repeatPasswordShown);
   };
 
+  const checkEmail = async (email: string) => {
+    try {
+      await apiClient.head(`/check-email/${email}`);
+      return true;
+    } catch (error: any) {
+      if (error.response?.status === 404) {
+        return false;
+      }
+      console.error("Błąd podczas sprawdzania emaila:", error);
+      return false;
+    }
+  };
+
   const handleNext = async (values: RegisterAuthValues) => {
     setIsEmailError(false);
     setIdEmailChecking(true);
 
-    const response = await apiClient.post("/check-email", {
-      email: values.email,
-    });
+    const emailExists = await checkEmail(values.email);
 
-    if (!response.data.exists) {
+    if (!emailExists) {
       setIsEmailError(false);
       setRegisterData(values);
       setIdEmailChecking(false);
