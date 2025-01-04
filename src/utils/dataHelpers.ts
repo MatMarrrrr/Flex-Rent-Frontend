@@ -1,4 +1,4 @@
-import { Period } from "@/types/interfaces";
+import { Period, ReservedPeriod } from "@/types/interfaces";
 import { Range } from "react-date-range";
 
 export const timestampToDate = (timestamp: number): string => {
@@ -14,12 +14,12 @@ export const dateToTimestamp = (dateString: string): number => {
   return date.getTime();
 };
 
-export const generateDisabledDates = (reservedPeriods: Period[]): Date[] => {
+export const generateDisabledDates = (reservedPeriods: ReservedPeriod[]): Date[] => {
   const disabledDates: Date[] = [];
 
   reservedPeriods.forEach((period) => {
-    const start = new Date(period.startDate);
-    const end = new Date(period.endDate);
+    const start = new Date(period.start_date);
+    const end = new Date(period.end_date);
 
     start.setHours(0, 0, 0, 0);
     end.setHours(0, 0, 0, 0);

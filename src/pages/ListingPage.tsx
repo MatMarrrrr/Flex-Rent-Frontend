@@ -55,14 +55,8 @@ export default function ListingPage() {
   const [isOwner, setIsOwner] = useState(false);
   const [isRequestSent, setIsRequestSent] = useState<boolean>(false);
   const [isRequestSending, setIsRequestSending] = useState<boolean>(false);
+  const [disabledDates, setDisabledDates] = useState<Date[]>([]);
   const [error, setError] = useState<string>("");
-
-  let reservedPeriods = [
-    { startDate: "2025-02-01", endDate: "2025-02-10" },
-    { startDate: "2025-02-15", endDate: "2025-02-18" },
-  ];
-
-  const disabledDates = generateDisabledDates(reservedPeriods);
 
   const handleBack = () => {
     navigate(-1);
@@ -154,7 +148,11 @@ export default function ListingPage() {
 
       user && setIsOwner(response.data.owner_id === user.id);
       setListingDetails(response.data);
-      
+      const reservedPeriods = generateDisabledDates(
+        response.data.reserved_periods
+      );
+      setDisabledDates(reservedPeriods);
+
       if (isLogin) {
         try {
           await checkIfRequestIsSent(
@@ -163,10 +161,11 @@ export default function ListingPage() {
             response.data.id
           );
         } catch (error) {
-          console.log('Request check failed:', error);
+          console.log("Request check failed:", error);
         }
       }
     } catch (error) {
+      console.log(error);
       setError("Nieprawidłowy identyfikator ogłoszenia.");
     } finally {
       setIsLoading(false);

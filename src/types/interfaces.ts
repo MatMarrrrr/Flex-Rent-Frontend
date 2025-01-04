@@ -11,6 +11,11 @@ export interface Period {
   endDate: string;
 }
 
+export interface ReservedPeriod {
+  start_date: string;
+  end_date: string;
+}
+
 export interface Request {
   id: number;
   start_date: string;
