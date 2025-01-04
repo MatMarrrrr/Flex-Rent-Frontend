@@ -3,7 +3,7 @@ import Button from "@/components/buttons/Button";
 import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
 import getSymbolFromCurrency from "currency-symbol-map";
 import { calculateDaysDifference } from "@/utils/dataHelpers";
-import { Period, Rental } from "@/types/interfaces";
+import { Rental } from "@/types/interfaces";
 
 interface RentalItemProps {
   rental: Rental;
@@ -14,33 +14,32 @@ const RentalItem: React.FC<RentalItemProps> = ({
   rental,
   onSendMessageClick,
 }) => {
-  const calculateCost = (rentedPeriod: Period) => {
-    const daysPeriod = calculateDaysDifference(
-      rentedPeriod.startDate,
-      rentedPeriod.endDate
-    );
-    return daysPeriod * rental.price;
+  const listing = rental.listing;
+  const request = rental.request;
+  const calculateCost = (startDate: string, endDate: string, price: number) => {
+    const daysPeriod = calculateDaysDifference(startDate, endDate);
+    return +(daysPeriod * price).toFixed(2);
   };
 
   return (
     <Container>
-      <Image src={rental.image} />
+      <Image src={listing.image} />
       <Wrapper>
-        <Name>{rental.name}</Name>
+        <Name>{listing.name}</Name>
         <Category>Kategoria</Category>
         <ItemDetailContainer>
           <ItemDetailTextBold>Lokalizacja: </ItemDetailTextBold>
-          <ItemDetailText>{rental.localization}</ItemDetailText>
+          <ItemDetailText>{listing.localization}</ItemDetailText>
         </ItemDetailContainer>
         <ItemDetailContainer>
           <ItemDetailTextBold>Okres: </ItemDetailTextBold>
-          <ItemDetailText>{`${rental.rentedPeriod.startDate} - ${rental.rentedPeriod.endDate}`}</ItemDetailText>
+          <ItemDetailText>{`${request.start_date} - ${request.end_date}`}</ItemDetailText>
         </ItemDetailContainer>
         <ItemDetailContainer>
           <ItemDetailTextBold>Koszt: </ItemDetailTextBold>
           <ItemDetailText>
-            {calculateCost(rental.rentedPeriod)}
-            {getSymbolFromCurrency(rental.currency)}
+            {calculateCost(request.start_date, request.end_date, listing.price)}
+            {getSymbolFromCurrency(listing.currency)}
           </ItemDetailText>
         </ItemDetailContainer>
         <Button

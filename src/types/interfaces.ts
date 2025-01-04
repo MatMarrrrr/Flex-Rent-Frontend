@@ -33,13 +33,10 @@ export interface Listing {
 
 export interface Rental {
   id: number;
-  image: string;
-  name: string;
-  category: string;
-  price: number;
-  currency: string;
-  localization: string;
-  rentedPeriod: Period;
+  listing: Listing;
+  owner: User;
+  borrower: User;
+  request: Request;
 }
 
 export interface RegisterAuthValues {

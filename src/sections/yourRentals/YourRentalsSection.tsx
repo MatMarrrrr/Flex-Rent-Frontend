@@ -1,13 +1,15 @@
 import Loader from "@/components/ui/Loader";
 import MotionWrapper from "@/components/ui/MotionWrapper";
 import { useEffect, useState } from "react";
-import test_item from "@/assets/test_item.jpg";
 import styled from "styled-components";
 import { fromBottomVariants03 } from "@/consts/motionVariants";
 import RentalItem from "@/sections/yourRentals/components/RentalItem";
-import { Period, Rental } from "@/types/interfaces";
+import { Rental } from "@/types/interfaces";
+import apiClient from "@/utils/apiClient";
+import { useUser } from "@/contexts/UserContext";
 
 const YourRentalsSection = () => {
+  const { token } = useUser();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [yourRentals, setYourRentals] = useState<Rental[]>([]);
 
@@ -15,28 +17,24 @@ const YourRentalsSection = () => {
     console.log("Message" + id);
   };
 
-  useEffect(() => {
-    const rentals = Array.from({ length: 5 }, (_, index) => ({
-      id: index + 1,
-      image: test_item,
-      name: `Nazwa rzeczy do wypożyczenia ${index + 1}`,
-      category: "Kategoria",
-      price: 100,
-      currency: "PLN",
-      localization: `Warszawa`,
-      rentedPeriod: {
-        startDate: "22.12.2024",
-        endDate: "28.12.2024",
-      } as Period,
-    }));
-
-    setYourRentals(rentals);
-
-    const timeout = setTimeout(() => {
+  const getYourRentals = async () => {
+    try {
+      setIsLoading(true);
+      const response = await apiClient.get(`rentals`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setYourRentals(response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
+  };
 
-    return () => clearTimeout(timeout);
+  useEffect(() => {
+    getYourRentals();
   }, []);
 
   return (
@@ -55,6 +53,9 @@ const YourRentalsSection = () => {
               onSendMessageClick={() => handleSendMessageClick(rental.id)}
             />
           ))}
+          {yourRentals.length === 0 && (
+            <NoResultsText>Aktualnie nie masz żadnych wypożyczeń</NoResultsText>
+          )}
         </MotionWrapper>
       )}
     </Container>
@@ -91,4 +92,15 @@ const LoaderText = styled.p`
   color: var(--dark);
   font-weight: bold;
   text-align: center;
+`;
+
+const NoResultsText = styled.p`
+  font-size: 24px;
+  text-align: start;
+  color: var(--dark);
+  font-weight: bold;
+
+  @media (max-width: 620px) {
+    text-align: center;
+  }
 `;
