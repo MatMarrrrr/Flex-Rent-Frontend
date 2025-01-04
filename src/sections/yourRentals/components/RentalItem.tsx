@@ -2,7 +2,10 @@ import styled from "styled-components";
 import Button from "@/components/buttons/Button";
 import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
 import getSymbolFromCurrency from "currency-symbol-map";
-import { calculateDaysDifference } from "@/utils/dataHelpers";
+import {
+  calculateDaysDifference,
+  getDateRangeString,
+} from "@/utils/dataHelpers";
 import { Rental } from "@/types/interfaces";
 
 interface RentalItemProps {
@@ -33,7 +36,12 @@ const RentalItem: React.FC<RentalItemProps> = ({
         </ItemDetailContainer>
         <ItemDetailContainer>
           <ItemDetailTextBold>Okres: </ItemDetailTextBold>
-          <ItemDetailText>{`${request.start_date} - ${request.end_date}`}</ItemDetailText>
+          <ItemDetailText>
+            {getDateRangeString({
+              startDate: request.start_date,
+              endDate: request.end_date,
+            })}
+          </ItemDetailText>
         </ItemDetailContainer>
         <ItemDetailContainer>
           <ItemDetailTextBold>Koszt: </ItemDetailTextBold>
