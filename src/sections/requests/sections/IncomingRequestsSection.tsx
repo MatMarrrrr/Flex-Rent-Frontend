@@ -188,21 +188,28 @@ export default function IncomingRequestsSection() {
         </LoaderContainer>
       ) : (
         <>
-          <FilterContainer>
-            <FilterText>Pokaż tylko:</FilterText>
-            <CheckboxesContainer>
-              {["waiting", "accepted", "confirmed", "declined", "canceled"].map(
-                (status) => (
+          {incomingRequests.length > 0 && (
+            <FilterContainer>
+              <FilterText>Pokaż tylko:</FilterText>
+              <CheckboxesContainer>
+                {[
+                  "waiting",
+                  "accepted",
+                  "confirmed",
+                  "declined",
+                  "canceled",
+                ].map((status) => (
                   <FilterCheckbox
                     key={status}
                     label={getStatusLabel(status as RequestStatus)}
                     isChecked={filterStatuses.includes(status as RequestStatus)}
                     onChange={() => handleFilterChange(status as RequestStatus)}
                   />
-                )
-              )}
-            </CheckboxesContainer>
-          </FilterContainer>
+                ))}
+              </CheckboxesContainer>
+            </FilterContainer>
+          )}
+
           <MotionWrapper variants={fromBottomVariants03}>
             {filteredRequests.map((request) => {
               const isUpdatingAccept = updatingRequests.some(
@@ -334,4 +341,5 @@ const NoResultsText = styled.p`
   font-size: 24px;
   color: var(--dark);
   font-weight: bold;
+  margin-top: 15px;
 `;

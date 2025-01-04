@@ -208,19 +208,28 @@ export default function OutgoingRequestsSection() {
         </LoaderContainer>
       ) : (
         <>
-          <FilterContainer>
-            <FilterText>Pokaż tylko: </FilterText>
-            <CheckboxesContainer>
-              {["waiting", "accepted", "declined", "canceled"].map((status) => (
-                <FilterCheckbox
-                  key={status}
-                  label={getStatusLabel(status as RequestStatus)}
-                  isChecked={filterStatuses.includes(status as RequestStatus)}
-                  onChange={() => handleFilterChange(status as RequestStatus)}
-                />
-              ))}
-            </CheckboxesContainer>
-          </FilterContainer>
+          {outgoingRequests.length > 0 && (
+            <FilterContainer>
+              <FilterText>Pokaż tylko: </FilterText>
+              <CheckboxesContainer>
+                {["waiting", "accepted", "declined", "canceled"].map(
+                  (status) => (
+                    <FilterCheckbox
+                      key={status}
+                      label={getStatusLabel(status as RequestStatus)}
+                      isChecked={filterStatuses.includes(
+                        status as RequestStatus
+                      )}
+                      onChange={() =>
+                        handleFilterChange(status as RequestStatus)
+                      }
+                    />
+                  )
+                )}
+              </CheckboxesContainer>
+            </FilterContainer>
+          )}
+
           <MotionWrapper variants={fromBottomVariants03}>
             {filteredRequests.map((request) => {
               console.log(request);
@@ -284,6 +293,7 @@ const LoaderText = styled.p`
 const FilterContainer = styled.div`
   display: flex;
   align-items: center;
+  margin-top: 10px;
 
   @media (max-width: 1320px) {
     width: 100%;
@@ -328,4 +338,5 @@ const NoResultsText = styled.p`
   font-size: 24px;
   color: var(--dark);
   font-weight: bold;
+  margin-top: 15px;
 `;
