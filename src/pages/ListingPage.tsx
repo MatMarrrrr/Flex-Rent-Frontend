@@ -342,7 +342,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: var(--light);
+  background-color: var(--white);
   min-height: calc(100vh - 308px);
 
   @media (max-width: 500px) {
@@ -377,6 +377,7 @@ const BackContainer = styled.div`
   align-items: center;
   gap: 10px;
   margin: 0px 0px 10px 10px;
+  padding-left: 30px;
   max-width: 1200px;
   width: 100%;
   width: 100%;
@@ -399,6 +400,7 @@ const BackContainer = styled.div`
 const MobileBackContainer = styled(BackContainer)`
   display: none;
   margin: 0 0 10px 0;
+  padding-left: 0;
 
   @media (max-width: 1330px) {
     display: flex;
