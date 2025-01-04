@@ -97,7 +97,6 @@ const YourListingsSection = () => {
       if (response.status === 200) {
         setYourListings(response.data);
       } else {
-        setYourListings([]);
         notify("Wystąpił błąd podczas pobierania ogłoszeń", "error");
       }
 

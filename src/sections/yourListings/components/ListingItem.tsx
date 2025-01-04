@@ -8,6 +8,8 @@ import Button from "@/components/buttons/Button";
 import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
 import getSymbolFromCurrency from "currency-symbol-map";
 import { Listing } from "@/types/interfaces";
+import { useTranslation } from "react-i18next";
+import { getDateRangeString } from "@/utils/dataHelpers";
 
 interface ListingItemProps {
   listing: Listing;
@@ -20,12 +22,14 @@ const ListingItem: React.FC<ListingItemProps> = ({
   onEditClick,
   onDeleteClick,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <Container>
       <Image src={listing.image} />
       <Wrapper>
         <Name>{listing.name}</Name>
-        <Category>{listing.category_id}</Category>
+        <Category>{t(`category${listing.category_id}`)}</Category>
         <ItemDetailsContainer>
           <ItemDetailText>
             {listing.price}
@@ -36,12 +40,21 @@ const ListingItem: React.FC<ListingItemProps> = ({
             <ItemDetailText>{listing.localization}</ItemDetailText>
           </ItemLocalizationContainer>
         </ItemDetailsContainer>
-        {listing.rentedPeriods &&
-          listing.rentedPeriods.map((period, index) => (
-            <ItemDetailText key={index}>
-              Wypożyczone: {period.startDate} - {period.endDate}
-            </ItemDetailText>
-          ))}
+        <ReservedPeriodsContainer>
+          {listing.reserved_periods && listing.reserved_periods.length > 0 && (
+            <>
+              <ItemDetailText>Zarezerwowane: </ItemDetailText>
+              {listing.reserved_periods.map((period, index) => (
+                <ItemDetailText key={index}>
+                  {getDateRangeString({
+                    startDate: period.start_date,
+                    endDate: period.end_date,
+                  })}
+                </ItemDetailText>
+              ))}
+            </>
+          )}
+        </ReservedPeriodsContainer>
         <Button
           desktopMaxWidth="500px"
           mobileStart={1320}
@@ -165,4 +178,10 @@ const ItemEditIcon = styled(PencilIcon)`
 const ItemDeleteIcon = styled(XIcon)`
   height: 22px;
   width: 22px;
+`;
+
+const ReservedPeriodsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 `;

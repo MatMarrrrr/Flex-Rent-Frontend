@@ -32,7 +32,7 @@ export interface Listing {
   price: number;
   currency: string;
   localization: string;
-  rentedPeriods?: Period[];
+  reserved_periods?: ReservedPeriod[];
   status: ListingStatus;
 }
 
