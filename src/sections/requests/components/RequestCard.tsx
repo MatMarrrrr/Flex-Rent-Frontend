@@ -4,9 +4,12 @@ import getSymbolFromCurrency from "currency-symbol-map";
 import { Request } from "@/types/interfaces";
 import {
   calculateDaysDifference,
+  formatDateForDisplay,
   getDateRangeString,
 } from "@/utils/dataHelpers";
 import { useTranslation } from "react-i18next";
+import { useLocation } from "react-router";
+import { useEffect, useState } from "react";
 
 interface RequestCardProps {
   request: Request;
@@ -15,11 +18,46 @@ interface RequestCardProps {
 
 const RequestCard: React.FC<RequestCardProps> = ({ request, children }) => {
   const { t } = useTranslation();
+  const location = useLocation();
+  const [requestsSection, setRequestsSection] = useState<
+    "outgoing" | "incoming"
+  >("incoming");
+
   const calculateCost = (startDate: string, endDate: string, price: number) => {
     const daysPeriod = calculateDaysDifference(startDate, endDate);
     return +(daysPeriod * price).toFixed(2);
   };
   let listing = request.listing;
+
+  const getActionString = () => {
+    switch (request.status) {
+      case "waiting":
+        return requestsSection === "incoming" ? "Otrzymano:" : "Wysłano:";
+      case "accepted":
+        return "Zaakceptowano:";
+      case "declined":
+        return "Odrzucono:";
+      case "confirmed":
+        return "Potwierdzono:";
+      case "canceled":
+        return "Anulowano:";
+    }
+  };
+
+  const getActionDate = () => {
+    const date =
+      request.status === "waiting" ? request.created_at : request.updated_at;
+    return formatDateForDisplay(date);
+  };
+
+  useEffect(() => {
+    if (location.pathname.includes("outgoing")) {
+      setRequestsSection("outgoing");
+    } else {
+      setRequestsSection("incoming");
+    }
+  }, [location.pathname]);
+
   return (
     <Container>
       <Image src={listing.image} />
@@ -45,6 +83,10 @@ const RequestCard: React.FC<RequestCardProps> = ({ request, children }) => {
             {calculateCost(request.start_date, request.end_date, listing.price)}
             {getSymbolFromCurrency(listing.currency)}
           </ItemDetailText>
+        </ItemDetailContainer>
+        <ItemDetailContainer>
+          <ItemDetailTextBold>{getActionString()}</ItemDetailTextBold>
+          <ItemDetailText>{getActionDate()}</ItemDetailText>
         </ItemDetailContainer>
         {children}
       </Wrapper>

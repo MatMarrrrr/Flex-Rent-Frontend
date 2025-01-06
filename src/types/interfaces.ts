@@ -22,6 +22,8 @@ export interface Request {
   end_date: string;
   status: RequestStatus;
   listing: Listing;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Listing {
