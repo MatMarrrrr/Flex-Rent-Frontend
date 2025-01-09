@@ -25,8 +25,13 @@ export const Chat: React.FC<ChatProps> = ({
     return initials;
   };
 
+  const handleChatClick = () => {
+    if (status === "active") return;
+    onClick();
+  };
+
   return (
-    <ChatContainer key={id} $status={status} onClick={onClick}>
+    <ChatContainer key={id} $status={status} onClick={handleChatClick}>
       {!profilePicture && (
         <ChatProfileText>{getProfileText(name)}</ChatProfileText>
       )}
@@ -46,11 +51,12 @@ const ChatContainer = styled.div<{ $status: ChatStatus }>`
   padding: 5px 10px;
   min-width: 400px;
   width: 100%;
-  cursor: pointer;
+  cursor: ${({ $status }) => ($status === "active" ? "default" : "pointer")};
   transition: transform 0.3s ease;
 
   &:hover {
-    transform: scale(1.02);
+    transform: ${({ $status }) =>
+      $status !== "active" ? "scale(1.02)" : "none"};
   }
 
   @media (max-width: 1250px) {

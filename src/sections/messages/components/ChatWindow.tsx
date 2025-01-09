@@ -3,14 +3,42 @@ import { Send as SendIcon } from "lucide-react";
 import { ChatMessage } from "@/sections/messages/components/ChatMessage";
 import { forwardRef, useState } from "react";
 import Loader from "@/components/ui/Loader";
+import apiClient from "@/utils/apiClient";
+import { useUser } from "@/contexts/UserContext";
 
+interface Message {
+  id: number;
+  content: string;
+  sender: {
+    name: string;
+    surname: string;
+    profile_image: string;
+  };
+  sender_id: number;
+}
 interface ChatWindowProps {
+  chatId: number;
   messagesLoading: boolean;
+  listing: string;
+  receiver: string;
+  messages: Message[];
 }
 
 export const ChatWindow = forwardRef<HTMLDivElement, ChatWindowProps>(
-  ({ messagesLoading }, ref) => {
+  ({ messagesLoading, listing, receiver, messages, chatId }, ref) => {
+    const { token, user } = useUser();
     const [message, setMessage] = useState<string>("");
+
+    const getInitials = (message: Message): string => {
+      const fullName = `${message.sender.name} ${message.sender.surname}`;
+      const initials = fullName
+        .trim()
+        .split(" ")
+        .map((word) => word[0].toUpperCase())
+        .join("");
+
+      return initials;
+    };
 
     const handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setMessage(e.target.value);
@@ -22,17 +50,28 @@ export const ChatWindow = forwardRef<HTMLDivElement, ChatWindowProps>(
       }
     };
 
-    const sendMessage = () => {
+    const sendMessage = async () => {
       if (message.trim() === "") return;
-      console.log(message);
+      await apiClient.post(
+        `messages`,
+        {
+          chat_id: chatId,
+          content: message,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setMessage("");
     };
 
     return (
       <ChatWindowContainer ref={ref} data-aos="fade-up">
         <ChatTitleContainer>
-          <ChatTitle>Rozmawiasz z Imię Nazwisko</ChatTitle>
-          <ChatTitle>Nazwa przedmiotu</ChatTitle>
+          <ChatTitle>Rozmawiasz z {receiver}</ChatTitle>
+          <ChatTitle>{listing}</ChatTitle>
         </ChatTitleContainer>
         <ChatMessagesContainer>
           {messagesLoading ? (
@@ -40,17 +79,18 @@ export const ChatWindow = forwardRef<HTMLDivElement, ChatWindowProps>(
               <Loader />
               <LoaderText>Wczytywanie wiadomości</LoaderText>
             </LoaderContainer>
+          ) : messages.length > 0 ? (
+            messages.map((message) => (
+              <ChatMessage
+                key={message.id}
+                profilePicture={message.sender.profile_image}
+                profileText={getInitials(message)}
+                isSender={user?.id === message.sender_id}
+                content={message.content}
+              />
+            ))
           ) : (
-            <>
-              <ChatMessage isSender={false} />
-              <ChatMessage isSender={true} />
-              <ChatMessage isSender={false} />
-              <ChatMessage isSender={true} />
-              <ChatMessage isSender={false} />
-              <ChatMessage isSender={true} />
-              <ChatMessage isSender={false} />
-              <ChatMessage isSender={true} />
-            </>
+            <span>Brak wiadomości</span>
           )}
         </ChatMessagesContainer>
         <ChatInputContainer>

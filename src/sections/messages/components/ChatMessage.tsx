@@ -1,18 +1,28 @@
 import SkeletonLoaderImage from "@/components/ui/SkeletonLoaderImage";
-import test_image from "@/assets/test_item.jpg";
 import styled from "styled-components";
 
 interface ChatMessageProps {
   isSender: boolean;
+  content: string;
+  profilePicture: string | null;
+  profileText: string;
 }
 
-export const ChatMessage: React.FC<ChatMessageProps> = ({ isSender }) => {
+export const ChatMessage: React.FC<ChatMessageProps> = ({
+  isSender,
+  content,
+  profilePicture,
+  profileText,
+}) => {
   return (
     <MessageContainer $isSender={isSender}>
-      {!isSender && <SenderImage src={test_image} />}
-      <Message $isSender={isSender}>
-        Proin nec ex in justo posuere dictum. Proin id tempus metus, ac luctus.
-      </Message>
+      {!isSender &&
+        (profilePicture ? (
+          <SenderImage src={profilePicture} />
+        ) : (
+          <ChatProfileText>{profileText}</ChatProfileText>
+        ))}
+      <Message $isSender={isSender}>{content}</Message>
     </MessageContainer>
   );
 };
@@ -30,6 +40,21 @@ const SenderImage = styled(SkeletonLoaderImage)`
   height: 28px;
   width: 28px;
   border-radius: 50%;
+`;
+
+const ChatProfileText = styled.div`
+  min-height: 28px;
+  min-width: 28px;
+  height: 28px;
+  width: 28px;
+  font-size: 12px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: var(--white);
 `;
 
 const Message = styled.div<{ $isSender: boolean }>`
