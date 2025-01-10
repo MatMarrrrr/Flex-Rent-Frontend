@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Send as SendIcon } from "lucide-react";
 import { ChatMessage } from "@/sections/messages/components/ChatMessage";
-import { forwardRef, useState } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import Loader from "@/components/ui/Loader";
 import apiClient from "@/utils/apiClient";
 import { useUser } from "@/contexts/UserContext";
@@ -28,6 +28,8 @@ export const ChatWindow = forwardRef<HTMLDivElement, ChatWindowProps>(
   ({ messagesLoading, listing, receiver, messages, chatId }, ref) => {
     const { token, user } = useUser();
     const [message, setMessage] = useState<string>("");
+    const [messageSending, setMessageSending] = useState<boolean>(false);
+    const messagesRef = useRef<HTMLDivElement>(null);
 
     const getInitials = (message: Message): string => {
       const fullName = `${message.sender.name} ${message.sender.surname}`;
@@ -38,6 +40,12 @@ export const ChatWindow = forwardRef<HTMLDivElement, ChatWindowProps>(
         .join("");
 
       return initials;
+    };
+
+    const scrollToBottom = () => {
+      if (messagesRef.current) {
+        messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
+      }
     };
 
     const handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,7 +59,8 @@ export const ChatWindow = forwardRef<HTMLDivElement, ChatWindowProps>(
     };
 
     const sendMessage = async () => {
-      if (message.trim() === "") return;
+      if (message.trim() === "" || messageSending) return;
+      setMessageSending(true);
       await apiClient.post(
         `messages`,
         {
@@ -65,7 +74,14 @@ export const ChatWindow = forwardRef<HTMLDivElement, ChatWindowProps>(
         }
       );
       setMessage("");
+      setMessageSending(false);
     };
+
+    useEffect(() => {
+      if (!messagesLoading) {
+        scrollToBottom();
+      }
+    }, [messages, messagesLoading]);
 
     return (
       <ChatWindowContainer ref={ref} data-aos="fade-up">
@@ -73,7 +89,7 @@ export const ChatWindow = forwardRef<HTMLDivElement, ChatWindowProps>(
           <ChatTitle>Rozmawiasz z {receiver}</ChatTitle>
           <ChatTitle>{listing}</ChatTitle>
         </ChatTitleContainer>
-        <ChatMessagesContainer>
+        <ChatMessagesContainer ref={messagesRef}>
           {messagesLoading ? (
             <LoaderContainer>
               <Loader />
@@ -90,7 +106,7 @@ export const ChatWindow = forwardRef<HTMLDivElement, ChatWindowProps>(
               />
             ))
           ) : (
-            <span>Brak wiadomości</span>
+            <EmptyChatText>Brak wiadomości</EmptyChatText>
           )}
         </ChatMessagesContainer>
         <ChatInputContainer>
@@ -100,7 +116,13 @@ export const ChatWindow = forwardRef<HTMLDivElement, ChatWindowProps>(
             value={message}
             onKeyDown={handleMessageKeyDown}
           />
-          <ChatSendButton onClick={sendMessage} />
+          {messageSending ? (
+            <SendMessageLoaderContainer>
+              <Loader size={24} />
+            </SendMessageLoaderContainer>
+          ) : (
+            <ChatSendButton onClick={sendMessage} />
+          )}
         </ChatInputContainer>
       </ChatWindowContainer>
     );
@@ -180,4 +202,16 @@ const ChatSendButton = styled(SendIcon)`
   right: 15px;
   top: 10px;
   cursor: pointer;
+`;
+
+const SendMessageLoaderContainer = styled.div`
+  position: absolute;
+  right: 15px;
+  top: 10px;
+`;
+
+const EmptyChatText = styled.p`
+  color: var(--dark);
+  font-size: 16px;
+  text-align: center;
 `;

@@ -9,6 +9,7 @@ import { ChatStatus } from "@/types/types";
 import apiClient from "@/utils/apiClient";
 import { useUser } from "@/contexts/UserContext";
 import { useToast } from "@/contexts/ToastContext";
+import echo from "@/utils/pusher";
 
 interface ChatData {
   id: number;
@@ -48,6 +49,8 @@ const MessagesSection = () => {
   const [chats, setChats] = useState<ChatData[]>([]);
   const [activeChatId, setActiveChatId] = useState<number>(0);
   const [messages, setMessages] = useState<Message[]>([]);
+  const isPusherDebug =
+    import.meta.env.VITE_APP_PUSHER_DEBUG === "true" || false;
 
   const scrollToChatWindow = () => {
     if (window.innerWidth < 1250) {
@@ -152,6 +155,48 @@ const MessagesSection = () => {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    console.log("Initializing channel for chatId:", activeChatId);
+
+    const channel = echo.channel(`chat.${activeChatId}`);
+
+    if (isPusherDebug) {
+      echo.connector.pusher.connection.bind("connected", () => {
+        console.log("Connected to Pusher");
+        console.log(
+          "Connection state:",
+          echo.connector.pusher.connection.state
+        );
+      });
+
+      echo.connector.pusher.connection.bind("error", (err: any) => {
+        console.error("Pusher connection error:", err);
+      });
+    }
+
+    channel.listen("MessageSent", (message: Message) => {
+      if (isPusherDebug) {
+        console.log("Received message:", message);
+      }
+
+      if (message) {
+        setMessages((prevMessages) => [...prevMessages, message]);
+      } else {
+        console.error("Invalid message data received:", message);
+      }
+    });
+
+    if (isPusherDebug) {
+      channel.error((error: any) => {
+        console.error("Channel subscription error:", error);
+      });
+    }
+
+    return () => {
+      echo.leaveChannel(`chat.${activeChatId}`);
+    };
+  }, [activeChatId]);
 
   useEffect(() => {
     getChats();
