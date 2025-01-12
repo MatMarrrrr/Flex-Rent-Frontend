@@ -15,6 +15,7 @@ import apiClient from "@/utils/apiClient";
 import { useUser } from "@/contexts/UserContext";
 import { format } from "date-fns";
 import { useNavigate } from "react-router";
+import { generateDisabledDates } from "@/utils/dataHelpers";
 
 export default function OutgoingRequestsSection() {
   const { notify } = useToast();
@@ -27,9 +28,11 @@ export default function OutgoingRequestsSection() {
   const [modalData, setModalData] = useState<{
     isVisible: boolean;
     requestId: number | null;
+    disabledDates: Date[] | null;
   }>({
     isVisible: false,
     requestId: null,
+    disabledDates: null,
   });
   const [filterStatuses, setFilterStatuses] = useState<RequestStatus[]>([
     "waiting",
@@ -41,6 +44,33 @@ export default function OutgoingRequestsSection() {
         ? prev.filter((s) => s !== status)
         : [...prev, status]
     );
+  };
+
+  const excludeDates = (dates: Date[], startDate: string, endDate: string) => {
+    const start = new Date(startDate).setHours(0, 0, 0, 0);
+    const end = new Date(endDate).setHours(0, 0, 0, 0);
+
+    return dates.filter((date) => {
+      const current = new Date(date).setHours(0, 0, 0, 0);
+
+      return current < start || current > end;
+    });
+  };
+
+  const getDisabledDatesFromRequest = (requestId: number) => {
+    const request = outgoingRequests.find(
+      (request) => request.id === requestId
+    );
+
+    if (!request || !request.listing?.reserved_periods) {
+      return [];
+    }
+
+    const disabledRange = generateDisabledDates(
+      request.listing.reserved_periods
+    );
+
+    return excludeDates(disabledRange, request.start_date, request.end_date);
   };
 
   const filteredRequests = outgoingRequests.filter((request) =>
@@ -106,6 +136,7 @@ export default function OutgoingRequestsSection() {
     setModalData({
       isVisible: true,
       requestId: requestId,
+      disabledDates: getDisabledDatesFromRequest(requestId),
     });
   };
 
@@ -113,6 +144,7 @@ export default function OutgoingRequestsSection() {
     setModalData({
       isVisible: false,
       requestId: null,
+      disabledDates: null,
     });
   };
 
@@ -210,6 +242,7 @@ export default function OutgoingRequestsSection() {
         isVisible={modalData.isVisible}
         isChanging={isChanging}
         requestId={modalData.requestId!}
+        disabledDates={modalData.disabledDates!}
         onAcceptClick={handlePeriodChange}
         onClose={hideChangePeriodModal}
       />

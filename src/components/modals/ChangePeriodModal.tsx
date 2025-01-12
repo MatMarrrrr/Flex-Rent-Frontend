@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { fadeIn, fadeOut } from "@/styledComponents/keyframes";
 import { X as XIcon } from "lucide-react";
@@ -7,12 +7,13 @@ import DateRangeCalendar from "@/components/ui/DateRangeCalendar";
 import { Range } from "react-date-range";
 import { RangeKeyDict } from "react-date-range";
 import pl from "date-fns/locale/pl";
-import { generateDisabledDates, getDateRangeString } from "@/utils/dataHelpers";
+import { getDateRangeString } from "@/utils/dataHelpers";
 import Loader from "@/components/ui/Loader";
 
 interface ChangePeriodModalProps {
   isVisible: boolean;
   isChanging: boolean;
+  disabledDates: Date[];
   requestId: number;
   onAcceptClick: (requestId: number, selectedRange: Range) => void;
   onClose: () => void;
@@ -21,6 +22,7 @@ interface ChangePeriodModalProps {
 const ChangePeriodModal: React.FC<ChangePeriodModalProps> = ({
   isVisible,
   isChanging,
+  disabledDates,
   requestId,
   onAcceptClick,
   onClose,
@@ -31,7 +33,6 @@ const ChangePeriodModal: React.FC<ChangePeriodModalProps> = ({
     endDate: new Date(),
     key: "selectedRange",
   });
-  const [disabledDates, setDisabledDates] = useState<Date[] | null>(null);
 
   const handleClose = () => {
     setisClosing(true);
@@ -44,27 +45,6 @@ const ChangePeriodModal: React.FC<ChangePeriodModalProps> = ({
   const onDateRangeChange = (ranges: RangeKeyDict) => {
     setSelectedDateRange(ranges.selectedRange);
   };
-
-  useEffect(() => {
-    if (isVisible) {
-      setDisabledDates(null);
-      setSelectedDateRange({
-        startDate: new Date(),
-        endDate: new Date(),
-        key: "selectedRange",
-      });
-      let reservedPeriods = [
-        { startDate: "2025-02-01", endDate: "2025-02-10" },
-        { startDate: "2025-02-15", endDate: "2025-02-18" },
-      ];
-
-      const disabledDates = generateDisabledDates(reservedPeriods);
-
-      setTimeout(() => {
-        setDisabledDates(disabledDates);
-      }, 1000);
-    }
-  }, [isVisible]);
 
   if (!isVisible && !isClosing) return null;
 
