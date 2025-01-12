@@ -52,7 +52,7 @@ const OutgoingRequestButtons: React.FC<OutgoingRequestButtonsProps> = ({
           onClick={onGoToChatClick}
         >
           <SendIcon />
-          Wyślij wiadomość
+          Przejdź do chatu
         </Button>
       </>
     )}
