@@ -46,7 +46,7 @@ const ProfileImageCircle: React.FC<ProfileImageCircleProps> = ({
       </ImageCircle>
       <ChangeImageButton disabled={disabled}>
         <StyledCameraIcon />
-        <ChangeImageText>Zmień zdjęcie</ChangeImageText>
+        <ChangeImageText>Prześlij plik</ChangeImageText>
         <FileInput
           type="file"
           accept="image/jpeg,image/png"
