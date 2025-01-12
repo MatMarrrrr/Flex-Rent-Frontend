@@ -51,7 +51,7 @@ export default function EditListingPage() {
       });
 
       if (response.status === 200) {
-        if (imageFile) {
+        if (imageFile && imageFile instanceof File && imageFile.size > 0) {
           const formData = new FormData();
           formData.append("image", imageFile);
 
@@ -73,6 +73,8 @@ export default function EditListingPage() {
               "error"
             );
           }
+        } else {
+          notify("Ogłoszenie zostało zaktualizowane!", "success");
         }
       }
     } catch (error) {
