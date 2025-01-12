@@ -118,7 +118,7 @@ export default function IncomingRequestsSection() {
       { requestId, action: "goingToChat" },
     ]);
 
-    const response = await apiClient.get(`chats/${requestId}/`, {
+    const response = await apiClient.get(`chats/request/${requestId}/`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

@@ -7,14 +7,24 @@ import RentalItem from "@/sections/yourRentals/components/RentalItem";
 import { Rental } from "@/types/interfaces";
 import apiClient from "@/utils/apiClient";
 import { useUser } from "@/contexts/UserContext";
+import { useNavigate } from "react-router";
 
 const YourRentalsSection = () => {
   const { token } = useUser();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [yourRentals, setYourRentals] = useState<Rental[]>([]);
 
-  const handleSendMessageClick = (id: number) => {
-    console.log("Message" + id);
+  const handleGoToChatClick = async (rentalId: number) => {
+    const response = await apiClient.get(`chats/rental/${rentalId}/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    navigate(`/dashboard/messages`, {
+      state: { chatId: response.data.chat.id },
+    });
   };
 
   const getYourRentals = async () => {
@@ -50,7 +60,7 @@ const YourRentalsSection = () => {
             <RentalItem
               key={rental.id}
               rental={rental}
-              onSendMessageClick={() => handleSendMessageClick(rental.id)}
+              onGoToChatClick={() => handleGoToChatClick(rental.id)}
             />
           ))}
           {yourRentals.length === 0 && (

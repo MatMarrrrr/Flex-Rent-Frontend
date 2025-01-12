@@ -10,12 +10,12 @@ import { Rental } from "@/types/interfaces";
 
 interface RentalItemProps {
   rental: Rental;
-  onSendMessageClick: (id: number) => void;
+  onGoToChatClick: (id: number) => void;
 }
 
 const RentalItem: React.FC<RentalItemProps> = ({
   rental,
-  onSendMessageClick,
+  onGoToChatClick,
 }) => {
   const listing = rental.listing;
   const request = rental.request;
@@ -58,9 +58,9 @@ const RentalItem: React.FC<RentalItemProps> = ({
           mobileStart={1320}
           mobileMaxWidth="700px"
           margin="20px 0px 0px 0px"
-          onClick={() => onSendMessageClick(rental.id)}
+          onClick={() => onGoToChatClick(rental.id)}
         >
-          Wyślij wiadomość
+          Przejdź do chatu
         </Button>
       </Wrapper>
     </Container>

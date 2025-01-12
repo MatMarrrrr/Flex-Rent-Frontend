@@ -137,7 +137,7 @@ export default function OutgoingRequestsSection() {
   const handleGoToChatClick = async (requestId: number) => {
     setUpdatingRequestIds((prev) => [...prev, requestId]);
 
-    const response = await apiClient.get(`chats/${requestId}/`, {
+    const response = await apiClient.get(`chats/request/${requestId}/`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
