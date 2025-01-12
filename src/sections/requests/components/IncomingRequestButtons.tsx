@@ -10,7 +10,7 @@ interface IncomingRequestButtonsProps {
   updatingAction: RequestAction | null;
   onAcceptClick: () => void;
   onDeclineClick: () => void;
-  onSendMessageClick: () => void;
+  onGoToChatClick: () => void;
   onConfirmRentalClick: () => void;
 }
 
@@ -20,7 +20,7 @@ const IncomingRequestButtons: React.FC<IncomingRequestButtonsProps> = ({
   updatingAction,
   onAcceptClick,
   onDeclineClick,
-  onSendMessageClick,
+  onGoToChatClick,
   onConfirmRentalClick,
 }) => (
   <>
@@ -56,7 +56,7 @@ const IncomingRequestButtons: React.FC<IncomingRequestButtonsProps> = ({
           mobileStart={1320}
           mobileMaxWidth="700px"
           margin="20px 0px 0px 0px"
-          disabled={isUpdating && updatingAction === "confirming"}
+          disabled={isUpdating}
           onClick={onConfirmRentalClick}
         >
           <CheckIcon />
@@ -138,10 +138,10 @@ const IncomingRequestButtons: React.FC<IncomingRequestButtonsProps> = ({
         mobileMaxWidth="700px"
         margin="20px 0px 0px 0px"
         disabled={isUpdating}
-        onClick={onSendMessageClick}
+        onClick={onGoToChatClick}
       >
         <SendIcon />
-        Wyślij wiadomość
+        Przejdź do chatu
       </Button>
     )}
   </>

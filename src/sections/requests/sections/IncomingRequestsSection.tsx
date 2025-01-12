@@ -11,10 +11,12 @@ import { useToast } from "@/contexts/ToastContext";
 import FilterCheckbox from "@/sections/requests/components/FilterCheckbox";
 import apiClient from "@/utils/apiClient";
 import { useUser } from "@/contexts/UserContext";
+import { useNavigate } from "react-router";
 
 export default function IncomingRequestsSection() {
   const { notify } = useToast();
   const { token } = useUser();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [incomingRequests, setIncomingRequests] = useState<Request[]>([]);
   const [updatingRequests, setUpdatingRequests] = useState<
@@ -49,6 +51,13 @@ export default function IncomingRequestsSection() {
       case "canceled":
         return "Anulowane";
     }
+  };
+
+  const getUpdatingAction = (requestId: number) => {
+    const updatingRequest = updatingRequests.find(
+      (req) => req.requestId === requestId
+    );
+    return updatingRequest?.action || null;
   };
 
   const handleAcceptClick = async (requestId: number) => {
@@ -103,8 +112,21 @@ export default function IncomingRequestsSection() {
     }
   };
 
-  const handleSendMessageClick = (chatId: number) => {
-    console.log(chatId);
+  const handleGoToChatClick = async (requestId: number) => {
+    setUpdatingRequests((prev) => [
+      ...prev,
+      { requestId, action: "goingToChat" },
+    ]);
+
+    const response = await apiClient.get(`chats/${requestId}/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    navigate(`/dashboard/messages`, {
+      state: { chatId: response.data.chat.id },
+    });
   };
 
   const handleConfirmRentalClick = async (requestId: number) => {
@@ -212,40 +234,18 @@ export default function IncomingRequestsSection() {
 
           <MotionWrapper variants={fromBottomVariants03}>
             {filteredRequests.map((request) => {
-              const isUpdatingAccept = updatingRequests.some(
-                (req) =>
-                  req.requestId === request.id && req.action === "accepting"
-              );
-              const isUpdatingDecline = updatingRequests.some(
-                (req) =>
-                  req.requestId === request.id && req.action === "declining"
-              );
-              const isUpdatingConfirm = updatingRequests.some(
-                (req) =>
-                  req.requestId === request.id && req.action === "confirming"
-              );
+              const updatingAction = getUpdatingAction(request.id);
+              const isUpdating = !!updatingAction;
 
               return (
                 <RequestCard request={request} key={request.id}>
                   <IncomingRequestButtons
                     requestStatus={request.status}
-                    isUpdating={
-                      isUpdatingAccept || isUpdatingDecline || isUpdatingConfirm
-                    }
-                    updatingAction={
-                      isUpdatingAccept
-                        ? "accepting"
-                        : isUpdatingDecline
-                        ? "declining"
-                        : isUpdatingConfirm
-                        ? "confirming"
-                        : null
-                    }
+                    isUpdating={isUpdating}
+                    updatingAction={updatingAction}
                     onAcceptClick={() => handleAcceptClick(request.id)}
                     onDeclineClick={() => handleDeclineClick(request.id)}
-                    onSendMessageClick={() =>
-                      handleSendMessageClick(request.id)
-                    }
+                    onGoToChatClick={() => handleGoToChatClick(request.id)}
                     onConfirmRentalClick={() =>
                       handleConfirmRentalClick(request.id)
                     }

@@ -11,6 +11,7 @@ import { useUser } from "@/contexts/UserContext";
 import { useToast } from "@/contexts/ToastContext";
 import echo from "@/utils/pusher";
 import HttpStatusCodes from "@/consts/httpStatusCodes";
+import { useLocation } from "react-router";
 
 interface ChatData {
   id: number;
@@ -44,6 +45,7 @@ interface Message {
 const MessagesSection = () => {
   const { token } = useUser();
   const { notify } = useToast();
+  const location = useLocation();
   const chatWindowRef = useRef<HTMLDivElement>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [messagesLoading, setMessagesLoading] = useState<boolean>(true);
@@ -136,7 +138,7 @@ const MessagesSection = () => {
           return;
         }
 
-        const defaultChatId = activeChatId || chatsData[0].id;
+        const defaultChatId = location.state?.chatId ?? chatsData[0]?.id;
 
         const chats = updateChatStatus(chatsData, defaultChatId);
         const activeChat = chats.find((chat) => chat.id === defaultChatId);
@@ -158,7 +160,9 @@ const MessagesSection = () => {
   };
 
   useEffect(() => {
-    console.log("Initializing channel for chatId:", activeChatId);
+    if (isPusherDebug) {
+      console.log("Initializing channel for chatId:", activeChatId);
+    }
 
     const channel = echo.channel(`chat.${activeChatId}`);
 
