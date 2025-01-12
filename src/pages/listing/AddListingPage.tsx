@@ -49,7 +49,7 @@ export default function AddListingPage() {
         },
       });
 
-      if (response.status === 200) {
+      if (response.status === 201) {
         notify("Ogłoszenie zostało dodane!", "success");
       } else {
         notify("Wystąpił bład podczas dodawania ogłoszenia", "error");
