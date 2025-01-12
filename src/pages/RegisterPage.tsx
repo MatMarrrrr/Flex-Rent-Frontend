@@ -27,6 +27,7 @@ import Loader from "@/components/ui/Loader";
 import { useNavigate } from "react-router";
 import { useUser } from "@/contexts/UserContext";
 import apiClient from "@/utils/apiClient";
+import HttpStatusCodes from "@/consts/httpStatusCodes";
 
 export default function RegisterPage() {
   const { register } = useUser();
@@ -56,7 +57,7 @@ export default function RegisterPage() {
       await apiClient.head(`/check-email/${email}`);
       return true;
     } catch (error: any) {
-      if (error.response?.status === 404) {
+      if (error.response?.status === HttpStatusCodes.NOT_FOUND) {
         return false;
       }
       console.error("Błąd podczas sprawdzania emaila:", error);

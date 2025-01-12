@@ -9,6 +9,7 @@ import { useToast } from "@/contexts/ToastContext";
 import apiClient from "@/utils/apiClient";
 import { useUser } from "@/contexts/UserContext";
 import { createFormData } from "@/utils/formDataHelpers";
+import HttpStatusCodes from "@/consts/httpStatusCodes";
 
 interface ListingFormValues {
   name: string;
@@ -49,7 +50,7 @@ export default function AddListingPage() {
         },
       });
 
-      if (response.status === 201) {
+      if (response.status === HttpStatusCodes.CREATED) {
         notify("Ogłoszenie zostało dodane!", "success");
       } else {
         notify("Wystąpił bład podczas dodawania ogłoszenia", "error");

@@ -10,6 +10,7 @@ import { ImageType } from "@/types/types";
 import { useToast } from "@/contexts/ToastContext";
 import apiClient from "@/utils/apiClient";
 import { useUser } from "@/contexts/UserContext";
+import HttpStatusCodes from "@/consts/httpStatusCodes";
 
 interface ListingFormValues {
   name: string;
@@ -50,7 +51,7 @@ export default function EditListingPage() {
         },
       });
 
-      if (response.status === 200) {
+      if (response.status === HttpStatusCodes.OK) {
         if (imageFile && imageFile instanceof File && imageFile.size > 0) {
           const formData = new FormData();
           formData.append("image", imageFile);
@@ -65,7 +66,7 @@ export default function EditListingPage() {
             }
           );
 
-          if (imageResponse.status === 200) {
+          if (imageResponse.status === HttpStatusCodes.OK) {
             notify("Ogłoszenie zostało zaktualizowane!", "success");
           } else {
             notify(
@@ -97,7 +98,7 @@ export default function EditListingPage() {
         },
       });
 
-      if (response.status === 200) {
+      if (response.status === HttpStatusCodes.OK) {
         const { image, ...listingData } = response.data;
         listingData.category_id = String(listingData.category_id);
         setListingData(listingData);

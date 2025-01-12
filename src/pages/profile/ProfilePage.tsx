@@ -10,6 +10,7 @@ import { ImageType } from "@/types/types";
 import { useToast } from "@/contexts/ToastContext";
 import { useUser } from "@/contexts/UserContext";
 import apiClient from "@/utils/apiClient";
+import HttpStatusCodes from "@/consts/httpStatusCodes";
 
 interface ProfileData {
   email: string;
@@ -46,7 +47,7 @@ export default function ProfilePage() {
         },
       });
 
-      if (response.status === 200) {
+      if (response.status === HttpStatusCodes.OK) {
         const updatedData = response.data.updated_data;
 
         setUser({
@@ -69,7 +70,7 @@ export default function ProfilePage() {
             }
           );
 
-          if (imageResponse.status === 200) {
+          if (imageResponse.status === HttpStatusCodes.OK) {
             const { image_url } = imageResponse.data;
             setUser({
               ...user!,

@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import apiClient from "@/utils/apiClient";
 import { AuthResult, LoginData, RegisterData, User } from "@/types/interfaces";
+import HttpStatusCodes from "@/consts/httpStatusCodes";
 
 interface UserContextType {
   isLogin: boolean;
@@ -67,7 +68,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
       const response = await apiClient.post("/login", { email, password });
 
-      if (response.status === 200) {
+      if (response.status === HttpStatusCodes.OK) {
         const { token, user } = response.data;
         setToken(token);
         setUser(user);
@@ -92,7 +93,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     try {
       const response = await apiClient.post("/register", data);
 
-      if (response.status === 200) {
+      if (response.status === HttpStatusCodes.OK) {
         const { token, user } = response.data;
 
         setToken(token);

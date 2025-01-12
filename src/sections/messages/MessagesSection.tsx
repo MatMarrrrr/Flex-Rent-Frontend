@@ -10,6 +10,7 @@ import apiClient from "@/utils/apiClient";
 import { useUser } from "@/contexts/UserContext";
 import { useToast } from "@/contexts/ToastContext";
 import echo from "@/utils/pusher";
+import HttpStatusCodes from "@/consts/httpStatusCodes";
 
 interface ChatData {
   id: number;
@@ -126,7 +127,7 @@ const MessagesSection = () => {
         },
       });
 
-      if (response.status === 200) {
+      if (response.status === HttpStatusCodes.OK) {
         const chatsData = response.data;
 
         if (chatsData.length === 0) {

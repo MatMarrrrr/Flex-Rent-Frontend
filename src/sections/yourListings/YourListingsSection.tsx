@@ -12,6 +12,7 @@ import { Listing } from "@/types/interfaces";
 import { ListingStatus } from "@/types/types";
 import apiClient from "@/utils/apiClient";
 import { useUser } from "@/contexts/UserContext";
+import HttpStatusCodes from "@/consts/httpStatusCodes";
 
 const YourListingsSection = () => {
   const navigate = useNavigate();
@@ -63,7 +64,7 @@ const YourListingsSection = () => {
       },
     });
 
-    if (response.status === 200) {
+    if (response.status === HttpStatusCodes.OK) {
       setIsDeleting(false);
       hideDeleteListingModal();
       updateListingsStatus(listingId, "deleted");
@@ -94,7 +95,7 @@ const YourListingsSection = () => {
         },
       });
 
-      if (response.status === 200) {
+      if (response.status === HttpStatusCodes.OK) {
         setYourListings(response.data);
       } else {
         notify("Wystąpił błąd podczas pobierania ogłoszeń", "error");

@@ -9,6 +9,7 @@ import { fromRightVariants01 } from "@/consts/motionVariants";
 import { useCategories } from "@/contexts/CategoriesContext";
 import apiClient from "@/utils/apiClient";
 import { useToast } from "@/contexts/ToastContext";
+import HttpStatusCodes from "@/consts/httpStatusCodes";
 
 interface Filters {
   query?: string;
@@ -103,7 +104,7 @@ export default function SearchPage() {
         params: filters,
       });
 
-      if (response.status === 200) {
+      if (response.status === HttpStatusCodes.OK) {
         setResult(response.data.results);
         console.log(response.data.results);
       } else {

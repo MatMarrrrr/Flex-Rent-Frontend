@@ -21,6 +21,7 @@ import { generateDisabledDates, getDateRangeString } from "@/utils/dataHelpers";
 import apiClient from "@/utils/apiClient";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
+import HttpStatusCodes from "@/consts/httpStatusCodes";
 
 interface ListingDetails {
   id: number;
@@ -128,7 +129,7 @@ export default function ListingPage() {
         }
       );
 
-      if (response.status === 200) {
+      if (response.status === HttpStatusCodes.OK) {
         const request = response.data.request;
         setSelectedStartDate(request.start_date);
         setSelectedEndDate(request.end_date);
