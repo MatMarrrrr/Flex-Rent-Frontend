@@ -13,7 +13,7 @@ interface OutgoingRequestButtonsProps {
   requestStatus: RequestStatus;
   isUpdating: boolean;
   onCancelClick: () => void;
-  onSendMessageClick: () => void;
+  onGoToChatClick: () => void;
   onChangePeriodClick: (requestId: number) => void;
 }
 
@@ -22,7 +22,7 @@ const OutgoingRequestButtons: React.FC<OutgoingRequestButtonsProps> = ({
   requestStatus,
   isUpdating,
   onCancelClick,
-  onSendMessageClick,
+  onGoToChatClick,
   onChangePeriodClick,
 }) => (
   <>
@@ -48,7 +48,8 @@ const OutgoingRequestButtons: React.FC<OutgoingRequestButtonsProps> = ({
           mobileStart={1320}
           mobileMaxWidth="700px"
           margin="20px 0px 0px 0px"
-          onClick={onSendMessageClick}
+          disabled={isUpdating}
+          onClick={onGoToChatClick}
         >
           <SendIcon />
           Wyślij wiadomość

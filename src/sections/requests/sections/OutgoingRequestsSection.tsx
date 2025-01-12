@@ -14,10 +14,12 @@ import FilterCheckbox from "@/sections/requests/components/FilterCheckbox";
 import apiClient from "@/utils/apiClient";
 import { useUser } from "@/contexts/UserContext";
 import { format } from "date-fns";
+import { useNavigate } from "react-router";
 
 export default function OutgoingRequestsSection() {
   const { notify } = useToast();
   const { token } = useUser();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [outgoingRequests, setOutgoingRequests] = useState<Request[]>([]);
   const [updatingRequestIds, setUpdatingRequestIds] = useState<number[]>([]);
@@ -132,8 +134,18 @@ export default function OutgoingRequestsSection() {
     }
   };
 
-  const handleSendMessageClick = (chatId: number) => {
-    console.log(chatId);
+  const handleGoToChatClick = async (requestId: number) => {
+    setUpdatingRequestIds((prev) => [...prev, requestId]);
+
+    const response = await apiClient.get(`chats/${requestId}/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    navigate(`/dashboard/messages`, {
+      state: { chatId: response.data.chat.id },
+    });
   };
 
   const handleChangePeriodClick = (requestId: number) => {
@@ -232,7 +244,6 @@ export default function OutgoingRequestsSection() {
 
           <MotionWrapper variants={fromBottomVariants03}>
             {filteredRequests.map((request) => {
-              console.log(request);
               return (
                 <RequestCard request={request} key={request.id}>
                   <OutgoingRequestButtons
@@ -240,9 +251,7 @@ export default function OutgoingRequestsSection() {
                     requestStatus={request.status}
                     isUpdating={updatingRequestIds.includes(request.id)}
                     onCancelClick={() => handleCancelClick(request.id)}
-                    onSendMessageClick={() =>
-                      handleSendMessageClick(request.id)
-                    }
+                    onGoToChatClick={() => handleGoToChatClick(request.id)}
                     onChangePeriodClick={() =>
                       handleChangePeriodClick(request.id)
                     }
