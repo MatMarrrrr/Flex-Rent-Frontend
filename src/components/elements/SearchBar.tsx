@@ -47,6 +47,12 @@ const SearchBar: React.FC<SearchBarProps> = ({
     }
   };
 
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && !isSearchDisabled) {
+      handleSearchClick();
+    }
+  };
+
   const handleModalCategoryClick = (categoryId: number) => {
     setCategoryId(categoryId);
     hideCategoryModal();
@@ -85,6 +91,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
             placeholder="Czego szukasz?"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={handleSearchKeyDown}
           />
         </QueryInputContainer>
         <Divider />
@@ -104,6 +111,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
             placeholder="Lokalizacja"
             value={localization}
             onChange={(e) => setLocalization(e.target.value)}
+            onKeyDown={handleSearchKeyDown}
           />
           <LocalizationMapIconWrapper onClick={showLocalizationModal}>
             <LocalizationMapIcon />
