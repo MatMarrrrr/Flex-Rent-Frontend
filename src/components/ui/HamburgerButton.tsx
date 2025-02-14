@@ -38,7 +38,7 @@ const Hamburger = styled.div`
   right: 30px;
   z-index: 102;
 
-  @media (max-width: 800px) {
+  @media (max-width: 830px) {
     display: flex;
   }
 `;

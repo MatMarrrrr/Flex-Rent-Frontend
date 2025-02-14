@@ -38,13 +38,13 @@ const Navbar = () => {
                   $isActive={isActivePath("/dashboard")}
                   to="/dashboard"
                 >
-                  Dashboard
+                  Panel użytkownika
                 </StyledLink>
               </LinkWrapper>
               <LinkWrapper>
                 <StyledUserIcon $isActive={isActivePath("/profile")} />
                 <StyledLink $isActive={isActivePath("/profile")} to="/profile">
-                  Profile
+                  Profil
                 </StyledLink>
               </LinkWrapper>
               <LinkWrapper>
@@ -77,13 +77,13 @@ const Navbar = () => {
                 $isActive={isActivePath("/dashboard")}
                 to="/dashboard"
               >
-                Dashboard
+                Panel użytkownika
               </StyledLink>
             </LinkWrapper>
             <LinkWrapper>
               <StyledUserIcon $isActive={isActivePath("/profile")} />
               <StyledLink $isActive={isActivePath("/profile")} to="/profile">
-                Profile
+                Profil
               </StyledLink>
             </LinkWrapper>
             <LinkWrapper>
@@ -125,7 +125,7 @@ const Links = styled.div`
   justify-content: center;
   gap: 30px;
 
-  @media (max-width: 800px) {
+  @media (max-width: 830px) {
     display: none;
   }
 `;
@@ -211,7 +211,7 @@ const MobileNavbarContainer = styled.div<{ $isOpen: boolean }>`
   gap: 20px;
   z-index: 101;
 
-  @media (max-width: 800px) {
+  @media (max-width: 830px) {
     display: flex;
   }
 `;

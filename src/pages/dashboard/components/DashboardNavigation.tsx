@@ -24,7 +24,7 @@ const DashboardNavigation = () => {
   return (
     <Container>
       <TitleContainer onClick={toggleMenu}>
-        <Title>Dashboard</Title>
+        <Title>Panel użytkownika</Title>
         <ArrowDown $isOpen={isOpen} />
       </TitleContainer>
       <NavigationContainer>
