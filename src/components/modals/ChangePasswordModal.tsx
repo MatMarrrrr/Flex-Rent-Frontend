@@ -11,7 +11,6 @@ import apiClient from "@/utils/apiClient";
 import { useUser } from "@/contexts/UserContext";
 import { useToast } from "@/contexts/ToastContext";
 import Loader from "../ui/Loader";
-import { is } from "date-fns/locale";
 
 interface ChangePasswordModalProps {
   isVisible: boolean;
