@@ -24,7 +24,7 @@ interface ProfileData {
 export default function ProfilePage() {
   const [imageFile, setImageFile] = useState<ImageType>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [isChangePasswordModalVisible, setIsChangePasswordModalVisible] = useState<boolean>(true);
+  const [isChangePasswordModalVisible, setIsChangePasswordModalVisible] = useState<boolean>(false);
   const { notify } = useToast();
   const { user, token, setUser } = useUser();
 
