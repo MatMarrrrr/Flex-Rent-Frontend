@@ -24,3 +24,9 @@ export const listingInitialValues = {
   localization: "",
   description: "",
 };
+
+export const changePasswordInitialValues = {  
+  old_password: "",
+  new_password: "",
+  repeat_password: "",
+};

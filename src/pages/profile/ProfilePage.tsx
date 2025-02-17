@@ -11,6 +11,7 @@ import { useToast } from "@/contexts/ToastContext";
 import { useUser } from "@/contexts/UserContext";
 import apiClient from "@/utils/apiClient";
 import HttpStatusCodes from "@/consts/httpStatusCodes";
+import ChangePasswordModal from "@/components/modals/ChangePasswordModal";
 
 interface ProfileData {
   email: string;
@@ -23,6 +24,7 @@ interface ProfileData {
 export default function ProfilePage() {
   const [imageFile, setImageFile] = useState<ImageType>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [isChangePasswordModalVisible, setIsChangePasswordModalVisible] = useState<boolean>(true);
   const { notify } = useToast();
   const { user, token, setUser } = useUser();
 
@@ -36,6 +38,14 @@ export default function ProfilePage() {
 
   const profileText = `${user!.name[0]}${user!.surname[0]}`;
   const profileImage = user!.profile_image ?? null;
+
+  const showChangePasswordModal = () => { 
+    setIsChangePasswordModalVisible(true);
+  };
+
+  const hideChangePasswordModal = () => {
+    setIsChangePasswordModalVisible(false);
+  };
 
   const handleSubmit = async (values: ProfileData) => {
     setIsSubmitting(true);
@@ -94,68 +104,79 @@ export default function ProfilePage() {
   };
 
   return (
-    <Container>
-      <Wrapper data-aos="fade-up">
-        <Header>Twój profil</Header>
-        <ProfileImageCircle
-          profileImage={profileImage}
-          profileText={profileText}
-          setImageFile={setImageFile}
-          disabled={isSubmitting}
-        />
-        <FormHeader>Twoje Dane</FormHeader>
-        <FormikForm
-          initialValues={profileData}
-          onSubmit={handleSubmit}
-          validationSchema={profileDataSchema}
-        >
-          <FormikInputField
-            name="email"
-            label="E-mail"
-            type="text"
-            isRequired={true}
-            margin="0px 0px 15px 0px"
+    <>
+      <ChangePasswordModal
+        isVisible={isChangePasswordModalVisible}
+        onClose={hideChangePasswordModal}
+      />
+      <Container>
+        <Wrapper /*data-aos="fade-up"*/>
+          <Header>Twój profil</Header>
+          <ProfileImageCircle
+            profileImage={profileImage}
+            profileText={profileText}
+            setImageFile={setImageFile}
             disabled={isSubmitting}
           />
-          <FormikInputField
-            name="name"
-            label="Imie"
-            type="text"
-            isRequired={true}
-            margin="0px 0px 15px 0px"
-            disabled={isSubmitting}
-          />
-          <FormikInputField
-            name="surname"
-            label="Nazwisko"
-            type="text"
-            isRequired={true}
-            margin="0px 0px 15px 0px"
-            disabled={isSubmitting}
-          />
-          <FormikInputField
-            name="city"
-            label="Miasto"
-            type="text"
-            isRequired={true}
-            margin="0px 0px 15px 0px"
-            disabled={isSubmitting}
-          />
-          <FormikInputField
-            name="province"
-            label="Województwo"
-            type="text"
-            isRequired={true}
-            margin="0px 0px 15px 0px"
-            disabled={isSubmitting}
-          />
-          <PrimaryButton type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Zmienianie" : "Zmień"}
-            {isSubmitting && <Loader size={18} />}
-          </PrimaryButton>
-        </FormikForm>
-      </Wrapper>
-    </Container>
+          <FormHeader>Twoje Dane</FormHeader>
+          <FormikForm
+            initialValues={profileData}
+            onSubmit={handleSubmit}
+            validationSchema={profileDataSchema}
+          >
+            <FormikInputField
+              name="email"
+              label="E-mail"
+              type="text"
+              isRequired={true}
+              margin="0px 0px 15px 0px"
+              disabled={isSubmitting}
+            />
+
+            <ChangePasswordButton type="button" disabled={isSubmitting} onClick={showChangePasswordModal}>
+              Zmień hasło
+            </ChangePasswordButton>
+
+            <FormikInputField
+              name="name"
+              label="Imie"
+              type="text"
+              isRequired={true}
+              margin="0px 0px 15px 0px"
+              disabled={isSubmitting}
+            />
+            <FormikInputField
+              name="surname"
+              label="Nazwisko"
+              type="text"
+              isRequired={true}
+              margin="0px 0px 15px 0px"
+              disabled={isSubmitting}
+            />
+            <FormikInputField
+              name="city"
+              label="Miasto"
+              type="text"
+              isRequired={true}
+              margin="0px 0px 15px 0px"
+              disabled={isSubmitting}
+            />
+            <FormikInputField
+              name="province"
+              label="Województwo"
+              type="text"
+              isRequired={true}
+              margin="0px 0px 15px 0px"
+              disabled={isSubmitting}
+            />
+            <PrimaryButton type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Aktualizowanie" : "Zaktualizuj dane"}
+              {isSubmitting && <Loader size={18} />}
+            </PrimaryButton>
+          </FormikForm>
+        </Wrapper>
+      </Container>
+    </>
   );
 }
 
@@ -201,4 +222,35 @@ const FormHeader = styled.h3`
   margin: 10px 0;
   max-width: 400px;
   width: 100%;
+`;
+
+const ChangePasswordButton = styled.button`
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--dark);
+  background: var(--white);
+  border: 2px solid var(--dark);
+  padding: 10px 20px;
+  border-radius: 25px;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: default;
+  }
+
+  &:disabled:hover {
+    transform: none;
+  }
 `;
