@@ -26,7 +26,7 @@ const OutgoingRequestButtons: React.FC<OutgoingRequestButtonsProps> = ({
   onChangePeriodClick,
 }) => (
   <>
-    {requestStatus === "waiting" && (
+    {requestStatus === "waiting" || requestStatus === "accepted" && (
       <Button
         desktopMaxWidth="500px"
         mobileStart={1320}
